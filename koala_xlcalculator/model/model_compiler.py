@@ -28,6 +28,7 @@ class ModelCompiler():
 
         file_name = os.path.abspath(file)
         archive = Reader(file_name)
+        archive.read()
         self.model.cells, self.model.formulae = archive.read_cells(ignore_sheets, ignore_hidden)
         self.defined_names = archive.read_defined_names(ignore_sheets, ignore_hidden)
         self.build_defined_names()

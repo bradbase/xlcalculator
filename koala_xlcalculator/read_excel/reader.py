@@ -18,15 +18,18 @@ class Reader():
 
 
     def __init__(self, file_name):
-
         self.excel_file_name = file_name
-        self.archive = Reader.build_archive(file_name) # the file handle for the Excel file
+
+
+    def read(self):
+        """Reads and parses the Excel file."""
+        self.archive = Reader.build_archive(self.excel_file_name) # the file handle for the Excel file
         self.build_worksheet_metadata()
         self.build_defined_name_metadata()
         self.build_shared_string_metadata()
 
 
-    def _read_archive(self, archive_address):
+    def _parse_archive(self, archive_address):
         """Extracts data from a paricular part of the given Excel file."""
 
         if self.archive is None:
@@ -46,12 +49,12 @@ class Reader():
     def build_worksheet_metadata(self):
         """Extracts data about the worksheets to be found in this particular Excel file."""
 
-        worksheet_root = self._read_archive('xl/workbook.xml')
+        worksheet_root = self._parse_archive('xl/workbook.xml')
 
         for sheet in worksheet_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"): # can get namespace from openpyxl but loading takes a long time
             self.worksheet_metadata[sheet.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')] = {'name' : sheet.get('name'), 'sheetId' : sheet.get('sheetId')}
 
-        relationship_root =  self._read_archive('xl/_rels/workbook.xml.rels')
+        relationship_root =  self._parse_archive('xl/_rels/workbook.xml.rels')
 
         for relationship in relationship_root:
             if relationship.get('Id') in self.worksheet_metadata.keys():
@@ -61,7 +64,7 @@ class Reader():
     def build_defined_name_metadata(self):
         """Extracts data about the named cells in this particular Excel file."""
 
-        defined_name_root = self._read_archive('xl/workbook.xml')
+        defined_name_root = self._parse_archive('xl/workbook.xml')
         defined_names = defined_name_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}definedNames")
         if defined_names is not None and len(defined_names) > 0:
             for name in defined_names:
@@ -75,7 +78,7 @@ class Reader():
         If a cell holds nothing but text, Excel places that text in a table and links the worksheet cell to it by a reference. 'for efficiency'.
         """
 
-        shared_string_root = self._read_archive('xl/sharedStrings.xml')
+        shared_string_root = self._parse_archive('xl/sharedStrings.xml')
 
         counter = 0
         for shared_string in shared_string_root.findall("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}si"):
@@ -97,7 +100,7 @@ class Reader():
             if sheet_name not in ignore_sheets:
 
                 logging.info( "Reading cells from {}".format(sheet_name) )
-                worksheet_root = self._read_archive("xl/%s" % self.worksheet_metadata[sheet_id]['Target'])
+                worksheet_root = self._parse_archive("xl/%s" % self.worksheet_metadata[sheet_id]['Target'])
 
                 rows = worksheet_root.findall('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheetData/{http://schemas.openxmlformats.org/spreadsheetml/2006/main}row')
                 for row in rows:

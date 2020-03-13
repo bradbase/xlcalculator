@@ -35,3 +35,9 @@ koala_xlcalculator currently supports:
   * Functions
     * SUM()
       * On defined name, cell and a range
+
+# Run tests
+
+```python
+python -m unittest discover -p "*_test.py"
+```
