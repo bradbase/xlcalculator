@@ -1,0 +1,16 @@
+
+koala_xlcalculator/__pycache__
+koala_xlcalculator/evaluator/__pycache__
+koala_xlcalculator/exceptions/__pycache__
+koala_xlcalculator/function_library/__pycache__
+koala_xlcalculator/koala_types/__pycache__
+koala_xlcalculator/model/__pycache__
+koala_xlcalculator/read_excel/__pycache__
+
+tests/__pycache__
+tests/evaluator/__pycache__
+tests/exceptions/__pycache__
+tests/function_library/__pycache__
+tests/koala_types/__pycache__
+tests/model/__pycache__
+tests/read_excel/__pycache__
