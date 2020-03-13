@@ -42,6 +42,9 @@ class TestExcelParser(unittest.TestCase):
         self.formula_031 = [f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), f_token(tvalue=',', ttype='operator-infix', tsubtype='union'), f_token(tvalue='A2:B2', ttype='operand', tsubtype='range')]
         self.formula_032 = [f_token(tvalue='SUM', ttype='function', tsubtype='start'), f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), f_token(tvalue='', ttype='function', tsubtype='stop')]
 
+        self.operand_range_00 = ['A1:B1']
+        self.operand_range_01 = ['A1', 'B1']
+
 
     # def teardown(self):
     #     pass
@@ -182,7 +185,7 @@ class TestExcelParser(unittest.TestCase):
         parser = ExcelParser()
         parser.parse("Sheet1!A1==Sheet2!B1")
         self.assertEqual(self.formula_024, parser.tokens.items)
-        
+
 
     def test_cells_function(self):
         parser = ExcelParser()
@@ -243,3 +246,17 @@ class TestExcelParser(unittest.TestCase):
         parser = ExcelParser()
         parser.parse("SUM(A1:B1)")
         self.assertEqual(self.formula_032, parser.tokens.items)
+
+
+    def test_operand_ranges_function(self):
+        parser = ExcelParser()
+        parser.parse("SUM(A1:B1)")
+        operand_ranges = parser.getOperandRanges()
+        self.assertEqual(self.operand_range_00, operand_ranges)
+
+
+    def test_operand_ranges_operand(self):
+        parser = ExcelParser()
+        parser.parse("A1+B1")
+        operand_ranges = parser.getOperandRanges()
+        self.assertEqual(self.operand_range_01, operand_ranges)
