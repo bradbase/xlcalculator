@@ -37,7 +37,13 @@ koala_xlcalculator currently supports:
       * On defined name, cell and a range
 
 # Run tests
-
+From the root koala_xlcalculator directory
 ```python
 python -m unittest discover -p "*_test.py"
+```
+
+# Run Example
+From the examples/common_use_case directory
+```python
+python use_case_01.py
 ```
