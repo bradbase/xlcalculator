@@ -493,3 +493,16 @@ class Model():
 
         else:
             return ASTNode(t)
+
+
+    def __eq__(self, other):
+
+        cells_comparison = []
+        for self_cell in self.cells:
+            cells_comparison.append( self.cells[self_cell] == other.cells[self_cell] )
+
+        defined_names_comparison = []
+        for self_defined_names in self.defined_names:
+            defined_names_comparison.append( self.defined_names[self_defined_names] == other.defined_names[self_defined_names] )
+
+        return self.__class__ == other.__class__ and all(cells_comparison) and all(defined_names_comparison)

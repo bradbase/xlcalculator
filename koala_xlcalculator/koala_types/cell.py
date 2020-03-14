@@ -102,5 +102,14 @@ class XLCell():
 
         return hash( self._address )
 
+
+    def __eq__(self, other):
+        truths = []
+        truths.append(self.__class__ == other.__class__)
+        truths.append(self.address == other.address)
+
+        return all(truths)
+
+
     def __float__(self):
         return float(self.value)

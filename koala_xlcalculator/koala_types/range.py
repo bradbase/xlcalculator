@@ -18,8 +18,8 @@ class XLRange():
     name: str = field(compare=True, hash=True, repr=True)
     cells: list = field(compare=True, hash=True, repr=True)
     _cells:  list = field(init=False, repr=False)
-    sheet: str = field(init=False, repr=False)
-    row: str = field(init=False, repr=False)
+    sheet: str = field(init=False, default=None, repr=False)
+    row: str = field(init=False, default=None, repr=False)
     value: list = field(default=None, repr=True)
     formula: XLFormula = field(default=None, repr=True)
     length: int = field(init=False, default=0, repr=False)
@@ -106,4 +106,16 @@ class XLRange():
     def __hash__(self):
         """Override the hash builtin to hash the address only."""
 
-        return hash( self.name )
+        return hash( self.name, self.sheet, self.row, self.formula, self.length )
+
+
+    def __eq__(self, other):
+        truths = []
+        truths.append(self.__class__ == other.__class__)
+        truths.append( self.name == other.name )
+        truths.append( self.sheet == other.sheet )
+        truths.append( self.row == other.row )
+        truths.append( self.formula == other.formula )
+        truths.append( self.length == other.length )
+
+        return all(truths)

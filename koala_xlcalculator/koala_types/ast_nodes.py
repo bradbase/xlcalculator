@@ -194,7 +194,6 @@ class ASTNode(object):
     """A generic node in the AST"""
 
     def __init__(self, token):
-        super().__init__()
         self.token = token
 
 
@@ -204,6 +203,14 @@ class ASTNode(object):
 
     def __getattr__(self, name):
         return getattr(self.token, name)
+
+
+    def __hash__(self):
+        return hash( self.token.tvalue )
+
+
+    def __eq__(self, other):
+        return self.token == other.token
 
 
     def children(self, ast):

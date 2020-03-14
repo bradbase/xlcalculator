@@ -53,4 +53,16 @@ class XLFormula():
     def __hash__(self):
         """Override the hash builtin to hash the formula only."""
 
-        return hash( (self.formula, self.type, self.reference, self.evaluate) )
+        return hash( (self.formula, self.return_type, self.reference, self.evaluate, self.python_code) )
+
+
+    def __eq__(self, other):
+        truths = []
+        truths.append(self.__class__ == other.__class__)
+        truths.append(self.formula == other.formula)
+        truths.append(self.return_type == other.return_type)
+        truths.append(self.reference == other.reference)
+        truths.append(self.evaluate == other.evaluate)
+        truths.append(self.python_code == other.python_code)
+
+        return all(truths)
