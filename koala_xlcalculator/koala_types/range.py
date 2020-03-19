@@ -52,16 +52,10 @@ class XLRange():
         if ',' in cells:
             addresses = cells.split(',')
             for address in addresses:
-                print("address", address)
                 range_cells.append( XLRange.cell_address_infill(address)[0] )
-
-            print("range_cells")
-            print(range_cells)
 
         # only one cell group in this range (no gaps eg; Sheet1!A1:E5)
         else:
-            print("cells")
-            print(cells)
             range_cells = XLRange.cell_address_infill(cells)
 
         self._cells = range_cells

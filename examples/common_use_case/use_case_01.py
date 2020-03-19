@@ -10,7 +10,7 @@ json_file_name = 'use_case_01.json'
 
 filename = 'use_case_01.xlsm'
 compiler = ModelCompiler()
-new_model = compiler.parse_excel_file(filename)
+new_model = compiler.read_and_parse_archive(filename)
 # new_model.build_code()
 new_model.persist_to_json_file(json_file_name)
 

@@ -16,7 +16,7 @@ from ..formulas import *
 class TestModel(unittest.TestCase):
 
     def setUp(self):
-        infile = open(r"./tests/model/model.json", "rb")
+        infile = open(r"./tests/resources/model.json", "rb")
         json_bytes = infile.read()
         infile.close()
         data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))

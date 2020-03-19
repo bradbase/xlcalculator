@@ -12,7 +12,7 @@ from koala_xlcalculator.read_excel.tokenizer import f_token
 class TestRead_excel(unittest.TestCase):
 
     def setUp(self):
-        infile = open(r"./tests/read_excel/reader.json", "rb")
+        infile = open(r"./tests/resources/reader.json", "rb")
         json_bytes = infile.read()
         infile.close()
         data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))
@@ -33,7 +33,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_read_cells(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         cells, formulae = archive.read_cells()
 
@@ -41,7 +41,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_read_formulae(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         cells, formulae = archive.read_cells()
 
@@ -49,7 +49,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_read_defined_names(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         defined_names = archive.read_defined_names()
 
@@ -57,7 +57,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_build_shared_string_metadata(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         archive.build_shared_string_metadata()
 
@@ -65,7 +65,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_build_defined_name_metadata(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         archive.build_defined_name_metadata()
 
@@ -73,7 +73,7 @@ class TestRead_excel(unittest.TestCase):
 
 
     def test_build_worksheet_metadata(self):
-        archive = Reader(r"./tests/read_excel/reader.xlsm")
+        archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
         archive.build_worksheet_metadata()
 

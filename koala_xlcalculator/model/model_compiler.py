@@ -23,18 +23,28 @@ class ModelCompiler():
         self.model = Model()
 
 
-    def parse_excel_file(self, file=None, ignore_sheets = [], ignore_hidden = False):
+    @staticmethod
+    def read_excel_file(file):
         """"""
-
         file_name = os.path.abspath(file)
         archive = Reader(file_name)
         archive.read()
+        return archive
+
+
+    def parse_archive(self, archive, ignore_sheets = [], ignore_hidden = False):
+        """"""
         self.model.cells, self.model.formulae = archive.read_cells(ignore_sheets, ignore_hidden)
         self.defined_names = archive.read_defined_names(ignore_sheets, ignore_hidden)
         self.build_defined_names()
         self.link_cells_to_defined_names()
         self.build_ranges()
 
+
+    def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False):
+        """"""
+        archive = ModelCompiler.read_excel_file(file_name)
+        self.parse_archive( archive )
         return self.model
 
 
@@ -56,7 +66,6 @@ class ModelCompiler():
             else:
                 self.model.defined_names[name] = XLRange(name, cell_address)
                 self.model.ranges[cell_address] = self.model.defined_names[name]
-
 
 
     def link_cells_to_defined_names(self):
@@ -95,15 +104,3 @@ class ModelCompiler():
                 #     print("about to put a cell into the range dict", range)
                 #     if range not in self.model.defined_names:
                 #         self.model.ranges[range] = XLCell(range)
-
-
-    def translate(self, outputs = [], inputs = []):
-        """Translates a Microsoft Excel cell structure into a model representation."""
-
-        self.model.translate(outputs=outputs, inputs=inputs)
-
-
-    def persist(self, fname):
-        """Convenience wrapper for the model persist_to_json_file."""
-
-        self.model.persist_to_json_file(fname)
