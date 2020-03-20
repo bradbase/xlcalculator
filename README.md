@@ -47,3 +47,6 @@ From the examples/common_use_case directory
 ```python
 python use_case_01.py
 ```
+
+# TODO
+- [] Set up a travis continuous integration service
