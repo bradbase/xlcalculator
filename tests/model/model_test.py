@@ -44,6 +44,11 @@ class TestModel(unittest.TestCase):
 
         self.assertEqual(self.model, this_model)
 
+        # TODO: fix test to check that the python code has bee correctly written
+        # for cell in this_model.cells:
+        #     if this_model.cells[cell].formula is not None:
+        #         print( this_model.cells[cell].formula.python_code )
+
 
     def test_shunting_yard(self):
         this_model = deepcopy(self.model)
