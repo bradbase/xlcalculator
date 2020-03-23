@@ -157,10 +157,10 @@ class Model():
 
         for cell in self.cells:
             if self.cells[cell].formula is not None:
-                sheet = self.cells[cell].sheet
-                tokenized_formula = self.shunting_yard(self.cells[cell].formula.formula, self.defined_names.keys(), sheet_name=sheet, ref=None, tokenize_range=False)
+                sheet_name = self.cells[cell].sheet
+                tokenized_formula = self.shunting_yard(self.cells[cell].formula.formula, self.defined_names.keys(), sheet_name=sheet_name, ref=None, tokenize_range=False)
                 ast, root = self.build_ast(tokenized_formula)
-                self.cells[cell].formula.python_code = root.emit(ast, context=sheet)
+                self.cells[cell].formula.python_code = root.emit(ast, sheet_name=sheet_name)
 
 
     def shunting_yard(self, expression, named_ranges, sheet_name=None, ref=None, tokenize_range=False):

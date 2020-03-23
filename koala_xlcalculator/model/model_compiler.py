@@ -3,8 +3,6 @@ import os.path
 import logging
 import re
 
-import networkx as nx
-
 from ..read_excel import Reader
 from ..koala_types import XLCell
 from ..koala_types import XLRange
