@@ -46,6 +46,9 @@ class XLCell():
     def address(self, address):
         """Overrides the address setter so we can break the address up into consitiuent parts."""
 
+        if ":" in address:
+            raise Exception("This is a Range {}".format(address))
+
         address = address.replace('$', '')
         if "!" in address:
             sheet, cell_address = address.split('!')

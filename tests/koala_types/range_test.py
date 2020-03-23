@@ -4,7 +4,7 @@ import unittest
 from koala_xlcalculator.koala_types import XLRange
 
 
-class TestModel(unittest.TestCase):
+class TestXLRange(unittest.TestCase):
 
     # def setUp(self):
     #     pass
