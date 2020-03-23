@@ -47,12 +47,19 @@ class XLRange():
 
         range_cells = []
         cells = XLCell.unfix(cells)
+        sheet = None
 
         # multiple cell groups in this range (there are gaps eg; Sheet1!A1:A5,C1:C5,E1:E5)
         if ',' in cells:
+            sheet_count = cells.count('!')
+            if sheet_count > 0:
+                sheet = cells.split('!')[0]
+
             addresses = cells.split(',')
+            counter = 0
             for address in addresses:
-                range_cells.append( XLRange.cell_address_infill(address)[0] )
+                xlrange = XLRange.cell_address_infill(address, sheet=sheet)[0]
+                range_cells.append( xlrange )
 
         # only one cell group in this range (no gaps eg; Sheet1!A1:E5)
         else:
@@ -63,13 +70,25 @@ class XLRange():
 
 
     @staticmethod
-    def cell_address_infill(address):
+    def cell_address_infill(address, sheet=None):
         """"""
 
         cells = []
+        address = address.replace(' ', '')
         start_address, end_cell_address = address.split(':')
-        sheet, start_cell_address = start_address.split('!')
-        end_address = "{}!{}".format(sheet, end_cell_address)
+        if start_address.count("!") > 0:
+            sheet, start_cell_address = start_address.split('!')
+        else:
+            start_cell_address = start_address
+            if sheet is None:
+                message = "I need a sheet name for this range. {}".format(address)
+                logging.error(message)
+                raise Exception(message)
+
+        if sheet is not None:
+            end_address = "{}!{}".format(sheet, end_cell_address)
+        else:
+            end_address = "{}".format(end_cell_address)
 
         start_column, start_row = [_f for _f in re.split('([A-Z\$]+)', start_cell_address) if _f]
         end_column, end_row = [_f for _f in re.split('([A-Z\$]+)', end_cell_address) if _f]
@@ -83,7 +102,10 @@ class XLRange():
         if start_column_ordinal == end_column_ordinal:
             row = []
             for row_ordinal in range(start_row, end_row + 1):
-                row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(start_column_ordinal), row_ordinal))
+                if sheet is not None:
+                    row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(start_column_ordinal), row_ordinal))
+                else:
+                    row.append("{}{}".format(XLCell.ordinal_column(start_column_ordinal), row_ordinal))
             cells.append(row)
 
         # Multiple columns involved
@@ -91,7 +113,10 @@ class XLRange():
             for column_ordinal in range(start_column_ordinal, end_column_ordinal + 1):
                 row = []
                 for row_ordinal in range(start_row, end_row + 1):
-                    row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(column_ordinal), row_ordinal))
+                    if sheet is not None:
+                        row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(column_ordinal), row_ordinal))
+                    else:
+                        row.append("{}{}".format(XLCell.ordinal_column(column_ordinal), row_ordinal))
                 cells.append(row)
 
         return cells
