@@ -88,9 +88,11 @@ class Evaluator():
         """"""
 
         if address in self.model.cells:
-            return pd.DataFrame([self.model.cells[address]])
+            return self.model.cells[address]
 
         elif address in self.model.defined_names:
+            # this is problematic as a defined name could be a cell, range or formula
+            # TODO: support defined name to be cell, range and formula
             return pd.DataFrame([self.model.defined_names[address]])
 
         elif address in self.model.ranges:

@@ -5,6 +5,7 @@ from numpy import sum as npsum
 
 from .excel_lib import KoalaBaseFunction
 from ..koala_types import XLRange
+from ..koala_types import XLCell
 
 class xSum(KoalaBaseFunction):
     """"""
@@ -22,8 +23,12 @@ class xSum(KoalaBaseFunction):
             for arg in args:
                 if isinstance(arg, XLRange):
                     sum_list.append(arg.value.sum().sum())
-                    
+
+                elif isinstance(arg, XLCell):
+                    sum_list.append(arg.value)
+
                 else:
+
                     sum_list.append(arg.sum().sum())
 
             return sum(sum_list)
