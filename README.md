@@ -49,7 +49,6 @@ python use_case_01.py
 ```
 
 # TODO
-- [] Complete Range support
 - [] Fix all functions in the function_library so that they work. Currently only SUM is being maintained.
 - [] Set up a travis continuous integration service
 - [] Improve testing
