@@ -22,6 +22,7 @@ class xSum(KoalaBaseFunction):
             for arg in args:
                 if isinstance(arg, XLRange):
                     sum_list.append(arg.value.sum().sum())
+                    
                 else:
                     sum_list.append(arg.sum().sum())
 
