@@ -19,15 +19,19 @@ class xMax(KoalaBaseFunction):
             return 0
 
         else:
-            average_list = []
+            max_list = []
             for arg in args:
                 if isinstance(arg, XLRange):
-                    average_list.append(arg.value.max().max())
+                    max_list.append(arg.value.max().max())
 
                 elif isinstance(arg, XLCell):
-                    average_list.append(arg.value)
+                    max_list.append(arg.value)
 
                 else:
-                    average_list.append(arg.max().max())
+                    max_list.append(arg.max().max())
 
-            return npmaximum(average_list)
+            if len(max_list) == 1:
+                return max_list[0]
+
+            else:
+                return npmaximum(max_list)
