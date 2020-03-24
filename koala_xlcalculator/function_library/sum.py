@@ -8,11 +8,11 @@ from ..koala_types import XLRange
 from ..koala_types import XLCell
 
 class xSum(KoalaBaseFunction):
-    """"""
+    """Sum all provided values."""
 
     @staticmethod
     def xsum(*args):
-        """Ignore non numeric cells and boolean cells."""
+        """Sum all provided values."""
 
         # however, if no non numeric cells, return zero (is what excel does)
         if len(args) < 1:

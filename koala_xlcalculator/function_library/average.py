@@ -9,11 +9,11 @@ from ..koala_types import XLCell
 
 
 class Average(KoalaBaseFunction):
-    """"""
+    """Find the average (mean) of provided values."""
 
     @staticmethod
     def average(*args):
-        """"""
+        """Find the average (mean) of provided values."""
         # however, if no non numeric cells, return zero (is what excel does)
         if len(args) < 1:
             return 0

@@ -6,8 +6,7 @@ import pandas as pd
 
 from ..exceptions import ExcelError
 from ..koala_types import XLCell, XLRange
-from ..function_library import xSum
-from ..function_library import Average
+from ..function_library import *
 
 
 class Evaluator():
@@ -464,7 +463,7 @@ class Evaluator():
     def set_cell_value(self, address, value):
         """Sets the value of a cell in the model."""
         self.model.set_cell_value(address, value)
-        
+
 
 
 SUPPORTED_OPERATORS = {
