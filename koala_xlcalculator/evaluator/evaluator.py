@@ -7,6 +7,7 @@ import pandas as pd
 from ..exceptions import ExcelError
 from ..koala_types import XLCell, XLRange
 from ..function_library import xSum
+from ..function_library import Average
 
 
 class Evaluator():

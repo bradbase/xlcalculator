@@ -33,9 +33,9 @@ koala_xlcalculator currently supports:
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
   * Functions
-    * SUM()
-      * On defined name, cell and a range
-  * set cell value
+    * SUM
+    * AVERAGE
+  * Set cell value
 
 # Run tests
 From the root koala_xlcalculator directory

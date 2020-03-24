@@ -1,16 +1,33 @@
 
 # Excel reference: https://support.office.com/en-us/article/AVERAGE-function-047bac88-d466-426c-a32b-8f33eb960cf6
 
+from numpy import average as npaverage
 
 from .excel_lib import KoalaBaseFunction
+from ..koala_types import XLRange
+from ..koala_types import XLCell
+
 
 class Average(KoalaBaseFunction):
     """"""
 
-    def average(self, *args):
+    @staticmethod
+    def average(*args):
         """"""
-        # Ignore non numeric cells and boolean cells.
+        # however, if no non numeric cells, return zero (is what excel does)
+        if len(args) < 1:
+            return 0
 
-        values = KoalaBaseFunction.extract_numeric_values(*args)
+        else:
+            average_list = []
+            for arg in args:
+                if isinstance(arg, XLRange):
+                    average_list.append(arg.value.mean().mean())
 
-        return sum(values) / len(values)
+                elif isinstance(arg, XLCell):
+                    average_list.append(arg.value)
+
+                else:
+                    average_list.append(arg.mean().mean())
+
+            return npaverage(average_list)

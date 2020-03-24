@@ -36,5 +36,8 @@ val7 = evaluator.evaluate('Tenth!C3')
 print("value 'evaluated' for Tenth!C3 with a defined name:", val7)
 
 evaluator.set_cell_value('First!A2', 88)
-val1 = evaluator.evaluate('First!A2')
-print("New value for First!A2 is", val1)
+val17 = evaluator.evaluate('First!A2')
+print("New value for First!A2 is", val17)
+
+val18 = evaluator.evaluate('Average!D1')
+print("Average value for Average!D1 is", val18)

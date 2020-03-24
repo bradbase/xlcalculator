@@ -28,7 +28,6 @@ class xSum(KoalaBaseFunction):
                     sum_list.append(arg.value)
 
                 else:
-
                     sum_list.append(arg.sum().sum())
 
             return sum(sum_list)
