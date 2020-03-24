@@ -35,6 +35,8 @@ koala_xlcalculator currently supports:
   * Functions
     * SUM
     * AVERAGE
+    * MAX
+    * MIN
   * Set cell value
 
 # Run tests
@@ -50,6 +52,6 @@ python use_case_01.py
 ```
 
 # TODO
-- [] Fix all functions in the function_library so that they work. Currently only SUM and AVERAGE are being maintained.
+- [] Fix all functions in the function_library so that they work. Currently only SUM, AVERAGE, MAX, MIN are being maintained.
 - [] Set up a travis continuous integration service
 - [] Improve testing
