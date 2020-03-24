@@ -35,6 +35,7 @@ koala_xlcalculator currently supports:
   * Functions
     * SUM()
       * On defined name, cell and a range
+  * set cell value
 
 # Run tests
 From the root koala_xlcalculator directory
