@@ -56,6 +56,42 @@ class Model():
     #     drawing = nx.draw(self.graph)
     #     plt.show()
 
+    def set_cell_value(self, address, value):
+        """Sets a new value for a specified cell."""
+        if isinstance(address, str):
+            if address in self.cells:
+                self.cells[address].value = value
+            else:
+                self.cells[address] = XLCell(address, value)
+
+        elif isinstance(address, XLCell):
+            if address.address in self.cells:
+                self.cells[address.address].value = value
+            else:
+                self.cells[address.address] = XLCell(address.address, value)
+
+        else:
+            raise Exception("I can't set the cell value for an address of type {}, I need XLCell or a string".format(type(address)))
+
+
+    def get_cell_value(self, address):
+        if isinstance(address, str):
+            if address in self.cells:
+                return self.cells[address].value
+            else:
+                logging.debug("Trying to get value for cell {} but that cell doesn't exist".format(address))
+                return 0
+
+        elif isinstance(address, XLCell):
+            if address.address in self.cells:
+                return self.cells[address.address].value
+            else:
+                logging.debug("Trying to get value for cell {} but that cell doesn't exist".format(address.address))
+                return 0
+
+        else:
+            raise Exception("I can't get the cell value for an address of type {}, I need XLCell or a string".format(type(address)))
+
 
     def persist_to_json_file(self, fname):
         """Writes the state to disk. Doesn't write the graph directly, but persist all the things that provide the ability to re-create the graph."""

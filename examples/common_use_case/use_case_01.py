@@ -34,3 +34,7 @@ val6 = evaluator.evaluate('Tenth!C2')
 print("value 'evaluated' for Tenth!C2 with a defined name:", val6)
 val7 = evaluator.evaluate('Tenth!C3')
 print("value 'evaluated' for Tenth!C3 with a defined name:", val7)
+
+evaluator.set_cell_value('First!A2', 88)
+val1 = evaluator.evaluate('First!A2')
+print("New value for First!A2 is", val1)

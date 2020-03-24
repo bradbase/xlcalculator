@@ -54,3 +54,19 @@ class TestEvaluator(unittest.TestCase):
         evaluated_result_07 = self.evaluator.evaluate('Tenth!C3')
         result_07 = 102
         self.assertEqual(result_07, evaluated_result_07)
+
+
+    def test_set_value(self):
+        self.evaluator.set_cell_value('First!A2', 88)
+        evaluated_result_00 = self.evaluator.model.cells['First!A2'].value
+        result_00 = 88
+        self.assertEqual(result_00, evaluated_result_00)
+        self.evaluator.set_cell_value('First!A2', 0.1) # Put it back the way we found it.
+
+
+    def test_set_value_evaluate(self):
+        self.evaluator.set_cell_value('First!A2', 88)
+        evaluated_result_00 = self.evaluator.evaluate('First!A2')
+        result_00 = 88
+        self.assertEqual(result_00, evaluated_result_00)
+        self.evaluator.set_cell_value('First!A2', 0.1) # Put it back the way we found it.
