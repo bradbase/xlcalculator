@@ -50,6 +50,6 @@ python use_case_01.py
 ```
 
 # TODO
-- [] Fix all functions in the function_library so that they work. Currently only SUM is being maintained.
+- [] Fix all functions in the function_library so that they work. Currently only SUM and AVERAGE are being maintained.
 - [] Set up a travis continuous integration service
 - [] Improve testing
