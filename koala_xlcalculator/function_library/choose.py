@@ -8,10 +8,12 @@ from ..exceptions import ExcelError
 class Choose(KoalaBaseFunction):
     """"""
 
-    def choose(self, index_num, *values):
+    @staticmethod
+    def choose(index_num, *values):
         """"""
 
-        index = int(index_num)
+        if isinstance(index_num, str):
+            index = int(index_num)
 
         if index <= 0 or index > 254:
             return ExcelError("#VALUE!", "{} must be between 1 and 254".format( str(index_num) ))

@@ -18,7 +18,7 @@ import itertools
 
 SUPPORTED_FUNCTIONS = {
     "AVERAGE":"Average.average",
-    # "CHOOSE":"Choose.choose",
+    "CHOOSE":"Choose.choose",
     # "CONCAT":"Concat.concat",
     # "COUNT":"Count.count",
     # "COUNTA":"Counta.counta",
