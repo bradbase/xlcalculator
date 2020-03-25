@@ -19,7 +19,7 @@ import itertools
 SUPPORTED_FUNCTIONS = {
     "AVERAGE":"Average.average",
     "CHOOSE":"Choose.choose",
-    # "CONCAT":"Concat.concat",
+    "_XLFN.CONCAT":"Concat.concat",
     # "COUNT":"Count.count",
     # "COUNTA":"Counta.counta",
     # "COUNTIF":"Countif.countif",

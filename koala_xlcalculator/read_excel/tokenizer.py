@@ -94,6 +94,14 @@ class f_token():
     ttype: str
     tsubtype: str
 
+
+    def __repr__(self):
+        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+
+
+    def __str__(self):
+        return self.__repr__()
+
 #========================================================================
 #       Class: f_tokens
 # Description: An ordered list of tokens

@@ -58,8 +58,12 @@ class XLRange():
             addresses = cells.split(',')
             counter = 0
             for address in addresses:
-                xlrange = XLRange.cell_address_infill(address, sheet=sheet)[0]
-                range_cells.append( xlrange )
+                xlrange = XLRange.cell_address_infill(address, sheet=sheet)
+                if range_cells == []:
+                    range_cells.extend(xlrange)
+                else:
+                    for index in range(0, len(range_cells)):
+                        range_cells[index].extend(xlrange[index])
 
         # only one cell group in this range (no gaps eg; Sheet1!A1:E5)
         else:
@@ -103,21 +107,22 @@ class XLRange():
             row = []
             for row_ordinal in range(start_row, end_row + 1):
                 if sheet is not None:
-                    row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(start_column_ordinal), row_ordinal))
+                    row.append(["{}!{}{}".format(sheet, XLCell.ordinal_column(start_column_ordinal), row_ordinal)])
                 else:
-                    row.append("{}{}".format(XLCell.ordinal_column(start_column_ordinal), row_ordinal))
-            cells.append(row)
+                    row.append(["{}{}".format(XLCell.ordinal_column(start_column_ordinal), row_ordinal)])
+
+            cells.extend(row)
 
         # Multiple columns involved
         else:
-            for column_ordinal in range(start_column_ordinal, end_column_ordinal + 1):
-                row = []
-                for row_ordinal in range(start_row, end_row + 1):
+            for row_ordinal in range(start_row, end_row + 1):
+                column = []
+                for column_ordinal in range(start_column_ordinal, end_column_ordinal + 1):
                     if sheet is not None:
-                        row.append("{}!{}{}".format(sheet, XLCell.ordinal_column(column_ordinal), row_ordinal))
+                        column.append("{}!{}{}".format(sheet, XLCell.ordinal_column(column_ordinal), row_ordinal))
                     else:
-                        row.append("{}{}".format(XLCell.ordinal_column(column_ordinal), row_ordinal))
-                cells.append(row)
+                        column.append("{}{}".format(XLCell.ordinal_column(column_ordinal), row_ordinal))
+                cells.append(column)
 
         return cells
 

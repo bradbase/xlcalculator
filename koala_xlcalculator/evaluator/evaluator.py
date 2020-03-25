@@ -141,8 +141,6 @@ class Evaluator():
     def apply_all(func, first, second, ref=None):
         """"""
 
-        #TODO: currently inadequate as Ranges are not correctly or fully supported.
-
         function = SUPPORTED_OPERATORS[func]
 
         if isinstance(first, XLRange) and isinstance(second, XLRange):

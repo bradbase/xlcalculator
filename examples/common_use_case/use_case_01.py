@@ -6,9 +6,9 @@ from koala_xlcalculator import Evaluator
 
 logging.basicConfig(level=logging.DEBUG)
 
-json_file_name = 'use_case_01.json'
+json_file_name = r'use_case_01.json'
 
-filename = 'use_case_01.xlsm'
+filename = r'use_case_01.xlsm'
 compiler = ModelCompiler()
 new_model = compiler.read_and_parse_archive(filename)
 # new_model.build_code()
@@ -38,6 +38,3 @@ print("value 'evaluated' for Tenth!C3 with a defined name:", val7)
 evaluator.set_cell_value('First!A2', 88)
 val17 = evaluator.evaluate('First!A2')
 print("New value for First!A2 is", val17)
-
-val18 = evaluator.evaluate('Average!D1')
-print("Average value for Average!D1 is", val18)

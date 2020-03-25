@@ -37,6 +37,8 @@ koala_xlcalculator currently supports:
     * AVERAGE
     * MAX
     * MIN
+    * CHOOSE
+    * CONCAT
   * Set cell value
 
 # Run tests
@@ -52,6 +54,8 @@ python use_case_01.py
 ```
 
 # TODO
-- [] Fix all functions in the function_library so that they work. Currently only SUM, AVERAGE, MAX, MIN are being maintained.
+- [] Fix all functions in the function_library so that they work.
 - [] Set up a travis continuous integration service
 - [] Improve testing
+- [] Fix a bug where somewhere between the archive and the tokens we can loose parameters from a function.
+  - =CONCAT("SPAM", " ", A1:B2, "SPAM", " ") gets interpreted as =CONCAT(A1:B2, "SPAM", " ")

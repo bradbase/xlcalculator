@@ -392,6 +392,12 @@ class OperatorNode(ASTNode):
 
         return ss
 
+    def __repr__(self):
+        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+
+    def __str__(self):
+        return self.__repr__()
+
 
 class OperandNode(ASTNode):
     """"""
@@ -414,6 +420,12 @@ class OperandNode(ASTNode):
 
         else:
             return to_str(self.tvalue)
+
+    def __repr__(self):
+        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class RangeNode(OperandNode):
@@ -526,6 +538,12 @@ class RangeNode(OperandNode):
 
         return output
 
+    def __repr__(self):
+        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+
+    def __str__(self):
+        return self.__repr__()
+
 
 class FunctionNode(ASTNode):
     """AST node representing a function call"""
@@ -624,3 +642,9 @@ class FunctionNode(ASTNode):
                 message = "Function {} is not supported.".format(fun.upper())
                 logging.error(message)
                 raise Exception(message)
+
+    def __repr__(self):
+        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+
+    def __str__(self):
+        return self.__repr__()
