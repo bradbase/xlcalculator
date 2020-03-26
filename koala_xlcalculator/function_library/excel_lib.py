@@ -42,7 +42,7 @@ SUPPORTED_FUNCTIONS = {
     # "NPV":"NPV.npv",
     # "OFFSET":"Offset.offset",
     # "PMT":"PMT.pmt",
-    # "POWER":"Power.power",
+    "POWER":"Power.power",
     # "RIGHT":"Right.right",
     # "ROUND":"Round.round",
     # "ROUNDUP":"Round.roundup",

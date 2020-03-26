@@ -33,17 +33,17 @@ koala_xlcalculator currently supports:
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
   * Functions
-    * SUM
     * AVERAGE
-    * MAX
-    * MID
-    * MIN
     * CHOOSE
     * CONCAT
     * COUNT
     * COUNTA
     * DATE
-
+    * MAX
+    * MID
+    * MIN
+    * POWER
+    * SUM
   * Set cell value
 
 # Run tests
