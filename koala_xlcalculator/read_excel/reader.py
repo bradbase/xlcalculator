@@ -32,11 +32,12 @@ class Reader():
     def _parse_archive(self, archive_address):
         """Extracts data from a paricular part of the given Excel file."""
 
-        if self.archive is None:
-            self.build_archive(self.excel_file_name)
-            logging.error("I have run build_archive on Excel file {} as you forgot to.".format(self.excel_file_name))
+        self.build_archive(self.excel_file_name)
+        try:
+            return ET.fromstring( self.archive.read(archive_address) )
+        except KeyError:
+            return None
 
-        return ET.fromstring( self.archive.read(archive_address) )
 
 
     @staticmethod
@@ -51,25 +52,27 @@ class Reader():
 
         worksheet_root = self._parse_archive('xl/workbook.xml')
 
-        for sheet in worksheet_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"): # can get namespace from openpyxl but loading takes a long time
-            self.worksheet_metadata[sheet.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')] = {'name' : sheet.get('name'), 'sheetId' : sheet.get('sheetId')}
+        if worksheet_root is not None:
+            for sheet in worksheet_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"): # can get namespace from openpyxl but loading takes a long time
+                self.worksheet_metadata[sheet.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')] = {'name' : sheet.get('name'), 'sheetId' : sheet.get('sheetId')}
 
-        relationship_root =  self._parse_archive('xl/_rels/workbook.xml.rels')
+            relationship_root =  self._parse_archive('xl/_rels/workbook.xml.rels')
 
-        for relationship in relationship_root:
-            if relationship.get('Id') in self.worksheet_metadata.keys():
-                self.worksheet_metadata[relationship.get('Id')]['Target'] = relationship.get('Target')
+            for relationship in relationship_root:
+                if relationship.get('Id') in self.worksheet_metadata.keys():
+                    self.worksheet_metadata[relationship.get('Id')]['Target'] = relationship.get('Target')
 
 
     def build_defined_name_metadata(self):
         """Extracts data about the named cells in this particular Excel file."""
 
         defined_name_root = self._parse_archive('xl/workbook.xml')
-        defined_names = defined_name_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}definedNames")
-        if defined_names is not None and len(defined_names) > 0:
-            for name in defined_names:
-                if name.get('hidden') is None:
-                    self.defined_name_metadata[name.get('name')] = name.text
+        if defined_name_root is not None:
+            defined_names = defined_name_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}definedNames")
+            if defined_names is not None and len(defined_names) > 0:
+                for name in defined_names:
+                    if name.get('hidden') is None:
+                        self.defined_name_metadata[name.get('name')] = name.text
 
 
     def build_shared_string_metadata(self):
@@ -79,13 +82,13 @@ class Reader():
         """
 
         shared_string_root = self._parse_archive('xl/sharedStrings.xml')
-
-        counter = 0
-        for shared_string in shared_string_root.findall("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}si"):
-            sh_string = shared_string.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t').text
-            sh_string = sh_string.replace('x005F_', '')
-            self.shared_strings_metadata[counter] = sh_string
-            counter += 1
+        if shared_string_root is not None:
+            counter = 0
+            for shared_string in shared_string_root.findall("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}si"):
+                sh_string = shared_string.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t').text
+                sh_string = sh_string.replace('x005F_', '')
+                self.shared_strings_metadata[counter] = sh_string
+                counter += 1
 
 
     def read_cells(self, ignore_sheets=[], ignore_hidden=False):

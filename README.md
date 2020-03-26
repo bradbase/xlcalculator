@@ -72,3 +72,4 @@ python use_case_01.py
     - Where A1, B1, E1, and F1 have values, =COUNTA(A1:F1) errors on evalling C1
   - Using integers in the function DATE, the integers don't get parsed correctly. Potentially another example of the first bug in this list.
     - =DATE(1, 1, 1) gets interpreted as =DATE(1)
+  - If you delete the sheets which are associated with a defined name, file reading breaks.

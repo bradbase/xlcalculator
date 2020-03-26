@@ -1,7 +1,11 @@
 
 # Excel reference: https://support.office.com/en-us/article/AVERAGE-function-047bac88-d466-426c-a32b-8f33eb960cf6
 
+import logging
+import itertools
+
 from numpy import average as npaverage
+from pandas import DataFrame
 
 from .excel_lib import KoalaBaseFunction
 from ..koala_types import XLRange
@@ -22,12 +26,18 @@ class Average(KoalaBaseFunction):
             average_list = []
             for arg in args:
                 if isinstance(arg, XLRange):
-                    average_list.append(arg.value.mean().mean())
+
+                    average_list.extend([item for item in itertools.chain( *arg.value.values.tolist() ) ])
 
                 elif isinstance(arg, XLCell):
                     average_list.append(arg.value)
 
-                else:
-                    average_list.append(arg.mean().mean())
+                elif isinstance(arg, (int, float)):
+                    average_list.append(arg)
+
+                elif isinstance(arg, DataFrame):
+                    average_list.extend([item for item in itertools.chain( *arg.values.tolist() ) ])
+
+            logging.debug("AVERAGE: {}".format(average_list))
 
             return npaverage(average_list)
