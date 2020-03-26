@@ -8,14 +8,16 @@ from jsonpickle import encode, decode
 from koala_xlcalculator.function_library import Average
 from koala_xlcalculator.koala_types import XLRange
 from koala_xlcalculator.evaluator.evaluator import Evaluator
-from koala_xlcalculator.model.model import Model
+from koala_xlcalculator import ModelCompiler
+from koala_xlcalculator import Evaluator
 
 
 class TestAverage(unittest.TestCase):
 
     def setUp(self):
-        self.model = Model()
-        self.model.construct_from_json_file(r"./tests/resources/average.json")
+        compiler = ModelCompiler()
+        self.model = compiler.read_and_parse_archive(r"./tests/resources/average.xlsx")
+        self.model.build_code()
         self.evaluator = Evaluator(self.model)
 
     # def teardown(self):
