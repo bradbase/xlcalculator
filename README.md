@@ -65,3 +65,5 @@ python use_case_01.py
     - =CONCAT("SPAM", " ", A1:B2, "SPAM", " ") gets interpreted as =CONCAT(A1:B2, "SPAM", " ")
   - If there's a gap in cells in a formula, the gap cells error (maybe they don't get read into the model?)
     - Where A1, B1, E1, and F1 have values, =COUNTA(A1:F1) errors on evalling C1
+  - Using integers in the function DATE, the integers don't get parsed correctly. Potentially another example of the first bug in this list.
+    - =DATE(1, 1, 1) gets interpreted as =DATE(1)
