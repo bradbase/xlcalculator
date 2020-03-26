@@ -20,7 +20,7 @@ SUPPORTED_FUNCTIONS = {
     "AVERAGE":"Average.average",
     "CHOOSE":"Choose.choose",
     "_XLFN.CONCAT":"Concat.concat",
-    # "COUNT":"Count.count",
+    "COUNT":"Count.count",
     # "COUNTA":"Counta.counta",
     # "COUNTIF":"Countif.countif",
     # "COUNTIFS":"Countifs.countifs",

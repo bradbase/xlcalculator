@@ -39,6 +39,7 @@ koala_xlcalculator currently supports:
     * MIN
     * CHOOSE
     * CONCAT
+    * COUNT
   * Set cell value
 
 # Run tests
