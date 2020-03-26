@@ -45,7 +45,7 @@ SUPPORTED_FUNCTIONS = {
     "POWER":"Power.power",
     # "RIGHT":"Right.right",
     "ROUND":"xRound.xround",
-    # "ROUNDDOWN":"xRound.rounddown",
+    "ROUNDDOWN":"xRound.rounddown",
     "ROUNDUP":"xRound.roundup",
     # "SLN":"SLN.sln",
     # "SQRT":"Sqrt.sqrt",

@@ -44,6 +44,7 @@ koala_xlcalculator currently supports:
     * MIN
     * POWER
     * ROUND
+    * ROUNDDOWN
     * ROUNDUP
     * SUM
   * Set cell value
