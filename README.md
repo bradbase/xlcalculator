@@ -40,6 +40,8 @@ koala_xlcalculator currently supports:
     * CHOOSE
     * CONCAT
     * COUNT
+    * COUNTA
+    * DATE
   * Set cell value
 
 # Run tests

@@ -24,7 +24,7 @@ SUPPORTED_FUNCTIONS = {
     "COUNTA":"Counta.counta",
     # "COUNTIF":"Countif.countif",
     # "COUNTIFS":"Countifs.countifs",
-    # "DATE":"xDate.xdate",
+    "DATE":"xDate.xdate",
     # "IFERROR":"Iferror.iferror",
     # "INDEX":"Index.index",
     # "IRR":"IRR.irr",

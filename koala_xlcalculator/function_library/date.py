@@ -6,13 +6,24 @@ from datetime import datetime, date
 
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
+from ..koala_types import XLCell
 
 
 class xDate(KoalaBaseFunction):
     """"""
 
-    def xdate(self, year, month, day):
+    @staticmethod
+    def xdate(year, month, day):
         """"""
+
+        if isinstance(year, XLCell):
+            year = year.value
+
+        if isinstance(month, XLCell):
+            month = month.value
+
+        if isinstance(day, XLCell):
+            day = day.value
 
         if type(year) != int:
             return ExcelError("#VALUE!", '%s is not an integer' % str(year))
