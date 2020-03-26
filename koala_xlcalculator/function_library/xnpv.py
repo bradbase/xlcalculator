@@ -18,7 +18,7 @@ class XNPV(KoalaBaseFunction):
         values = KoalaBaseFunction.extract_numeric_values(args[1])
         dates = KoalaBaseFunction.extract_numeric_values(args[2])
         if len(values) != len(dates):
-            return ExcelError("#NUM!", '`values` range must be the same length as `dates` range in XNPV, %s != %s' % (len(values), len(dates)))
+            raise ExcelError("#NUM!", '`values` range must be the same length as `dates` range in XNPV, %s != %s' % (len(values), len(dates)))
 
         xnpv = 0
         for v, d in zip(values, dates):

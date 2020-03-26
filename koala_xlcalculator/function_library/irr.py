@@ -28,4 +28,4 @@ class IRR(KoalaBaseFunction):
                 return np.irr(values)
 
             except Exception as e:
-                return ExcelError('#NUM!', e)
+                raise ExcelError('#NUM!', e)

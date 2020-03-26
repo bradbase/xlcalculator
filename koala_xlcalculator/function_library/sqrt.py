@@ -14,6 +14,6 @@ class Sqrt(KoalaBaseFunction):
         """"""
 
         if number < 0:
-            return ExcelError('#NUM!', '%s must be non-negative' % str(index_num))
+            raise ExcelError('#NUM!', '%s must be non-negative' % str(index_num))
 
         return np.sqrt(number)

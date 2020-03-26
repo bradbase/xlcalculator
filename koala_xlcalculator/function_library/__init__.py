@@ -30,7 +30,7 @@ from .offset import Offset
 from .pmt import PMT
 from .power import Power
 from .right import Right
-from .round import Round
+from .round import xRound
 from .sln import SLN
 from .sqrt import Sqrt
 from .sum import xSum

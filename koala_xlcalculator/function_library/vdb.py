@@ -18,7 +18,7 @@ class VDB(KoalaBaseFunction):
 
         for arg in [cost, salvage, life, start_period, end_period, factor]:
             if not isinstance(arg, (float, int)):
-                return ExcelError('#VALUE', 'Arg %s should be an int, float or long, instead: %s' % (arg, type(arg)))
+                raise ExcelError('#VALUE', 'Arg %s should be an int, float or long, instead: %s' % (arg, type(arg)))
 
         start_period = start_period
         end_period = end_period

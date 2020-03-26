@@ -44,7 +44,7 @@ SUPPORTED_FUNCTIONS = {
     # "PMT":"PMT.pmt",
     "POWER":"Power.power",
     # "RIGHT":"Right.right",
-    # "ROUND":"Round.round",
+    "ROUND":"xRound.xround",
     # "ROUNDUP":"Round.roundup",
     # "SLN":"SLN.sln",
     # "SQRT":"Sqrt.sqrt",
@@ -207,6 +207,7 @@ class KoalaBaseFunction():
 
         return check
 
+
     @staticmethod
     def check_value(a):
         """"""
@@ -215,7 +216,7 @@ class KoalaBaseFunction():
             return a
 
         elif isinstance(a, str) and a in ErrorCodes:
-            return ExcelError(a)
+            raise ExcelError(a)
 
         try:  # This is to avoid None or Exception returned by Range operations
             if float(a) or isinstance(a, (str)):

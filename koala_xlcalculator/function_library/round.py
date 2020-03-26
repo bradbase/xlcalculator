@@ -8,23 +8,25 @@ from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
 
-class Round(KoalaBaseFunction):
+class xRound(KoalaBaseFunction):
     """"""
 
-    def roundup(self, number, num_digits=0):
+    @staticmethod
+    def roundup(number, num_digits=0):
         """"""
 
         return self.xround(number, num_digits=num_digits, rounding=ROUND_UP)
 
 
-    def xround(self, number, num_digits=0, rounding=ROUND_HALF_UP):
+    @staticmethod
+    def xround(number, num_digits=0, rounding=ROUND_HALF_UP):
         """"""
 
-        if not KoalaBaseFunction.is_number(number):
-            return ExcelError("#VALUE!", "{} is not a number".format(str(number)))
+        if not xRound.is_number(number):
+            raise ExcelError("#VALUE!", "{} is not a number".format(str(number)))
 
-        if not KoalaBaseFunction.is_number(num_digits):
-            return ExcelError("#VALUE!", "{} is not a number".format(str(num_digits)))
+        if not xRound.is_number(num_digits):
+            raise ExcelError("#VALUE!", "{} is not a number".format(str(num_digits)))
 
         number = float(number) # if you don't Spreadsheet.dump/load, you might end up with Long numbers, which Decimal doesn't accept
 

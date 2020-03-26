@@ -26,7 +26,7 @@ class Sumproduct(KoalaBaseFunction):
             for item in range.values:
                 # If there is an ExcelError inside a Range, sumproduct should output an ExcelError
                 if isinstance(item, ExcelError):
-                    return ExcelError("#N/A", "ExcelErrors are present in the sumproduct items")
+                    raise ExcelError("#N/A", "ExcelErrors are present in the sumproduct items")
 
         reduce(check_length, range_list) # check that all ranges have the same size
 

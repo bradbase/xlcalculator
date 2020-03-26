@@ -16,7 +16,7 @@ class Concat(KoalaBaseFunction):
     def concat(*args):
         """"""
         if len(args) > 254:
-            return ExcelError("#VALUE!", "Can't concat more than 254 arguments. You provided {}".format( len(args) ))
+            raise ExcelError("#VALUE!", "Can't concat more than 254 arguments. You provided {}".format( len(args) ))
 
         joinable = []
         for item in args:

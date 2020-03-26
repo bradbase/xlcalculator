@@ -43,6 +43,7 @@ koala_xlcalculator currently supports:
     * MID
     * MIN
     * POWER
+    * ROUND
     * SUM
   * Set cell value
 

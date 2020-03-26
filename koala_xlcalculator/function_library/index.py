@@ -29,16 +29,16 @@ class Index(KoalaBaseFunction):
         nc = int(nc)
 
         if type(cells) != list:
-            return ExcelError("#VALUE!", "{} must be a list".format(str(cells)))
+            raise ExcelError("#VALUE!", "{} must be a list".format(str(cells)))
 
         if row is not None and not is_number(row):
-            return ExcelError("#VALUE!", "{} must be a number".format(str(row)))
+            raise ExcelError("#VALUE!", "{} must be a number".format(str(row)))
 
         if row == 0 and col == 0:
-            return ExcelError("#VALUE!", "No index asked for Range")
+            raise ExcelError("#VALUE!", "No index asked for Range")
 
         if row is not None and row > nr:
-            return ExcelError("#VALUE!", "Index {} out of range".format(row) )
+            raise ExcelError("#VALUE!", "Index {} out of range".format(row) )
 
         if nr == 1:
             col = row if col is None else col
@@ -49,13 +49,13 @@ class Index(KoalaBaseFunction):
 
         else: # could be optimised
             if col is None or row is None:
-                return ExcelError("#VALUE!", "Range is 2 dimensional, can not reach value with 1 arg as None")
+                raise ExcelError("#VALUE!", "Range is 2 dimensional, can not reach value with 1 arg as None")
 
             if not is_number(col):
-                return ExcelError("#VALUE!", "{} must be a number".format(str(col)))
+                raise ExcelError("#VALUE!", "{} must be a number".format(str(col)))
 
             if col > nc:
-                return ExcelError("#VALUE!", "Index {} out of range".format(col))
+                raise ExcelError("#VALUE!", "Index {} out of range".format(col))
 
             indices = list(range(len(cells)))
 

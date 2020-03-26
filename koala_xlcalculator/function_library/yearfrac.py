@@ -80,16 +80,16 @@ class Yearfrac(KoalaBaseFunction):
             return delta / denom
 
         if not xDate.is_number(start_date):
-            return ExcelError('#VALUE!', 'start_date %s must be a number' % str(start_date))
+            raise ExcelError('#VALUE!', 'start_date %s must be a number' % str(start_date))
 
         if not xDate.is_number(end_date):
-            return ExcelError('#VALUE!', 'end_date %s must be number' % str(end_date))
+            raise ExcelError('#VALUE!', 'end_date %s must be number' % str(end_date))
 
         if start_date < 0:
-            return ExcelError('#VALUE!', 'start_date %s must be positive' % str(start_date))
+            raise ExcelError('#VALUE!', 'start_date %s must be positive' % str(start_date))
 
         if end_date < 0:
-            return ExcelError('#VALUE!', 'end_date %s must be positive' % str(end_date))
+            raise ExcelError('#VALUE!', 'end_date %s must be positive' % str(end_date))
 
         if start_date > end_date: # switch dates if start_date > end_date
             temp = end_date
@@ -123,6 +123,6 @@ class Yearfrac(KoalaBaseFunction):
             result = count / 360
 
         else:
-            return ExcelError('#VALUE!', '%d must be 0, 1, 2, 3 or 4' % basis)
+            raise ExcelError('#VALUE!', '%d must be 0, 1, 2, 3 or 4' % basis)
 
         return result
