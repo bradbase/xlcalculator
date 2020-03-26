@@ -21,7 +21,7 @@ SUPPORTED_FUNCTIONS = {
     "CHOOSE":"Choose.choose",
     "_XLFN.CONCAT":"Concat.concat",
     "COUNT":"Count.count",
-    # "COUNTA":"Counta.counta",
+    "COUNTA":"Counta.counta",
     # "COUNTIF":"Countif.countif",
     # "COUNTIFS":"Countifs.countifs",
     # "DATE":"xDate.xdate",
