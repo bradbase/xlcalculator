@@ -8,13 +8,14 @@ from ..exceptions import ExcelError
 class Mid(KoalaBaseFunction):
     """"""
 
-    def mid(self, text, start_num, num_chars):
+    @staticmethod
+    def mid(text, start_num, num_chars):
         """"""
 
         text = str(text)
 
-        if len(text) > self.CELL_CHARACTER_LIMIT:
-            return ExcelError("#VALUE!", 'text is too long. Is %s needs to be %s or less.' % (len(text), self.CELL_CHARACTER_LIMIT))
+        if len(text) > Mid.CELL_CHARACTER_LIMIT:
+            return ExcelError("#VALUE!", 'text is too long. Is %s needs to be %s or less.' % (len(text), Mid.CELL_CHARACTER_LIMIT))
 
         if type(start_num) != int:
             return ExcelError("#VALUE!", '%s is not an integer' % str(start_num))
@@ -28,4 +29,4 @@ class Mid(KoalaBaseFunction):
         if num_chars < 0:
             return ExcelError("#VALUE!", '%s is < 0' % str(num_chars))
 
-        return text[start_num : start_num + num_chars]
+        return text[start_num - 1 : start_num - 1 + num_chars]

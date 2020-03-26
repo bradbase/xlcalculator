@@ -36,12 +36,14 @@ koala_xlcalculator currently supports:
     * SUM
     * AVERAGE
     * MAX
+    * MID
     * MIN
     * CHOOSE
     * CONCAT
     * COUNT
     * COUNTA
     * DATE
+
   * Set cell value
 
 # Run tests

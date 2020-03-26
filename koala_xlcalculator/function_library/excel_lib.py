@@ -36,7 +36,7 @@ SUPPORTED_FUNCTIONS = {
     # "LOOKUP":"Lookup.lookup",
     # "MATCH":"Match.match",
     "MAX":"xMax.xmax",
-    # "MID":"Mid.mid",
+    "MID":"Mid.mid",
     "MIN":"xMin.xmin",
     # "MOD":"Mod.mod",
     # "NPV":"NPV.npv",
