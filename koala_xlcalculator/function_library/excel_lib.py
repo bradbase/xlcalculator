@@ -121,16 +121,9 @@ class KoalaBaseFunction():
 
 
     @staticmethod
-    def is_number(s): # http://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-is-a-number-float-in-python
-        """"""
-
-        try:
-
-            float(s)
-            return True
-
-        except:
-            return False
+    def is_number(value): # http://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-is-a-number-float-in-python
+        """Determines if a value is a number."""
+        return isinstance(value, (int, float))
 
 
     @staticmethod

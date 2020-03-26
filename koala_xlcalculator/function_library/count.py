@@ -18,14 +18,17 @@ class Count(KoalaBaseFunction):
 
         def get_count(arg):
             if isinstance(arg, XLRange):
-                return len([x for x in [str(item) for item in itertools.chain( *arg.value.values.tolist() ) ] if KoalaBaseFunction.is_number(x) and type(x) is not bool ])
+                return len([x for x in [item for item in itertools.chain( *arg.value.values.tolist() ) ] if Count.is_number(x) and type(x) is not bool ])
 
             elif isinstance(arg, DataFrame):
                 # I don't like nesting list comprehensions. But here we are...
-                return len([x for x in [str(item) for item in itertools.chain( *arg.values.tolist() ) ] if KoalaBaseFunction.is_number(x) and type(x) is not bool ])
+                return len([x for x in [item for item in itertools.chain( *arg.values.tolist() ) ] if Count.is_number(x) and type(x) is not bool ])
 
-            elif KoalaBaseFunction.is_number(arg): # int() is used for text representation of numbers
+            elif Count.is_number(arg):
                 return 1
+
+            else:
+                return 0
 
 
         if arg_1 is None:

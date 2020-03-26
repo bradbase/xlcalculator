@@ -34,7 +34,14 @@ class TestCount(unittest.TestCase):
         result_01 = 3
         self.assertEqual(result_01, choose_result_01)
 
-        range_01 = pd.DataFrame([[2, 1],[3, "SPAM"]])
-        choose_result_01 = Count.count(range_00, range_01)
-        result_01 = 7
-        self.assertEqual(result_01, choose_result_01)
+        choose_result_02 = Count.count(range_00, range_01)
+        result_02 = 7
+        self.assertEqual(result_02, choose_result_02)
+
+        choose_result_03 = Count.count(range_00, range_01, 1)
+        result_03 = 8
+        self.assertEqual(result_03, choose_result_03)
+
+        choose_result_04 = Count.count(range_00, range_01, 1, "SPAM")
+        result_04 = 8
+        self.assertEqual(result_04, choose_result_04)
