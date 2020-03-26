@@ -3,7 +3,7 @@
 # Excel reference: https://support.office.com/en-us/article/ROUNDUP-function-f8bc9b23-e795-47db-8703-db171d0c42a7
 
 
-from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, getcontext, ROUND_HALF_UP, ROUND_UP, ROUND_DOWN
 
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
@@ -13,14 +13,21 @@ class xRound(KoalaBaseFunction):
 
     @staticmethod
     def roundup(number, num_digits=0):
-        """"""
+        """Round down"""
 
-        return self.xround(number, num_digits=num_digits, rounding=ROUND_UP)
+        return xRound.xround(number, num_digits=num_digits, rounding=ROUND_UP)
+
+
+    @staticmethod
+    def rounddown(number, num_digits=0):
+        """Rounding up"""
+
+        return xRound.xround(number, num_digits=num_digits, rounding=ROUND_DOWN)
 
 
     @staticmethod
     def xround(number, num_digits=0, rounding=ROUND_HALF_UP):
-        """"""
+        """Rounding half up"""
 
         if not xRound.is_number(number):
             raise ExcelError("#VALUE!", "{} is not a number".format(str(number)))
@@ -28,12 +35,9 @@ class xRound(KoalaBaseFunction):
         if not xRound.is_number(num_digits):
             raise ExcelError("#VALUE!", "{} is not a number".format(str(num_digits)))
 
-        number = float(number) # if you don't Spreadsheet.dump/load, you might end up with Long numbers, which Decimal doesn't accept
+        number = Decimal(str(number))
+        dc = getcontext()
+        dc.rounding = rounding
+        ans = round(number, num_digits)
 
-        if num_digits >= 0: # round to the right side of the point
-            return float(Decimal(repr(number)).quantize(Decimal(repr(pow(10, -num_digits))), rounding=rounding))
-            # see https://docs.python.org/2/library/functions.html#round
-            # and https://gist.github.com/ejamesc/cedc886c5f36e2d075c5
-
-        else:
-            return round(number, num_digits)
+        return float( ans )
