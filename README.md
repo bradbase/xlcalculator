@@ -73,3 +73,4 @@ python use_case_01.py
   - Using integers in the function DATE, the integers don't get parsed correctly. Potentially another example of the first bug in this list.
     - =DATE(1, 1, 1) gets interpreted as =DATE(1)
   - If you delete the sheets which are associated with a defined name, file reading breaks.
+  - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE

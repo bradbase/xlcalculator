@@ -7,7 +7,6 @@ from jsonpickle import encode, decode
 
 from koala_xlcalculator.function_library import Average
 from koala_xlcalculator.koala_types import XLRange
-from koala_xlcalculator.evaluator.evaluator import Evaluator
 from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
