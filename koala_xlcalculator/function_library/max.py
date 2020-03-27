@@ -27,6 +27,8 @@ class xMax(KoalaBaseFunction):
                 elif isinstance(arg, XLCell):
                     max_list.append(arg.value)
 
+                elif  isinstance(arg, (int, float)):
+                    max_list.append(arg)
                 else:
                     max_list.append(arg.max().max())
 
@@ -34,4 +36,4 @@ class xMax(KoalaBaseFunction):
                 return max_list[0]
 
             else:
-                return npmaximum(max_list)
+                return npmaximum(*max_list)
