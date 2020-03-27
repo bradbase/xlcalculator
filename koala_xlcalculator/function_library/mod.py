@@ -7,7 +7,8 @@ from ..exceptions import ExcelError
 class Mod(KoalaBaseFunction):
     """"""
 
-    def mod(self, nb, q):
+    @staticmethod
+    def mod(nb, q):
         """"""
 
         if not isinstance(nb, int):

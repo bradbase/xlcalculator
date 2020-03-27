@@ -42,6 +42,7 @@ koala_xlcalculator currently supports:
     * MAX
     * MID
     * MIN
+    * MOD
     * POWER
     * ROUND
     * ROUNDDOWN

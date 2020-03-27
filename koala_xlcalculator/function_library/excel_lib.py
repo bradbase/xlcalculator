@@ -38,7 +38,7 @@ SUPPORTED_FUNCTIONS = {
     "MAX":"xMax.xmax",
     "MID":"Mid.mid",
     "MIN":"xMin.xmin",
-    # "MOD":"Mod.mod",
+    "MOD":"Mod.mod",
     # "NPV":"NPV.npv",
     # "OFFSET":"Offset.offset",
     # "PMT":"PMT.pmt",
