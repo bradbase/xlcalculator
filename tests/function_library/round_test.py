@@ -72,6 +72,7 @@ class Test_Round(unittest.TestCase):
         value = self.evaluator.evaluate('Sheet1!A4')
         self.assertEqual( excel_value, value )
 
+
     @unittest.skip('Problem evalling: #VALUE! for Sheet1!A5, xRound.xround(626.3,Evaluator.apply_one("minus", 3, None, None))')
     def test_evaluation_A5(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A5')
