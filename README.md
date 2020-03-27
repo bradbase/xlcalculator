@@ -70,7 +70,7 @@ Excel function support can be easily added to koala_xlcalculator.
 Do the git things.. fork, clone, branch. checkout the new branch and then;
 - Write a class for the function in function_library. Use existing supported function classes as template examples.
 - Add the function name and related class to excel_lib.py SUPPORTED_FUNCTIONS dict
-Add the class to function_library\\__init__.py
+- Add the class to function_library\\\_\_init\_\_.py
 - Write a test for it in tests\\function_library. Use existing tests as template examples. Ensure you include an associated .xlsx file and implement one or more evaluate test methods. Often a great place for example test ideas is found on the Microsoft Office Excel help page for that function.
 - Update the README.md to state that function is supported.
 - Put your code, tests and doco forward as a pull request.
