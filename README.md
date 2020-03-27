@@ -76,3 +76,5 @@ python use_case_01.py
   - If you delete the sheets which are associated with a defined name, file reading breaks.
   - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
   - Reading some dates causes a tokenizing problem. eg; =DATE(2024,1,1)
+  - ExcelError evaluating Evaluator.apply("divide",4,5,None)
+  - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773
