@@ -47,6 +47,7 @@ koala_xlcalculator currently supports:
     * ROUNDDOWN
     * ROUNDUP
     * SUM
+    * SQRT
   * Set cell value
   * Get cell value
 
