@@ -35,32 +35,32 @@ class TestConcat(unittest.TestCase):
         self.assertTrue(result_02, concat_result_02)
 
 
-    def test_concat_evaluation_00(self):
+    def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )
 
 
-    def test_concat_evaluation_01(self):
+    def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
         self.assertEqual( excel_value, value )
 
 
-    def test_concat_evaluation_02(self):
+    def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')
         self.assertEqual( excel_value, value )
 
 
     @unittest.skip("There's a bug that doesn't create empty cells involved with formulas")
-    def test_concat_evaluation_03(self):
+    def test_evaluation_A4(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A4')
         value = self.evaluator.evaluate('Sheet1!A4')
         self.assertEqual( excel_value, value )
 
 
-    def test_concat_evaluation_04(self):
+    def test_evaluation_A5(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A5')
         value = self.evaluator.evaluate('Sheet1!A5')
         self.assertEqual( excel_value, value )

@@ -35,12 +35,12 @@ class TestMax(unittest.TestCase):
         self.assertEqual(result_01, xsum_result_01)
 
 
-    def test_counta_evaluation_A1(self):
+    def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )
 
-    def test_counta_evaluation_B1(self):
+    def test_evaluation_B1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!B1')
         value = self.evaluator.evaluate('Sheet1!B1')
         self.assertEqual( excel_value, value )

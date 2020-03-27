@@ -4,6 +4,7 @@
 
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
+from ..koala_types import XLCell
 
 class Mid(KoalaBaseFunction):
     """"""
@@ -12,7 +13,10 @@ class Mid(KoalaBaseFunction):
     def mid(text, start_num, num_chars):
         """"""
 
-        text = str(text)
+        if isinstance(text, XLCell):
+            text = str(text.value)
+        else:
+            text = str(text)
 
         if len(text) > Mid.CELL_CHARACTER_LIMIT:
             raise ExcelError("#VALUE!", 'text is too long. Is %s needs to be %s or less.' % (len(text), Mid.CELL_CHARACTER_LIMIT))

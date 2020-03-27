@@ -39,7 +39,7 @@ class TestAverage(unittest.TestCase):
         self.assertEqual(result_02, average_result_02)
 
 
-    def test_average_evaluation(self):
+    def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )

@@ -90,26 +90,26 @@ class Test_Date(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    def test_counta_evaluation_A3(self):
+    def test_evaluation_A3(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')
         self.assertEqual( excel_value, value )
 
 
-    def test_counta_evaluation_A7(self):
+    def test_evaluation_A7(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A7')
         value = self.evaluator.evaluate('Sheet1!A7')
         self.assertEqual( excel_value, value )
 
 
-    def test_counta_evaluation_A9(self):
+    def test_evaluation_A9(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A9')
         value = self.evaluator.evaluate('Sheet1!A9')
         self.assertEqual( excel_value, value )
 
 
     @unittest.skip('Problem evalling: #VALUE! for Sheet1!A17, xDate.xdate(self.eval_ref("Sheet1!B17"),self.eval_ref("Sheet1!C17"),self.eval_ref("Sheet1!D17"))')
-    def test_counta_evaluation_A17(self):
+    def test_evaluation_A17(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A17')
         value = self.evaluator.evaluate('Sheet1!A17')
         self.assertEqual( excel_value, value )

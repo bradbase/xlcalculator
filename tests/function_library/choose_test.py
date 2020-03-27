@@ -29,20 +29,20 @@ class TestChoose(unittest.TestCase):
         self.assertTrue(result_00.equals(choose_result_00))
 
 
-    def test_choose_evaluation_int(self):
+    def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value_00 = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value_00 )
 
 
-    def test_choose_evaluation_cell(self):
+    def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value_01 = self.evaluator.evaluate('Sheet1!A2')
         self.assertEqual( excel_value, value_01 )
 
 
     @unittest.skip("Range isn't being tokenised properly in choose.")
-    def test_choose_evaluation_range(self):
+    def test_evaluation_A3(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value_00 = self.evaluator.evaluate('Sheet1!A3')
         self.assertTrue( excel_value.equals(value_00) )

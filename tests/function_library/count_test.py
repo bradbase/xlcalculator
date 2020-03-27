@@ -54,20 +54,20 @@ class TestCount(unittest.TestCase):
         self.assertEqual(result_04, choose_result_04)
 
 
-    def test_count_evaluation_00(self):
+    def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )
 
 
-    def test_count_evaluation_02(self):
+    def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
         self.assertEqual( excel_value, value )
 
 
     @unittest.skip("There's a bug that doesn't create empty cells involved with formulas")
-    def test_count_evaluation_03(self):
+    def test_evaluation_A3(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')
         self.assertEqual( excel_value, value )
