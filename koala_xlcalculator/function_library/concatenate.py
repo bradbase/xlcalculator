@@ -1,5 +1,5 @@
 
-# https://support.office.com/en-us/article/CONCATENATE-function-8F8AE884-2CA8-4F7A-B093-75D702BEA31D
+# Excel reference: https://support.office.com/en-us/article/CONCATENATE-function-8F8AE884-2CA8-4F7A-B093-75D702BEA31D
 # Important: In Excel 2016, Excel Mobile, and Excel Online, this function has
 # been replaced with the CONCAT function. Although the CONCATENATE function is
 # still available for backward compatibility, you should consider using CONCAT

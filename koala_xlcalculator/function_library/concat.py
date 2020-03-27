@@ -1,5 +1,5 @@
 
-# https://support.office.com/en-us/article/concat-function-9b1a9a3f-94ff-41af-9736-694cbd6b4ca2
+# Excel reference: https://support.office.com/en-us/article/concat-function-9b1a9a3f-94ff-41af-9736-694cbd6b4ca2
 
 import itertools
 
@@ -15,7 +15,7 @@ class Concat(KoalaBaseFunction):
 
     @staticmethod
     def concat(*args):
-        """"""
+        """The CONCAT function combines the text from multiple ranges and/or strings, but it doesn't provide delimiter or IgnoreEmpty arguments."""
         if len(args) > 254:
             raise ExcelError("#VALUE!", "Can't concat more than 254 arguments. You provided {}".format( len(args) ))
 

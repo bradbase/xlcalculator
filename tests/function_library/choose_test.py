@@ -1,4 +1,6 @@
 
+# Excel reference: https://support.office.com/en-us/article/CHOOSE-function-fc5c184f-cb62-4ec7-a46e-38653b98f5bc
+
 import unittest
 
 import pandas as pd

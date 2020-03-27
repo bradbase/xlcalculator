@@ -15,7 +15,7 @@ class Count(KoalaBaseFunction):
 
     @staticmethod
     def count(arg_1, *args):
-        """"""
+        """The COUNT function counts the number of cells that contain numbers, and counts numbers within the list of arguments."""
 
         def get_count(arg):
             if isinstance(arg, XLRange):

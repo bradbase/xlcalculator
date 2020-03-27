@@ -1,9 +1,9 @@
+
+# Excel reference: https://support.office.com/en-us/article/AVERAGE-function-047bac88-d466-426c-a32b-8f33eb960cf6
+
 import unittest
-import json
-from copy import deepcopy
 
 import pandas as pd
-from jsonpickle import encode, decode
 
 from koala_xlcalculator.function_library import Average
 from koala_xlcalculator.koala_types import XLRange
