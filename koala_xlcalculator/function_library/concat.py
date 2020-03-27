@@ -7,6 +7,7 @@ from pandas import DataFrame
 
 from .excel_lib import KoalaBaseFunction
 from ..koala_types import XLRange
+from ..koala_types import XLCell
 
 
 class Concat(KoalaBaseFunction):
@@ -29,7 +30,13 @@ class Concat(KoalaBaseFunction):
             elif isinstance(item, XLRange):
                 joinable.extend( [str(item) for item in itertools.chain( *item.value.values.tolist() ) ] )
 
+            elif isinstance(item, XLCell):
+                joinable.extend( item.value )
+
             elif isinstance(item, list):
-                joinable.append( list )
+                joinable.extend( list )
+
+            elif isinstance(item, (int, float)):
+                joinable.extend( str(list) )
 
         return ''.join(joinable)
