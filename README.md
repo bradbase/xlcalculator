@@ -48,6 +48,7 @@ koala_xlcalculator currently supports:
     * ROUNDUP
     * SUM
   * Set cell value
+  * Get cell value
 
 # Run tests
 From the root koala_xlcalculator directory

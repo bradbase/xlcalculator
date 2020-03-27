@@ -1,4 +1,6 @@
 
+# https://support.office.com/en-us/article/counta-function-7dc98875-d5c1-46f1-9a82-53f3219e2509
+
 import itertools
 
 from pandas import DataFrame

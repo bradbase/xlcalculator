@@ -27,7 +27,7 @@ class TestCount(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-    
+
     def test_count(self):
         range_00 = pd.DataFrame([[1, 2],[3, 4]])
         choose_result_00 = Count.count(range_00)
@@ -53,16 +53,19 @@ class TestCount(unittest.TestCase):
 
 
     def test_count_evaluation_00(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( 5, value )
+        self.assertEqual( excel_value, value )
 
 
     def test_count_evaluation_02(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
-        self.assertEqual( 5, value )
+        self.assertEqual( excel_value, value )
 
 
     @unittest.skip("There's a bug that doesn't create empty cells involved with formulas")
     def test_count_evaluation_03(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')
-        self.assertEqual( 1, value )
+        self.assertEqual( excel_value, value )

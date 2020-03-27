@@ -463,6 +463,11 @@ class Evaluator():
         self.model.set_cell_value(address, value)
 
 
+    def get_cell_value(self, address):
+        """Gets the value of a cell in the model."""
+        return self.model.get_cell_value(address)
+
+
 
 SUPPORTED_OPERATORS = {
     "minus": Evaluator.minus,

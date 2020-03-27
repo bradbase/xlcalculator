@@ -28,17 +28,19 @@ class TestChoose(unittest.TestCase):
 
 
     def test_choose_evaluation_int(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value_00 = self.evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( 12, value_00 )
+        self.assertEqual( excel_value, value_00 )
 
 
     def test_choose_evaluation_cell(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value_01 = self.evaluator.evaluate('Sheet1!A2')
-        self.assertEqual( 4, value_01 )
+        self.assertEqual( excel_value, value_01 )
 
 
     @unittest.skip("Range isn't being tokenised properly in choose.")
     def test_choose_evaluation_range(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value_00 = self.evaluator.evaluate('Sheet1!A3')
-        result_00 = pd.DataFrame([1, 2, 3])
-        self.assertTrue( result_00.equals(value_00) )
+        self.assertTrue( excel_value.equals(value_00) )
