@@ -79,3 +79,4 @@ python use_case_01.py
   - ExcelError evaluating Evaluator.apply("divide",4,5,None)
   - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773
   - Problem evalling: #VALUE! Evaluator.apply_one("minus", 1.475, None, None)
+  - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.
