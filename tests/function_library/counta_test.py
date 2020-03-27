@@ -41,22 +41,6 @@ class TestCount(unittest.TestCase):
         result_01 = 3
         self.assertEqual(result_01, choose_result_01)
 
-        choose_result_02 = Counta.counta(range_00, range_01)
-        result_02 = 7
-        self.assertEqual(result_02, choose_result_02)
-
-        choose_result_03 = Counta.counta(range_00, range_01, 1)
-        result_03 = 8
-        self.assertEqual(result_03, choose_result_03)
-
-        choose_result_04 = Counta.counta(range_00, range_01, 1, '')
-        result_04 = 8
-        self.assertEqual(result_04, choose_result_04)
-
-        choose_result_05 = Counta.counta(range_00, range_01, 1, None)
-        result_05 = 8
-        self.assertEqual(result_05, choose_result_05)
-
 
         with self.assertRaises(Exception) as context:
             Counta.counta(None)
