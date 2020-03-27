@@ -4,6 +4,8 @@ import unittest
 import pandas as pd
 
 from koala_xlcalculator.function_library import Count
+from koala_xlcalculator import ModelCompiler
+from koala_xlcalculator import Evaluator
 
 """
 The COUNT function syntax has the following arguments:
@@ -17,12 +19,15 @@ Note: The arguments can contain or refer to a variety of different types of data
 
 class TestCount(unittest.TestCase):
 
-    # def setUp(self):
-    #     pass
+    def setUp(self):
+        compiler = ModelCompiler()
+        self.model = compiler.read_and_parse_archive(r"./tests/resources/COUNT.xlsx")
+        self.model.build_code()
+        self.evaluator = Evaluator(self.model)
 
     # def teardown(self):
     #     pass
-
+    
     def test_count(self):
         range_00 = pd.DataFrame([[1, 2],[3, 4]])
         choose_result_00 = Count.count(range_00)
@@ -45,3 +50,19 @@ class TestCount(unittest.TestCase):
         choose_result_04 = Count.count(range_00, range_01, 1, "SPAM")
         result_04 = 8
         self.assertEqual(result_04, choose_result_04)
+
+
+    def test_count_evaluation_00(self):
+        value = self.evaluator.evaluate('Sheet1!A1')
+        self.assertEqual( 5, value )
+
+
+    def test_count_evaluation_02(self):
+        value = self.evaluator.evaluate('Sheet1!A2')
+        self.assertEqual( 5, value )
+
+
+    @unittest.skip("There's a bug that doesn't create empty cells involved with formulas")
+    def test_count_evaluation_03(self):
+        value = self.evaluator.evaluate('Sheet1!A3')
+        self.assertEqual( 1, value )

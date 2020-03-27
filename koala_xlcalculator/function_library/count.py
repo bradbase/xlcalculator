@@ -7,6 +7,7 @@ from pandas import DataFrame
 
 from .excel_lib import KoalaBaseFunction
 from ..koala_types import XLRange
+from ..koala_types import XLCell
 from ..exceptions import ExcelError
 
 class Count(KoalaBaseFunction):
@@ -19,6 +20,9 @@ class Count(KoalaBaseFunction):
         def get_count(arg):
             if isinstance(arg, XLRange):
                 return len([element for element in [item for item in itertools.chain( *arg.value.values.tolist() ) ] if Count.is_number(element) ])
+
+            elif isinstance(arg, XLCell):
+                return 1
 
             elif isinstance(arg, DataFrame):
                 # I don't like nesting list comprehensions. But here we are...
