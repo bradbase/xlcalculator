@@ -27,6 +27,8 @@ class xMin(KoalaBaseFunction):
                 elif isinstance(arg, XLCell):
                     min_list.append(arg.value)
 
+                elif isinstance(arg, (int, float)):
+                    min_list.append(arg)
                 else:
                     min_list.append(arg.min().min())
 
@@ -34,4 +36,4 @@ class xMin(KoalaBaseFunction):
                 return min_list[0]
 
             else:
-                return npminimum(min_list)
+                return npminimum(*min_list)
