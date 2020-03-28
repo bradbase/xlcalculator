@@ -52,7 +52,7 @@ SUPPORTED_FUNCTIONS = {
     "SUM":"xSum.xsum",
     # "SUMIF":"SumIf.sumif",
     # "SUMPRODUCT":"Sumproduct.sumproduct",
-    # "TODAY":"Today.today",
+    "TODAY":"Today.today",
     # "VDB":"VDB.vdb",
     # "VLOOKUP":"Vlookup.vlookup",
     # "XNPV":"XNPV.xnpv",

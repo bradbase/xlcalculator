@@ -9,7 +9,8 @@ from .excel_lib import KoalaBaseFunction
 class Today(KoalaBaseFunction):
     """"""
 
-    def today(self):
+    @staticmethod
+    def today():
         """"""
 
         reference_date = datetime.today().date()
