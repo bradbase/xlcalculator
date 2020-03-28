@@ -83,6 +83,13 @@ Do the git things.. fork, clone, branch. checkout the new branch and then;
 - Update the README.md to state that function is supported.
 - Put your code, tests and doco forward as a pull request.
 
+# Compatibility modes
+Compatability modes are currently a fixed class attribute on excel_lib.KoalaBaseFunction(). Defaulted to "Excel" other valid values are:
+- "ANTHILL"
+  - Performs calculations compatible with those found in Anthill Koala where the function definition was markedly different to the intent of the corresponding Excel function.
+- "PYTHON"
+  - Performs calculations compatible Python, pandas, numpy and numpy_financial where the function output differs between the Microsoft Excel Help website, or Excel itself, and the result coming from Python or its libraries.
+
 # TODO
 - [] Fix all functions in the function_library so that they work.
 - [] Set up a travis continuous integration service

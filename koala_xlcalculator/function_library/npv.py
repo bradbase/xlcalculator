@@ -35,7 +35,7 @@ class NPV(KoalaBaseFunction):
                 cashflow.append(item)
 
 
-        if NPV.COMPATIBILITY == 'Python':
+        if NPV.COMPATIBILITY == 'PYTHON':
             return npnpv(discount_rate, cashflow)
 
         else:
