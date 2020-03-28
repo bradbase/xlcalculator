@@ -25,7 +25,8 @@ class TestIRR(unittest.TestCase):
 
 
     def test_irr_basic(self):
-        self.assertEqual(round(IRR.irr([-100, 39, 59, 55, 20], 0), 7), 0.2809484)
+        range_00 = pd.DataFrame([[-100, 39, 59, 55, 20]])
+        self.assertEqual(round(IRR.irr(range_00, 0), 7), 0.2809484)
 
 
     def test_irr_with_guess_non_null(self):
@@ -33,15 +34,20 @@ class TestIRR(unittest.TestCase):
             IRR.irr([-100, 39, 59, 55, 20], 2)
 
 
-    @unittest.skip("""Problem evalling: unsupported operand type(s) for +: 'int' and 'XLCell' for Sheet1!A1, NPV.npv(self.eval_ref("Sheet1!A2"),self.eval_ref("Sheet1!A3"),self.eval_ref("Sheet1!A4"),self.eval_ref("Sheet1!A5"),self.eval_ref("Sheet1!A6"))""")
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip("""Problem evalling: unsupported operand type(s) for +: 'int' and 'XLCell' for Sheet1!B1, Evaluator.apply("add",NPV.npv(self.eval_ref("Sheet1!B2"),self.eval_ref("Sheet1!B4:B8"),Evaluator.apply_one("minus", 9000, None, None)),self.eval_ref("Sheet1!B3"),None))""")
     def test_evaluation_B1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!B1')
         value = self.evaluator.evaluate('Sheet1!B1')
+        self.assertEqual( round(excel_value, 1), round(value, 1) )
+
+
+    @unittest.skip("""Problem evalling: guess value for excellib.irr() is #N/A and not 0 for Sheet1!C1, IRR.irr(self.eval_ref("Sheet1!A2:A4"),Evaluator.apply_one("minus", 0.1, None, None))""")
+    def test_evaluation_C1(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!C1')
+        value = self.evaluator.evaluate('Sheet1!C1')
         self.assertEqual( excel_value, value )

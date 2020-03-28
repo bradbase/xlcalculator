@@ -41,7 +41,7 @@ SUPPORTED_FUNCTIONS = {
     "MOD":"Mod.mod",
     "NPV":"NPV.npv",
     # "OFFSET":"Offset.offset",
-    # "PMT":"PMT.pmt",
+    "PMT":"PMT.pmt",
     "POWER":"Power.power",
     "RIGHT":"Right.right",
     "ROUND":"xRound.xround",
