@@ -43,7 +43,7 @@ SUPPORTED_FUNCTIONS = {
     # "OFFSET":"Offset.offset",
     # "PMT":"PMT.pmt",
     "POWER":"Power.power",
-    # "RIGHT":"Right.right",
+    "RIGHT":"Right.right",
     "ROUND":"xRound.xround",
     "ROUNDDOWN":"xRound.rounddown",
     "ROUNDUP":"xRound.roundup",
