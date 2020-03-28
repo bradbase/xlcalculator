@@ -3,16 +3,23 @@
 
 
 from .excel_lib import KoalaBaseFunction
-from ..exceptions import ExcelError
+from ..koala_types import XLCell
 
 class SLN(KoalaBaseFunction):
     """"""
 
-    def sln(self, cost, salvage, life):
+    @staticmethod
+    def sln(cost, salvage, life):
         """"""
 
-        for arg in [cost, salvage, life]:
-            if isinstance(arg, ExcelError) or arg in KoalaBaseFunction.ErrorCodes:
-                return arg
+        if isinstance(cost, XLCell):
+            cost = cost.value
 
-        return (cost - salvage) / life
+        if isinstance(salvage, XLCell):
+            salvage = salvage.value
+
+        if isinstance(life, XLCell):
+            life = life.value
+
+        if isinstance(cost, (int, float)) and isinstance(salvage, (int, float)) and isinstance(life, (int, float)):
+            return (cost - salvage) / life

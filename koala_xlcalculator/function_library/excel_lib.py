@@ -47,7 +47,7 @@ SUPPORTED_FUNCTIONS = {
     "ROUND":"xRound.xround",
     "ROUNDDOWN":"xRound.rounddown",
     "ROUNDUP":"xRound.roundup",
-    # "SLN":"SLN.sln",
+    "SLN":"SLN.sln",
     "SQRT":"Sqrt.sqrt",
     "SUM":"xSum.xsum",
     # "SUMIF":"SumIf.sumif",

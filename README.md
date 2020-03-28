@@ -48,6 +48,7 @@ koala_xlcalculator currently supports:
     * ROUND
     * ROUNDDOWN
     * ROUNDUP
+    * SLN
     * SUM
     * SQRT
     * TODAY
