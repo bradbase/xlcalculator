@@ -32,18 +32,19 @@ koala_xlcalculator currently supports:
     * Evaluation of a function which has had a range passed to it
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
-  * Functions
+  * Supported Functions
     * AVERAGE
     * CHOOSE
     * CONCAT
     * COUNT
     * COUNTA
     * DATE
+    * LN (Python Math.log() differs from Excel LN. Currently returning Math.log())
     * MAX
     * MID
     * MIN
     * MOD
-    * POWER
+    * POWER (Python numpy.power() differs from Excel POWER. Currently returning numpy.power())
     * ROUND
     * ROUNDDOWN
     * ROUNDUP
@@ -52,6 +53,9 @@ koala_xlcalculator currently supports:
     * TODAY
   * Set cell value
   * Get cell value
+  * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
+    * ABS
+    * EXP
 
 # Run tests
 From the root koala_xlcalculator directory
@@ -91,6 +95,6 @@ Do the git things.. fork, clone, branch. checkout the new branch and then;
   - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
   - Reading some dates causes a tokenizing problem. eg; =DATE(2024,1,1)
   - ExcelError evaluating Evaluator.apply("divide",4,5,None)
-  - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773
+  - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773  *ROUNDING ISSUES AND HOW MANY DECIMAL PLACES ARE RIFE*
   - Problem evalling: #VALUE! Evaluator.apply_one("minus", 1.475, None, None)
   - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.

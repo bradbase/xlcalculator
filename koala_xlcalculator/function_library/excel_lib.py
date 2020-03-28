@@ -32,7 +32,7 @@ SUPPORTED_FUNCTIONS = {
     # "ISNA":"Isna.isna",
     # "ISTEXT":"Istext.istext",
     # "LINEST":"Linest.linest",
-    # "LN":"Ln.ln",
+    "LN":"Ln.ln",
     # "LOOKUP":"Lookup.lookup",
     # "MATCH":"Match.match",
     "MAX":"xMax.xmax",
