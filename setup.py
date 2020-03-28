@@ -25,6 +25,7 @@ setuptools.setup(
             'numpy >= 1.18.1',
             'pandas >= 1.0.1',
             'openpyxl >= 3.0.3',
+            'numpy_financial >= 1.0.0'
         ],
     python_requires='>=3.7.6',
 )

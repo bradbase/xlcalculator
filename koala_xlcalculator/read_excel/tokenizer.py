@@ -36,7 +36,7 @@ def old_div(a, b):
     Copied from:
     https://github.com/PythonCharmers/python-future/blob/master/src/past/utils/__init__.py
     """
-    if isinstance(a, numbers.Integral) and isinstance(b, numbers.Integral):
+    if isinstance(a, int) and isinstance(b, int):
         return a // b
     else:
         return a / b
