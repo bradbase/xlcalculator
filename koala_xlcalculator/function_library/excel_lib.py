@@ -76,7 +76,8 @@ IND_FUN = [
 
 
 class KoalaBaseFunction():
-
+    
+    COMPATIBILITY = 'EXCEL'
     EXCEL_EPOCH = datetime.strptime("1900-01-01", '%Y-%m-%d').date()
     CELL_CHARACTER_LIMIT = 32767
 

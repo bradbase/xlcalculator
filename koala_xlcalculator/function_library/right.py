@@ -3,7 +3,6 @@ from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
 from ..koala_types import XLCell
 
-COMPATIBILITY = 'EXCEL'
 
 class Right(KoalaBaseFunction):
     """"""
@@ -13,8 +12,9 @@ class Right(KoalaBaseFunction):
     def right(text, number_of_chars = 1):
         """"""
 
-        if COMPATIBILITY == "ANTHILL":
+        if Right.COMPATIBILITY == "ANTHILL":
             return Right.anthill(text, number_of_chars)
+            
         else:
             return Right.excel(text, number_of_chars)
 

@@ -14,7 +14,7 @@ class Today(KoalaBaseFunction):
         """"""
 
         reference_date = datetime.today().date()
-        days_since_epoch = reference_date - KoalaBaseFunction.EXCEL_EPOCH
+        days_since_epoch = reference_date - Today.EXCEL_EPOCH
         # why +2 ?
         # 1 based from 1900-01-01
         # I think it is "inclusive" / to the _end_ of the day.
