@@ -39,7 +39,7 @@ SUPPORTED_FUNCTIONS = {
     "MID":"Mid.mid",
     "MIN":"xMin.xmin",
     "MOD":"Mod.mod",
-    # "NPV":"NPV.npv",
+    "NPV":"NPV.npv",
     # "OFFSET":"Offset.offset",
     # "PMT":"PMT.pmt",
     "POWER":"Power.power",
@@ -129,7 +129,7 @@ class KoalaBaseFunction():
 
     @staticmethod
     def flatten(l, only_lists=False):
-        return list(itertools.chain(l))
+        return list(itertools.chain(*l))
     # def flatten(l, only_lists = False):
     #     instance = list if only_lists else collections.Iterable
     #

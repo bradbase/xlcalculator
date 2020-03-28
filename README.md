@@ -44,6 +44,7 @@ koala_xlcalculator currently supports:
     * MID
     * MIN
     * MOD
+    * NPV
     * POWER (Python numpy.power() differs from Excel POWER. Currently returning numpy.power())
     * ROUND
     * ROUNDDOWN
