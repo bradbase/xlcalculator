@@ -106,7 +106,7 @@ Compatability modes are currently a fixed class attribute on excel_lib.KoalaBase
 - [] Fix all functions in the function_library so that they work.
 - [] Set up a travis continuous integration service
 - [] Improve testing
-- [] Refactor model and evaluator to use pass-by-object-reference for cells, ranges, defined names and formulas
+- [] Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
 - [] Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
 - [] BUGS:
   - Somewhere between the archive and the tokens we can loose parameters from a function (probs in managing the stack / RPN stuff).
