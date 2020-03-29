@@ -9,7 +9,8 @@ from .sln import SLN
 class VDB(KoalaBaseFunction):
     """"""
 
-    def vdb(self, cost, salvage, life, start_period, end_period, factor = 2, no_switch = False):
+    @staticmethod
+    def vdb(cost, salvage, life, start_period, end_period, factor = 2, no_switch = False):
         """"""
 
         for arg in [cost, salvage, life, start_period, end_period, factor, no_switch]:

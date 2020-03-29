@@ -118,6 +118,9 @@ class Reader():
                             else:
                                 return_type = "value"
 
+                            # # Need to support shared formulas
+                            # if formula.text is None:
+                            #     print("FORMULA", formula.text, sheet_name, column.get('r'))
                             formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'))
 
                         value = column.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v')

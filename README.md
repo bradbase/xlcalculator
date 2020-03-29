@@ -61,6 +61,7 @@ koala_xlcalculator currently supports:
   * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
     * ABS
     * EXP
+    * DB
 
 # Run tests
 From the root koala_xlcalculator directory
@@ -110,3 +111,4 @@ Compatability modes are currently a fixed class attribute on excel_lib.KoalaBase
   - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773  *ROUNDING ISSUES AND HOW MANY DECIMAL PLACES ARE RIFE*
   - Problem evalling: #VALUE! Evaluator.apply_one("minus", 1.475, None, None)
   - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.
+  - Support needed for shared formulas

@@ -53,7 +53,7 @@ SUPPORTED_FUNCTIONS = {
     # "SUMIF":"SumIf.sumif",
     # "SUMPRODUCT":"Sumproduct.sumproduct",
     "TODAY":"Today.today",
-    # "VDB":"VDB.vdb",
+    # "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
     # "VLOOKUP":"Vlookup.vlookup",
     # "XNPV":"XNPV.xnpv",
     # "YEARFRAC":"Yearfrac.yearfrac",
