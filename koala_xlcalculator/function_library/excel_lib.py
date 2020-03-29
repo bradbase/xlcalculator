@@ -54,7 +54,7 @@ SUPPORTED_FUNCTIONS = {
     # "SUMPRODUCT":"Sumproduct.sumproduct",
     "TODAY":"Today.today",
     # "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
-    # "VLOOKUP":"Vlookup.vlookup",
+    "VLOOKUP":"VLookup.vlookup", # need to support shared formulas and XLRange.ncols
     "XNPV":"XNPV.xnpv",
     "YEARFRAC":"Yearfrac.yearfrac",
     # # "GAMMALN":"lgamma",

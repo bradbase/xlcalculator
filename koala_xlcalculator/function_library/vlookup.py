@@ -1,46 +1,52 @@
 
 # https://support.office.com/en-us/article/VLOOKUP-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1
 
+from pandas import DataFrame
 
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
 from ..koala_types import XLRange
+from ..koala_types import XLCell
 
-class Vlookup(KoalaBaseFunction):
+class VLookup(KoalaBaseFunction):
     """"""
 
-    def vlookup(self, lookup_value, table_array, col_index_num, range_lookup=True):
+    @staticmethod
+    def vlookup(lookup_value, table_array, col_index_num, range_lookup=False):
         """"""
 
-        raise Exception("VLOOKUP DOESN'T WORK, XLRANGE IS NOT SUPPORTED")
+        if range_lookup:
+            raise Exception("Excact match only supported at the moment.")
 
-        if not isinstance(table_array, XLRange):
-            raise ExcelError('#VALUE', 'table_array should be a Range')
+        if isinstance(lookup_value, XLCell):
+            lookup_value = lookup_value.value
 
-        if col_index_num > table_array.ncols:
+        if isinstance( table_array, XLRange ):
+            table_array = table_array.value
+
+        if col_index_num > len(table_array):
             raise ExcelError('#VALUE', 'col_index_num is greater than the number of cols in table_array')
 
-        first_column = table_array.get(0, 1)
-        result_column = table_array.get(0, col_index_num)
+        table_array = table_array.set_index(0)
 
         if not range_lookup:
-            if lookup_value not in first_column.values:
+            if lookup_value not in table_array.index:
                 raise ExcelError('#N/A', 'lookup_value not in first column of table_array')
 
             else:
-                i = first_column.values.index(lookup_value)
-                ref = first_column.order[i]
-        else:
-            i = None
-            for v in first_column.values:
-                if lookup_value >= v:
-                    i = first_column.values.index(v)
-                    ref = first_column.order[i]
+                return table_array.loc[lookup_value].values[0]
 
-                else:
-                    break
-
-            if i is None:
-                raise ExcelError('#N/A', 'lookup_value smaller than all values of table_array')
-
-        return XLRange.find_associated_value(ref, result_column)
+        # else:
+        #     i = None
+        #     for v in first_column.values:
+        #         if lookup_value >= v:
+        #             i = first_column.values.index(v)
+        #             ref = first_column.order[i]
+        #
+        #         else:
+        #             break
+        #
+        #     if i is None:
+        #         raise ExcelError('#N/A', 'lookup_value smaller than all values of table_array')
+        #
+        # return XLRange.find_associated_value(ref, result_column)

@@ -38,6 +38,6 @@ from .sumif import SumIf
 from .sumproduct import Sumproduct
 from .today import Today
 from .vdb import VDB
-from .vlookup import Vlookup
+from .vlookup import VLookup
 from .xnpv import XNPV
 from .yearfrac import Yearfrac
