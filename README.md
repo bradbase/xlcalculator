@@ -56,6 +56,7 @@ koala_xlcalculator currently supports:
     * SQRT
     * SUM
     * TODAY
+    * XNPV
   * Set cell value
   * Get cell value
   * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN

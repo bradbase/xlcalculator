@@ -12,11 +12,11 @@ from koala_xlcalculator import Evaluator
 
 class Test_VDB(unittest.TestCase):
 
-    def setUp(self):
-        compiler = ModelCompiler()
-        self.model = compiler.read_and_parse_archive(r"./tests/resources/VDB.xlsx")
-        self.model.build_code()
-        self.evaluator = Evaluator(self.model)
+    # def setUp(self):
+    #     compiler = ModelCompiler()
+    #     self.model = compiler.read_and_parse_archive(r"./tests/resources/VDB.xlsx")
+    #     self.model.build_code()
+    #     self.evaluator = Evaluator(self.model)
 
     def test_vdb_basic(self):
         cost = 575000
@@ -55,11 +55,11 @@ class Test_VDB(unittest.TestCase):
         self.assertEqual(VDB.vdb(cost, salvage, life, start, end, rate, True), obj)
 
 
-    def test_evaluation_F23(self):
-        excel_value = self.evaluator.get_cell_value('Sheet1!F23')
-        value = self.evaluator.evaluate('Sheet1!F23')
-        self.assertEqual( excel_value, value )
-
+    # def test_evaluation_F23(self):
+    #     excel_value = self.evaluator.get_cell_value('Sheet1!F23')
+    #     value = self.evaluator.evaluate('Sheet1!F23')
+    #     self.assertEqual( excel_value, value )
+    #
 
     # def test_evaluation_F24(self):
     #     excel_value = self.evaluator.get_cell_value('Sheet1!F24')
