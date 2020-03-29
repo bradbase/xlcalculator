@@ -51,7 +51,7 @@ SUPPORTED_FUNCTIONS = {
     "SQRT":"Sqrt.sqrt",
     "SUM":"xSum.xsum",
     # "SUMIF":"SumIf.sumif",
-    # "SUMPRODUCT":"Sumproduct.sumproduct",
+    "SUMPRODUCT":"Sumproduct.sumproduct",
     "TODAY":"Today.today",
     # "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
     "VLOOKUP":"VLookup.vlookup", # need to support shared formulas and XLRange.ncols

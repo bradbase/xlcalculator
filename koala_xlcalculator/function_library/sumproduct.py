@@ -1,8 +1,9 @@
 
 # Excel reference: https://support.office.com/en-us/article/SUMPRODUCT-function-16753e75-9f68-4874-94ac-4d2145a2fd2e
 
-
 from functools import reduce
+
+from pandas import concat
 
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
@@ -11,23 +12,32 @@ from ..koala_types import XLRange
 class Sumproduct(KoalaBaseFunction):
     """"""
 
-    def sumproduct(self, *ranges):
+    @staticmethod
+    def sumproduct(range_1, *ranges):
         """"""
 
-        raise Exception("SUMPRODUCT DOESN'T WORK, XLRANGE ISN'T SUPPORTED")
+        if isinstance(range_1, XLRange):
+            range_1 = range_1.value
 
-        range_list = list(ranges)
+        range_length = len(range_1.values)
 
-        for r in range_list: # if a range has no values (i.e if it's empty)
-            if len(r.values) == 0:
+        for range in ranges: # if a range has no values (i.e if it's empty)
+            this_range_len = len(range.value.values)
+            if range_length != this_range_len:
+                raise ExcelError("#VALUE!", "The length of the ranges does not match. Looking for {} and you've given me a range of length {}".format(range_length, this_range_len))
+
+            if this_range_len == 0:
                 return 0
 
-        for range in range_list:
-            for item in range.values:
+        sumproduct_ranges = [range_1]
+        for range in ranges:
+            for item in range.value.values:
                 # If there is an ExcelError inside a Range, sumproduct should output an ExcelError
                 if isinstance(item, ExcelError):
                     raise ExcelError("#N/A", "ExcelErrors are present in the sumproduct items")
 
-        reduce(check_length, range_list) # check that all ranges have the same size
+            sumproduct_ranges.append(range.value)
 
-        return reduce(lambda X, Y: X + Y, reduce(lambda x, y: XLRange.apply_all('multiply', x, y), range_list).values)
+        sumproduct = concat(sumproduct_ranges, axis=1)
+
+        return sumproduct.prod(axis=1).sum()

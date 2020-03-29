@@ -58,6 +58,7 @@ koala_xlcalculator currently supports:
     * SLN
     * SQRT
     * SUM
+    * SUMPRODUCT
     * TODAY
     * VLOOKUP
       - Exact match only
