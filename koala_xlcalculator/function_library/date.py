@@ -53,6 +53,11 @@ class xDate(KoalaBaseFunction):
         else:
             return result
 
+    @staticmethod
+    def is_number(excel_date):
+        """"""
+        return isinstance(excel_date, (int, float))
+
 
     @staticmethod
     def normalize_year(y, m, d):

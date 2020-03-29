@@ -36,7 +36,6 @@ class TestNPV(unittest.TestCase):
         self.assertEqual(round(XNPV.xnpv(0.09, range_00, range_01), 2), 2086.65)
 
 
-    # @unittest.skip("""Problem evalling: unsupported operand type(s) for +: 'int' and 'XLCell' for Sheet1!A1, NPV.npv(self.eval_ref("Sheet1!A2"),self.eval_ref("Sheet1!A3"),self.eval_ref("Sheet1!A4"),self.eval_ref("Sheet1!A5"),self.eval_ref("Sheet1!A6"))""")
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')

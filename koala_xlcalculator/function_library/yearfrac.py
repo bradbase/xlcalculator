@@ -7,11 +7,13 @@ from datetime import date
 from .excel_lib import KoalaBaseFunction
 from ..exceptions import ExcelError
 from .date import xDate
+from ..koala_types import XLCell
 
 class Yearfrac(KoalaBaseFunction):
     """"""
 
-    def yearfrac(self, start_date, end_date, basis = 0):
+    @staticmethod
+    def yearfrac(start_date, end_date, basis = 0):
         """"""
 
         def actual_nb_days_ISDA(start, end): # needed to separate days_in_leap_year from days_not_leap_year
@@ -56,7 +58,7 @@ class Yearfrac(KoalaBaseFunction):
 
             delta = date(*end) - date(*start)
 
-            if delta <= 365:
+            if delta.days <= 365:
                 if xDate.is_leap_year(y1) and xDate.is_leap_year(y2):
                     denom = 366
 
@@ -79,8 +81,14 @@ class Yearfrac(KoalaBaseFunction):
 
             return delta / denom
 
+        if isinstance(start_date, XLCell):
+            start_date = start_date.value
+
+        if isinstance(end_date, XLCell):
+            end_date = end_date.value
+
         if not xDate.is_number(start_date):
-            raise ExcelError('#VALUE!', 'start_date %s must be a number' % str(start_date))
+            raise ExcelError('#VALUE!', 'start_date {} must be a number. You supplied {}'.format(str(start_date), type(start_date)))
 
         if not xDate.is_number(end_date):
             raise ExcelError('#VALUE!', 'end_date %s must be number' % str(end_date))
@@ -107,7 +115,7 @@ class Yearfrac(KoalaBaseFunction):
             result = count / 360
 
         elif basis == 1: # Actual/actual
-            result = actual_nb_days_AFB_alter((y1, m1, d1), (y2, m2, d2))
+            result = actual_nb_days_AFB_alter((y1, m1, d1), (y2, m2, d2)).seconds/60/60/24
 
         elif basis == 2: # Actual/360
             result = (end_date - start_date) / 360

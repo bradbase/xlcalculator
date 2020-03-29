@@ -56,7 +56,7 @@ SUPPORTED_FUNCTIONS = {
     # "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
     # "VLOOKUP":"Vlookup.vlookup",
     "XNPV":"XNPV.xnpv",
-    # "YEARFRAC":"Yearfrac.yearfrac",
+    "YEARFRAC":"Yearfrac.yearfrac",
     # # "GAMMALN":"lgamma",
 }
 
