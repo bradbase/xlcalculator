@@ -40,15 +40,18 @@ koala_xlcalculator currently supports:
     * COUNTA
     * DATE
     * IRR
-    * LN (Python Math.log() differs from Excel LN. Currently returning Math.log())
+    * LN
+      * (Python Math.log() differs from Excel LN. Currently returning Math.log())
     * MAX
     * MID
     * MIN
     * MOD
     * NPV
     * PMT
-    * POWER (Python numpy.power() differs from Excel POWER. Currently returning numpy.power())
-    * RIGHT (The anthill implementation of Koala was wacky, refers: "hack to deal with naca section numbers" so have introduced an optional ANTHILL compatibility for this method)
+    * POWER
+      * (Python numpy.power() differs from Excel POWER. Currently returning numpy.power())
+    * RIGHT
+      * (The anthill implementation of Koala was wacky, refers: "hack to deal with naca section numbers" so have introduced an optional ANTHILL compatibility for this method)
     * ROUND
     * ROUNDDOWN
     * ROUNDUP
