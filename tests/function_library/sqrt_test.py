@@ -21,8 +21,7 @@ class Test_Sqrt(unittest.TestCase):
 
 
     def test_first_argument_validity(self):
-        with self.assertRaises(ExcelError):
-            Sqrt.sqrt(-16)
+        self.assertIsInstance(Sqrt.sqrt(-16), ExcelError )
 
 
     def test_positive_integers(self):

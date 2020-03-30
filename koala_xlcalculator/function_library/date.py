@@ -26,16 +26,16 @@ class xDate(KoalaBaseFunction):
             day = day.value
 
         if type(year) != int:
-            raise ExcelError("#VALUE!", '%s is not an integer' % str(year))
+            return ExcelError("#VALUE!", '%s is not an integer' % str(year))
 
         if type(month) != int:
-            raise ExcelError("#VALUE!", '%s is not an integer' % str(month))
+            return ExcelError("#VALUE!", '%s is not an integer' % str(month))
 
         if type(day) != int:
-            raise ExcelError("#VALUE!", '%s is not an integer' % str(day))
+            return ExcelError("#VALUE!", '%s is not an integer' % str(day))
 
         if year < 0 or year > 9999:
-            raise ExcelError("#VALUE!", 'Year must be between 1 and 9999, instead %s' % str(year))
+            return ExcelError("#VALUE!", 'Year must be between 1 and 9999, instead %s' % str(year))
 
         if year < 1900:
             year = 1900 + year
@@ -48,7 +48,7 @@ class xDate(KoalaBaseFunction):
         result = (datetime(year, month, day) - date_0).days + 2
 
         if result <= 0:
-            raise ExcelError("#VALUE!", "Date result is negative")
+            return ExcelError("#VALUE!", "Date result is negative")
 
         else:
             return result

@@ -44,32 +44,32 @@ class Offset(KoalaBaseFunction):
         new_row = int(found.group(2)) + rows
 
         if new_row <= 0 or new_col <= 0:
-            raise ExcelError('#VALUE!', 'Offset is out of bounds')
+            return ExcelError('#VALUE!', 'Offset is out of bounds')
 
         start_address = str(num2col(new_col)) + str(new_row)
 
         if (height is not None and width is not None):
             if type(height) != int:
-                raise ExcelError('#VALUE!', '%d must not be integer' % height)
+                return ExcelError('#VALUE!', '%d must not be integer' % height)
 
             if type(width) != int:
-                raise ExcelError('#VALUE!', '%d must not be integer' % width)
+                return ExcelError('#VALUE!', '%d must not be integer' % width)
 
             if height > 0:
                 end_row = new_row + height - 1
 
             else:
-                raise ExcelError('#VALUE!', '%d must be strictly positive' % height)
+                return ExcelError('#VALUE!', '%d must be strictly positive' % height)
 
             if width > 0:
                 end_col = new_col + width - 1
 
             else:
-                raise ExcelError('#VALUE!', '%d must be strictly positive' % width)
+                return ExcelError('#VALUE!', '%d must be strictly positive' % width)
 
             end_address = ':' + str(num2col(end_col)) + str(end_row)
 
         elif height and not width or not height and width:
-            raise ExcelError('Height and width must be passed together')
+            return ExcelError('Height and width must be passed together')
 
         return ref_sheet + start_address + end_address

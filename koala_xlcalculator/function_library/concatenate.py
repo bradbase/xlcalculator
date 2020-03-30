@@ -20,11 +20,11 @@ class Concatenate(KoalaBaseFunction):
         """"""
 
         if tuple(KoalaBaseFunction.flatten(args)) != args:
-            raise ExcelError('#VALUE', 'Could not process arguments %s' % (args))
+            return ExcelError('#VALUE', 'Could not process arguments %s' % (args))
 
         cat_string = ''.join(str(a) for a in args)
 
         if len(cat_string) > KoalaBaseFunction.CELL_CHARACTER_LIMIT:
-            raise ExcelError('#VALUE', 'Too long. concatentaed string should be no longer than %s but is %s' % (KoalaBaseFunction.CELL_CHARACTER_LIMIT, len(cat_String)))
+            return ExcelError('#VALUE', 'Too long. concatentaed string should be no longer than %s but is %s' % (KoalaBaseFunction.CELL_CHARACTER_LIMIT, len(cat_String)))
 
         return cat_string

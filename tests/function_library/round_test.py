@@ -20,13 +20,11 @@ class Test_Round(unittest.TestCase):
 
 
     def test_nb_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            xRound.xround('er', 1)
+        self.assertIsInstance(xRound.xround('er', 1), ExcelError )
 
 
     def test_nb_digits_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            xRound.xround(2.323, 'ze')
+        self.assertIsInstance(xRound.xround(2.323, 'ze'), ExcelError )
 
 
     def test_positive_number_of_digits(self):

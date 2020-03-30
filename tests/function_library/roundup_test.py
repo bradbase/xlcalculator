@@ -19,14 +19,13 @@ class Test_Roundup(unittest.TestCase):
         self.evaluator = Evaluator(self.model)
 
 
+
     def test_nb_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            xRound.roundup('er', 1)
+        self.assertIsInstance(xRound.roundup('er', 1), ExcelError )
 
 
     def test_nb_digits_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            xRound.roundup(2.323, 'ze')
+        self.assertIsInstance(xRound.roundup(2.323, 'ze'), ExcelError )
 
 
     def test_positive_number_of_digits(self):

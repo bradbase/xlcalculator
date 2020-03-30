@@ -17,7 +17,7 @@ class Concat(KoalaBaseFunction):
     def concat(*args):
         """The CONCAT function combines the text from multiple ranges and/or strings, but it doesn't provide delimiter or IgnoreEmpty arguments."""
         if len(args) > 254:
-            raise ExcelError("#VALUE!", "Can't concat more than 254 arguments. You provided {}".format( len(args) ))
+            return ExcelError("#VALUE!", "Can't concat more than 254 arguments. You provided {}".format( len(args) ))
 
         joinable = []
         for item in args:

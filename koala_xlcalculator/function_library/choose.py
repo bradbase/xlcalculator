@@ -18,10 +18,10 @@ class Choose(KoalaBaseFunction):
             index_num = int(index_num)
 
         if index_num <= 0 or index_num > 254:
-            raise ExcelError("#VALUE!", "{} must be between 1 and 254".format( str(index_num) ))
+            return ExcelError("#VALUE!", "{} must be between 1 and 254".format( str(index_num) ))
 
         elif index_num > len(values):
-            raise ExcelError("#VALUE!", "{} must not be larger than the number of values: {}".format( str(index_num), len(values)) )
+            return ExcelError("#VALUE!", "{} must not be larger than the number of values: {}".format( str(index_num), len(values)) )
 
         else:
             if isinstance(values[index_num - 1], XLCell):

@@ -30,10 +30,10 @@ class xRound(KoalaBaseFunction):
         """Rounding half up"""
 
         if not xRound.is_number(number):
-            raise ExcelError("#VALUE!", "{} is not a number".format(str(number)))
+            return ExcelError("#VALUE!", "{} is not a number".format(str(number)))
 
         if not xRound.is_number(num_digits):
-            raise ExcelError("#VALUE!", "{} is not a number".format(str(num_digits)))
+            return ExcelError("#VALUE!", "{} is not a number".format(str(num_digits)))
 
         number = Decimal(str(number))
         dc = getcontext()

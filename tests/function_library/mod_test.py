@@ -21,13 +21,11 @@ class TestMod(unittest.TestCase):
 
 
     def test_first_argument_validity(self):
-        with self.assertRaises(ExcelError):
-            Mod.mod(2.2, 1)
+        self.assertIsInstance(Mod.mod(2.2, 1), ExcelError )
 
 
     def test_second_argument_validity(self):
-        with self.assertRaises(ExcelError):
-            Mod.mod(2, 1.1)
+        self.assertIsInstance(Mod.mod(2, 1.1), ExcelError )
 
 
     def test_output_value(self):

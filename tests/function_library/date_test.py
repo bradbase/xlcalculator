@@ -26,34 +26,30 @@ class Test_Date(unittest.TestCase):
     # def teardown(self):
     #     pass
 
+
+
     def test_year_must_be_integer(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate('2016', 1, 1)
+        self.assertIsInstance(xDate.xdate('2016', 1, 1), ExcelError )
 
 
     def test_month_must_be_integer(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate(2016, '1', 1)
+        self.assertIsInstance(xDate.xdate(2016, '1', 1), ExcelError )
 
 
     def test_day_must_be_integer(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate(2016, 1, '1')
+        self.assertIsInstance(xDate.xdate(2016, 1, '1'), ExcelError )
 
 
     def test_year_must_be_positive(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate(-1, 1, 1)
+        self.assertIsInstance(xDate.xdate(-1, 1, 1), ExcelError )
 
 
     def test_year_must_have_less_than_10000(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate(10000, 1, 1)
+        self.assertIsInstance(xDate.xdate(10000, 1, 1), ExcelError )
 
 
     def test_result_must_be_positive(self):
-        with self.assertRaises(ExcelError):
-            xDate.xdate(1900, 1, -1)
+        self.assertIsInstance(xDate.xdate(1900, 1, -1), ExcelError )
 
 
     def test_not_stricly_positive_month_substracts(self):

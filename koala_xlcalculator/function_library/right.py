@@ -23,7 +23,7 @@ class Right(KoalaBaseFunction):
     def excel(text, number_of_chars):
 
         if not isinstance(number_of_chars, int):
-            raise ExcelError("#VALUE!", "RIGHT function number of cars must be int, you've given me {}".format( type(number_of_chars) ))
+            return ExcelError("#VALUE!", "RIGHT function number of cars must be int, you've given me {}".format( type(number_of_chars) ))
 
         if isinstance(text, XLCell):
             text = str(text.value)

@@ -21,23 +21,19 @@ class Test_Mid(unittest.TestCase):
 
 
     def test_start_num_must_be_integer(self):
-        with self.assertRaises(ExcelError):
-            Mid.mid('Romain', 1.1, 2)
+        self.assertIsInstance(Mid.mid('Romain', 1.1, 2), ExcelError )
 
 
     def test_num_chars_must_be_integer(self):
-        with self.assertRaises(ExcelError):
-            Mid.mid('Romain', 1, 2.1)
+        self.assertIsInstance(Mid.mid('Romain', 1, 2.1), ExcelError )
 
 
     def test_start_num_must_be_superior_or_equal_to_1(self):
-        with self.assertRaises(ExcelError):
-            Mid.mid('Romain', 0, 3)
+        self.assertIsInstance(Mid.mid('Romain', 0, 3), ExcelError )
 
 
     def test_num_chars_must_be_positive(self):
-        with self.assertRaises(ExcelError):
-            Mid.mid('Romain', 1, -1)
+        self.assertIsInstance(Mid.mid('Romain', 1, -1), ExcelError )
 
 
     def test_mid(self):
@@ -57,7 +53,7 @@ class Test_Mid(unittest.TestCase):
         value = self.evaluator.evaluate('Sheet1!B1')
         self.assertEqual( excel_value, value )
 
-    
+
     def test_evaluation_C1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!C1')
         value = self.evaluator.evaluate('Sheet1!C1')

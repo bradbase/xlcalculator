@@ -24,7 +24,7 @@ class Sumproduct(KoalaBaseFunction):
         for range in ranges: # if a range has no values (i.e if it's empty)
             this_range_len = len(range.value.values)
             if range_length != this_range_len:
-                raise ExcelError("#VALUE!", "The length of the ranges does not match. Looking for {} and you've given me a range of length {}".format(range_length, this_range_len))
+                return ExcelError("#VALUE!", "The length of the ranges does not match. Looking for {} and you've given me a range of length {}".format(range_length, this_range_len))
 
             if this_range_len == 0:
                 return 0
@@ -34,7 +34,7 @@ class Sumproduct(KoalaBaseFunction):
             for item in range.value.values:
                 # If there is an ExcelError inside a Range, sumproduct should output an ExcelError
                 if isinstance(item, ExcelError):
-                    raise ExcelError("#N/A", "ExcelErrors are present in the sumproduct items")
+                    return ExcelError("#N/A", "ExcelErrors are present in the sumproduct items")
 
             sumproduct_ranges.append(range.value)
 

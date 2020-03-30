@@ -25,13 +25,13 @@ class VLookup(KoalaBaseFunction):
             table_array = table_array.value
 
         if col_index_num > len(table_array):
-            raise ExcelError('#VALUE', 'col_index_num is greater than the number of cols in table_array')
+            return ExcelError('#VALUE', 'col_index_num is greater than the number of cols in table_array')
 
         table_array = table_array.set_index(0)
 
         if not range_lookup:
             if lookup_value not in table_array.index:
-                raise ExcelError('#N/A', 'lookup_value not in first column of table_array')
+                return ExcelError('#N/A', 'lookup_value not in first column of table_array')
 
             else:
                 return table_array.loc[lookup_value].values[0]
@@ -47,6 +47,6 @@ class VLookup(KoalaBaseFunction):
         #             break
         #
         #     if i is None:
-        #         raise ExcelError('#N/A', 'lookup_value smaller than all values of table_array')
+        #         return ExcelError('#N/A', 'lookup_value smaller than all values of table_array')
         #
         # return XLRange.find_associated_value(ref, result_column)

@@ -218,7 +218,7 @@ class KoalaBaseFunction():
             return a
 
         elif isinstance(a, str) and a in ErrorCodes:
-            raise ExcelError(a)
+            return ExcelError(a)
 
         try:  # This is to avoid None or Exception returned by Range operations
             if float(a) or isinstance(a, (str)):

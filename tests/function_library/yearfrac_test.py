@@ -25,36 +25,31 @@ class TestYearfrac(unittest.TestCase):
 
 
     def test_start_date_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac('not a number', 1)
+        self.assertIsInstance(Yearfrac.yearfrac('not a number', 1), ExcelError )
 
 
     def test_end_date_must_be_number(self):
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac(1, 'not a number')
+        self.assertIsInstance(Yearfrac.yearfrac(1, 'not a number'), ExcelError )
 
 
     def test_start_date_must_be_positive(self):
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac(-1, 0)
+        self.assertIsInstance(Yearfrac.yearfrac(-1, 0), ExcelError )
 
 
     def test_end_date_must_be_positive(self):
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac(0, -1)
+        self.assertIsInstance(Yearfrac.yearfrac(0, -1), ExcelError )
 
 
     def test_basis_must_be_between_0_and_4(self):
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac(1, 2, 5)
-        with self.assertRaises(ExcelError):
-            Yearfrac.yearfrac(1, 2, -1)
+        self.assertIsInstance(Yearfrac.yearfrac(1, 2, 5), ExcelError )
+        self.assertIsInstance(Yearfrac.yearfrac(1, 2, -1), ExcelError )
 
 
     def test_yearfrac_basis_0(self):
         self.assertAlmostEqual(Yearfrac.yearfrac(xDate.xdate(2008, 1, 1), xDate.xdate(2015, 4, 20)), 7.30277777777778)
         self.assertAlmostEqual(Yearfrac.yearfrac(xDate.xdate(2008, 1, 1), xDate.xdate(2015, 4, 20), 0), 7.30277777777778)
         self.assertAlmostEqual(Yearfrac.yearfrac(xDate.xdate(2024, 1, 1), xDate.xdate(2025, 1, 1), 0), 1)
+
 
     @unittest.skip("basis_1 doesn't get accurate enough (not within 3 decimal places)")
     def test_yearfrac_basis_1(self):

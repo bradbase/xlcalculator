@@ -7,7 +7,8 @@ from .excel_lib import KoalaBaseFunction
 class Iferror(KoalaBaseFunction):
     """"""
 
-    def iferror(self, value, value_if_error):
+    @staticmethod
+    def iferror(value, value_if_error):
         """"""
 
         if isinstance(value, ExcelError) or value in ErrorCodes:

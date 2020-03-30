@@ -19,9 +19,9 @@ class Sqrt(KoalaBaseFunction):
 
         if isinstance(number, (int, float)):
             if number < 0:
-                raise ExcelError('#NUM!', '{} must be non-negative'.format( number ))
+                return ExcelError('#NUM!', '{} must be non-negative'.format( number ))
 
             return sqrt(number)
             
         else:
-            raise ExcelError('#VALUE!', '{} must be a number. You gave me a {}'.format( number, type(number) ))
+            return ExcelError('#VALUE!', '{} must be a number. You gave me a {}'.format( number, type(number) ))

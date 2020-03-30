@@ -17,10 +17,10 @@ class Counta(KoalaBaseFunction):
         """The COUNTA function counts the number of cells that are not empty in a range."""
 
         if arg is None:
-            raise ExcelError('#VALUE', 'value1 is required')
+            return ExcelError('#VALUE', 'value1 is required')
 
         if not isinstance(arg, (XLRange, DataFrame)):
-            raise ExcelError('#VALUE', "COUNTA only takes a range, you provided {}".format(type(args)))
+            return ExcelError('#VALUE', "COUNTA only takes a range, you provided {}".format(type(args)))
 
 
         if isinstance(arg, XLRange):

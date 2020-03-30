@@ -22,4 +22,4 @@ class Ln(KoalaBaseFunction):
             return log(val)
 
         else:
-            raise ExcelError("#VALUE!", "{} must be an XLCell, int or float. You've given me {}".format( val, type(val) ))
+            return ExcelError("#VALUE!", "{} must be an XLCell, int or float. You've given me {}".format( val, type(val) ))

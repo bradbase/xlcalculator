@@ -18,7 +18,7 @@ class Countifs(KoalaBaseFunction):
         l = len(arg_list)
 
         if l % 2 != 0:
-            raise ExcelError('#VALUE!', 'excellib.countifs() must have a pair number of arguments, here %d' % l)
+            return ExcelError('#VALUE!', 'excellib.countifs() must have a pair number of arguments, here %d' % l)
 
 
         if l >= 2:

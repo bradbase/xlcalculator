@@ -36,10 +36,10 @@ class Count(KoalaBaseFunction):
 
 
         if arg_1 is None:
-            raise ExcelError('#VALUE', 'value1 is required')
+            return ExcelError('#VALUE', 'value1 is required')
 
         if len(list(args)) > 255:
-            raise ExcelError('#VALUE', "Can only have up to 255 supplimentary arguments, you provided {}".format(len(args)))
+            return ExcelError('#VALUE', "Can only have up to 255 supplimentary arguments, you provided {}".format(len(args)))
 
         total = 0
         total += get_count(arg_1)

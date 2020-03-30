@@ -15,7 +15,7 @@ class Match(KoalaBaseFunction):
         raise Exception("MATCH DOESN'T WORK, XLRANGE DOESN'T SUPPORT .values")
 
         if not isinstance(lookup_range, XLRange):
-            raise ExcelError('#VALUE!', 'Lookup_range is not a Range')
+            return ExcelError('#VALUE!', 'Lookup_range is not a Range')
 
         def type_convert(value):
             if type(value) == str:
@@ -42,12 +42,12 @@ class Match(KoalaBaseFunction):
                 current = type_convert(range_values[i])
 
                 if i is not range_length-1 and current > type_convert(range_values[i+1]):
-                    raise ExcelError('#VALUE!', 'for match_type 1, lookup_range must be sorted ascending')
+                    return ExcelError('#VALUE!', 'for match_type 1, lookup_range must be sorted ascending')
 
                 if current <= lookup_value:
                     posMax = i
             if posMax == -1:
-                raise ExcelError('#VALUE!','no result in lookup_range for match_type 1')
+                return ExcelError('#VALUE!','no result in lookup_range for match_type 1')
 
             return posMax +1 #Excel starts at 1
 
@@ -58,7 +58,7 @@ class Match(KoalaBaseFunction):
                 return [type_convert(x) for x in range_values].index(lookup_value) + 1
 
             except:
-                raise ExcelError('#VALUE!', '%s not found' % lookup_value)
+                return ExcelError('#VALUE!', '%s not found' % lookup_value)
 
         elif match_type == -1:
             # Verify descending sort
@@ -67,12 +67,12 @@ class Match(KoalaBaseFunction):
                 current = type_convert(range_values[i])
 
                 if i is not range_length-1 and current < type_convert(range_values[i+1]):
-                   raise ExcelError('#VALUE!','for match_type -1, lookup_range must be sorted descending')
+                   return ExcelError('#VALUE!','for match_type -1, lookup_range must be sorted descending')
 
                 if current >= lookup_value:
                    posMin = i
 
             if posMin == -1:
-                raise ExcelError('#VALUE!', 'no result in lookup_range for match_type -1')
+                return ExcelError('#VALUE!', 'no result in lookup_range for match_type -1')
 
             return posMin +1 #Excel starts at 1

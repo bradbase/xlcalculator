@@ -12,10 +12,10 @@ class Mod(KoalaBaseFunction):
         """"""
 
         if not isinstance(nb, int):
-            raise ExcelError("#VALUE!", "{} is not an integer".format(str(nb)))
+            return ExcelError("#VALUE!", "{} is not an integer".format(str(nb)))
 
         elif not isinstance(q, int):
-            raise ExcelError("#VALUE!", "{} is not an integer".format(str(q)))
+            return ExcelError("#VALUE!", "{} is not an integer".format(str(q)))
 
         else:
             return nb % q

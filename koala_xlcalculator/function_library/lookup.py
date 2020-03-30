@@ -29,11 +29,11 @@ class Lookup(KoalaBaseFunction):
         output_range = result_range.values if result_range is not None else lookup_range.values
 
         if lastnum < 0:
-            raise ExcelError('#VALUE!', 'No numeric data found in the lookup range')
+            return ExcelError('#VALUE!', 'No numeric data found in the lookup range')
 
         else:
             if i == 0:
-                raise ExcelError('#VALUE!', 'All values in the lookup range are bigger than %s' % value)
+                return ExcelError('#VALUE!', 'All values in the lookup range are bigger than %s' % value)
 
             else:
                 if i >= len(lookup_range)-1:

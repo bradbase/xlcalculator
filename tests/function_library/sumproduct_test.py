@@ -23,12 +23,12 @@ class TestSumProduct(unittest.TestCase):
     # def teardown(self):
     #     pass
 
+
     def test_ranges_with_different_sizes(self):
         range1 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[1], [10], [3]]))
         range2 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[3], [3], [1], [2]]))
 
-        with self.assertRaises(ExcelError):
-            Sumproduct.sumproduct(range1, range2)
+        self.assertIsInstance(Sumproduct.sumproduct(range1, range2), ExcelError )
 
 
     def test_regular(self):
