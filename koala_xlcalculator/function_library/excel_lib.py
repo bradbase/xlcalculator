@@ -25,7 +25,7 @@ SUPPORTED_FUNCTIONS = {
     # "COUNTIF":"Countif.countif",
     # "COUNTIFS":"Countifs.countifs",
     "DATE":"xDate.xdate",
-    # "IFERROR":"Iferror.iferror",
+    # "IFERROR":"Iferror.iferror", # Can't happen outside the evaluator.
     # "INDEX":"Index.index",
     "IRR":"IRR.irr",
     # "ISBLANK":"Isblank.isblank",
@@ -40,7 +40,7 @@ SUPPORTED_FUNCTIONS = {
     "MIN":"xMin.xmin",
     "MOD":"Mod.mod",
     "NPV":"NPV.npv",
-    # "OFFSET":"Offset.offset",
+    # "OFFSET":"Offset.offset",  # Can't happen outside the evaluator.
     "PMT":"PMT.pmt",
     "POWER":"Power.power",
     "RIGHT":"Right.right",
