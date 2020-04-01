@@ -10,7 +10,7 @@ from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
 
-class TestNPV(unittest.TestCase):
+class TestRight(unittest.TestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
@@ -27,14 +27,12 @@ class TestNPV(unittest.TestCase):
         self.assertEqual(Right.right("Stock Number"), "r")
 
 
-    # @unittest.skip("""Problem evalling: unsupported operand type(s) for +: 'int' and 'XLCell' for Sheet1!A1, NPV.npv(self.eval_ref("Sheet1!A2"),self.eval_ref("Sheet1!A3"),self.eval_ref("Sheet1!A4"),self.eval_ref("Sheet1!A5"),self.eval_ref("Sheet1!A6"))""")
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqual( excel_value, value )
 
 
-    # @unittest.skip("""Problem evalling: unsupported operand type(s) for +: 'int' and 'XLCell' for Sheet1!B1, Evaluator.apply("add",NPV.npv(self.eval_ref("Sheet1!B2"),self.eval_ref("Sheet1!B4:B8"),Evaluator.apply_one("minus", 9000, None, None)),self.eval_ref("Sheet1!B3"),None))""")
     def test_evaluation_B1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!B1')
         value = self.evaluator.evaluate('Sheet1!B1')

@@ -1,6 +1,7 @@
 
 import logging
 from copy import deepcopy
+from decimal import Decimal
 
 import pandas as pd
 
@@ -81,6 +82,7 @@ class Evaluator():
 
         logging.debug("\r\nCell {} has a formula, {} \r\nwhich has been translated to Python as {} which evaluates to {}\r\n".format(cell.address, cell.formula.formula, cell.formula.python_code, cell.value))
 
+
         return cell.value
 
 
@@ -145,7 +147,7 @@ class Evaluator():
 
         if isinstance(first, XLRange) and isinstance(second, XLRange):
             if first.length != second.length:
-                raise ExcelError('#VALUE!', 'apply_all must have 2 Ranges of identical length')
+                return ExcelError('#VALUE!', 'apply_all must have 2 Ranges of identical length')
 
             vals = [function(
                 x.value if isinstance(x, CellBase) else x,
@@ -263,7 +265,7 @@ class Evaluator():
                         item_value = item[(item.origin[0], col)] if (item.origin[0], col) in item else None
 
                 else:
-                    raise ExcelError('#VALUE!', 'cannot use find_associated_value on %s' % item.type)
+                    return ExcelError('#VALUE!', 'cannot use find_associated_value on %s' % item.type)
 
             except ExcelError as e:
                 raise Exception('First argument of Range operation is not valid: ' + e.value)
@@ -306,22 +308,35 @@ class Evaluator():
 
 
     @staticmethod
-    def add(a, b):
+    def add(lhs, rhs):
         """"""
 
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
         try:
-            return Evaluator.check_value(a.value) + Evaluator.check_value(b.value)
+            return Evaluator.check_value(lhs) + Evaluator.check_value(rhs)
 
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def substract(a, b):
+    def substract(lhs, rhs):
         """"""
 
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
         try:
-            return Evaluator.check_value(a.value) - Evaluator.check_value(b.value)
+
+            return Evaluator.check_value(lhs) - Evaluator.check_value(rhs)
 
         except Exception as e:
             return ExcelError('#N/A', e)
@@ -333,70 +348,114 @@ class Evaluator():
 
         # b is not used, but needed in the signature. Maybe could be better
         try:
-            return -Evaluator.check_value(a.value)
+            if isinstance(a, XLCell):
+                a = a.value
+
+            return a * -1
 
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def multiply(a, b):
+    def multiply(lhs, rhs):
         """"""
 
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
         try:
-            return Evaluator.check_value(a.value) * Evaluator.check_value(b.value)
+
+            return Evaluator.check_value( lhs ) * Evaluator.check_value( rhs )
 
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def divide(a, b):
+    def divide(numerator, denominator):
         """"""
 
-        try:
-            return float(Evaluator.check_value(a.value)) / float(Evaluator.check_value(b.value))
+        if isinstance(numerator, XLCell):
+            numerator = numerator.value
 
-        except Exception as e:
+        if isinstance(denominator, XLCell):
+            denominator = denominator.value
+
+        if denominator == 0:
             return ExcelError('#DIV/0!', e)
 
+        return numerator / denominator
+
 
     @staticmethod
-    def is_strictly_superior(a, b):
+    def is_strictly_superior(lhs, rhs):
+
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
         try:
-            return Evaluator.check_value(a.value) > Evaluator.check_value(b.value)
+            return Evaluator.check_value(lhs) > Evaluator.check_value(rhs)
 
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def is_strictly_inferior(a, b):
+    def is_strictly_inferior(lhs, rhs):
+
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
         try:
-            return Evaluator.check_value(a.value) < Evaluator.check_value(b.value)
+            return Evaluator.check_value(lhs) < Evaluator.check_value(rhs)
+
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def is_superior_or_equal(a, b):
-        try:
-            a = Evaluator.check_value(a.value)
-            b = Evaluator.check_value(b.value)
+    def is_superior_or_equal(lhs, rhs):
 
-            return a > b or Evaluator.is_almost_equal(a, b)
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
+        try:
+            lhs = Evaluator.check_value(lhs)
+            rhs = Evaluator.check_value(rhs)
+
+            return a > b or Evaluator.is_almost_equal(lhs, rhs)
 
         except Exception as e:
             return ExcelError('#N/A', e)
 
 
     @staticmethod
-    def is_inferior_or_equal(a, b):
-        try:
-            a = Evaluator.check_value(a.value)
-            b = Evaluator.check_value(b.value)
+    def is_inferior_or_equal(lhs, rhs):
 
-            return a < b or Evaluator.is_almost_equal(a, b)
+        if isinstance(lhs, XLCell):
+            lhs = lhs.value
+
+        if isinstance(rhs, XLCell):
+            rhs = rhs.value
+
+        try:
+            lhs = Evaluator.check_value(lhs)
+            rhs = Evaluator.check_value(rhs)
+
+            return a < b or Evaluator.is_almost_equal(lhs, rhs)
 
         except Exception as e:
             return ExcelError('#N/A', e)

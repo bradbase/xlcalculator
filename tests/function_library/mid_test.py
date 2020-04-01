@@ -11,7 +11,7 @@ from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
 
-class Test_Mid(unittest.TestCase):
+class TestMid(unittest.TestCase):
 
     def setUp(self):
         compiler = ModelCompiler()

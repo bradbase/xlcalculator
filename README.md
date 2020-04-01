@@ -49,7 +49,6 @@ koala_xlcalculator currently supports:
     * NPV
     * PMT
     * POWER
-      - Python numpy.power() differs from Excel POWER. Currently returning numpy.power()
     * RIGHT
       - The anthill implementation of Koala was wacky, refers: "hack to deal with naca section numbers" so have introduced an optional ANTHILL compatibility for this method
     * ROUND
@@ -95,20 +94,24 @@ Do the git things.. fork, clone, branch. checkout the new branch and then;
 - Update the README.md to state that function is supported.
 - Put your code, tests and doco forward as a pull request.
 
-# Compatibility modes
-Compatability modes are currently a fixed class attribute on excel_lib.KoalaBaseFunction(). Defaulted to "Excel" other valid values are:
-- "ANTHILL"
-  - Performs calculations compatible with those found in Anthill Koala where the function definition was markedly different to the intent of the corresponding Excel function.
-- "PYTHON"
-  - Performs calculations compatible Python, pandas, numpy and numpy_financial where the function output differs between the Microsoft Excel Help website, or Excel itself, and the result coming from Python or its libraries.
+# Excel number precision
+Excel number precision is a complex discussion.
+
+It has been discussed in a (Wikipedia page)[https://en.wikipedia.org/wiki/Numeric_precision_in_Microsoft_Excel].
+
+The fundamentals come down to floating point numbers and a contention between how they are represented in memory Vs how they are stored on disk Vs how they are presented on screen. A (Microsoft article)[https://www.microsoft.com/en-us/microsoft-365/blog/2008/04/10/understanding-floating-point-precision-aka-why-does-excel-give-me-seemingly-wrong-answers/] explains the contention.
+
+This project is taking care while reading numbers from the Excel file to try and remove a variety of representation errors.
+
+Further work will be required to keep numbers in-line with Excel throughout different transformations.
 
 # TODO
-- [] Fix all functions in the function_library so that they work.
-- [] Set up a travis continuous integration service
-- [] Improve testing
-- [] Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
-- [] Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
-- [] BUGS:
+- Fix all functions in the function_library so that they work.
+- Set up a travis continuous integration service
+- Improve testing
+- Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
+- Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
+- BUGS:
   - Somewhere between the archive and the tokens we can loose parameters from a function (probs in managing the stack / RPN stuff).
     - =CONCAT("SPAM", " ", A1:B2, "SPAM", " ") gets interpreted as =CONCAT(A1:B2, "SPAM", " ")
   - If there's a gap in cells in a formula, the gap cells error (maybe they don't get read into the model?)
@@ -118,8 +121,5 @@ Compatability modes are currently a fixed class attribute on excel_lib.KoalaBase
   - If you delete the sheets which are associated with a defined name, file reading breaks.
   - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
   - Reading some dates causes a tokenizing problem. eg; =DATE(2024,1,1)
-  - ExcelError evaluating Evaluator.apply("divide",4,5,None)
-  - function POWER evaluates incorrectly. 2401077.2220695755 != 2401077.2220695773  *ROUNDING ISSUES AND HOW MANY DECIMAL PLACES ARE RIFE*
-  - Problem evalling: #VALUE! Evaluator.apply_one("minus", 1.475, None, None)
   - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.
   - Support needed for shared formulas

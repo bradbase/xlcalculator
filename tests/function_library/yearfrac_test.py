@@ -2,6 +2,7 @@
 # Excel reference: https://support.office.com/en-us/article/yearfrac-function-3844141e-c76d-4143-82b6-208454ddc6a8
 
 import unittest
+
 from datetime import date
 
 import pandas as pd
@@ -13,9 +14,11 @@ from koala_xlcalculator.exceptions import ExcelError
 from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
+from ..koala_test import KoalaTestCase
+
 # Basis 1, 	Actual/actual, is in error. can only go to 3 decimal places
 
-class TestYearfrac(unittest.TestCase):
+class TestYearfrac(KoalaTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
@@ -84,16 +87,17 @@ class TestYearfrac(unittest.TestCase):
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value )
 
 
+    # only close within 3 decimal places.
     def test_evaluation_B1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!B1')
         value = self.evaluator.evaluate('Sheet1!B1')
-        self.assertEqual( round(excel_value, 4), round(value, 4) )
+        self.assertEqualTruncated( excel_value, value, 3 )
 
 
     def test_evaluation_C1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!C1')
         value = self.evaluator.evaluate('Sheet1!C1')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value )

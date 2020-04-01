@@ -2,6 +2,10 @@
 import logging
 from zipfile import ZipFile, ZIP_DEFLATED, BadZipfile
 import xml.etree.ElementTree as ET
+from decimal import Decimal
+from decimal import Context
+from decimal import ROUND_FLOOR
+import re
 
 from ..koala_types import XLCell
 from ..koala_types import XLFormula
@@ -19,6 +23,21 @@ class Reader():
 
     def __init__(self, file_name):
         self.excel_file_name = file_name
+
+
+    @staticmethod
+    def isInteger(value):
+        value = str(value)
+        return value=='0' or (value if value.find('..') > -1 else value.lstrip('-+').rstrip('0').rstrip('.')).isdigit()
+
+
+    @staticmethod
+    def isFloat(value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
 
 
     def read(self):
@@ -105,6 +124,8 @@ class Reader():
                 logging.info( "Reading cells from {}".format(sheet_name) )
                 worksheet_root = self._parse_archive("xl/%s" % self.worksheet_metadata[sheet_id]['Target'])
 
+                decimal_context = Context(prec=15, rounding=ROUND_FLOOR)
+
                 rows = worksheet_root.findall('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheetData/{http://schemas.openxmlformats.org/spreadsheetml/2006/main}row')
                 for row in rows:
 
@@ -140,12 +161,15 @@ class Reader():
                             # TODO: test a numeric value - could be legacy
                             # if column attribute 't' has value 'n' there's a number in this cell
                             elif column.attrib['t'] in ['n']:
-                                try:
 
+                                if Reader.isInteger(value):
                                     value = int(value)
 
-                                except ValueError:
-                                    value = float(value)
+                                elif Reader.isFloat(value):
+                                    decimal_from_float = decimal_context.create_decimal_from_float(float(value))
+                                    decimal_value = Decimal(value)
+                                    diff = decimal_value - decimal_from_float
+                                    value = float(decimal_from_float + diff)
 
                             # if column attribute 't' has value 'array' we have found a dynamic array
                             elif column.attrib['t'] in ['array']:
@@ -156,12 +180,14 @@ class Reader():
                                 pass
 
                         else: # if the cell type is not specified there may be a number in the cell
-                            try:
-
+                            if Reader.isInteger(value):
                                 value = int(value)
 
-                            except ValueError:
-                                value = float(value)
+                            elif Reader.isFloat(value):
+                                decimal_from_float = decimal_context.create_decimal_from_float(float(value))
+                                decimal_value = Decimal(value)
+                                diff = decimal_value - decimal_from_float
+                                value = float(decimal_from_float + diff)
 
                         cell_address = column.get('r')
                         should_eval = 'normal'

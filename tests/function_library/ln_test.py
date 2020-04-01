@@ -10,8 +10,10 @@ from koala_xlcalculator.koala_types import XLCell
 from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
+from ..koala_test import KoalaTestCase
 
-class TestLn(unittest.TestCase):
+
+class TestLn(KoalaTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
@@ -25,26 +27,26 @@ class TestLn(unittest.TestCase):
         self.assertEqual(result_00, round(ln_result_00, 7))
 
 
-    @unittest.skip("Is Python Math.log based on e? AssertionError: 4.4543473 != 4.454347296253507 and AssertionError: 1 != 0.9999999895305024")
-    def test_ln_not_rounded(self):
-
+    def test_ln_rounded(self):
         ln_01 = XLCell("Sheet1!A1", 86)
-        result_01 = 4.4543473
+        result_01 = 4.4543473 # this doesn't have enough decimal places but is what's in the LN function examples from MS.
         ln_result_01 = Ln.ln(ln_01)
-        self.assertEqual(result_01, ln_result_01)
+        self.assertEqualRounded(result_01, ln_result_01)
 
+
+    def test_ln_not_rounded(self):
         ln_result_02 = Ln.ln(2.7182818)
-        result_02 = 1
-        self.assertEqual(result_02, ln_result_02)
+        result_02 = 1 # this is in error but is what's in the LN function examples from MS.
+        self.assertEqualRounded(result_02, ln_result_02)
 
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value )
 
 
     def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value )

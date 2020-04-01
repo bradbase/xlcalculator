@@ -3,6 +3,8 @@ from datetime import datetime
 from collections.abc import Iterable
 import itertools
 
+from pandas import DataFrame
+
 ######################################################################################
 # A dictionary that maps excel function names onto python equivalents. You should
 # only add an entry to this map if the python name is different to the excel name
@@ -129,8 +131,11 @@ class KoalaBaseFunction():
 
 
     @staticmethod
-    def flatten(l, only_lists=False):
-        return list(itertools.chain(*l))
+    def flatten(this_list, only_lists=False):
+        if isinstance(this_list, DataFrame):
+            this_list = this_list.values.tolist()
+
+        return list(itertools.chain(*this_list))
     # def flatten(l, only_lists = False):
     #     instance = list if only_lists else collections.Iterable
     #

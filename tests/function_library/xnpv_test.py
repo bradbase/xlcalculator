@@ -12,8 +12,10 @@ from koala_xlcalculator.exceptions import ExcelError
 from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
+from ..koala_test import KoalaTestCase
 
-class TestNPV(unittest.TestCase):
+
+class TestNPV(KoalaTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
@@ -39,4 +41,4 @@ class TestNPV(unittest.TestCase):
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value )

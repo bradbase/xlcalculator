@@ -38,14 +38,12 @@ class TestMod(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Problem evalling: #VALUE! for Sheet1!A2, Mod.mod(Evaluator.apply_one("minus", 3, None, None),2)')
     def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Problem evalling: #VALUE! for Sheet1!A3, Mod.mod(3,Evaluator.apply_one("minus", 2, None, None))')
     def test_evaluation_A3(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')

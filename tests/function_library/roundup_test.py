@@ -60,14 +60,12 @@ class Test_Roundup(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Problem evalling: #VALUE! for Sheet1!A4, xRound.roundup(Evaluator.apply_one("minus", 3.14159, None, None),1)')
     def test_evaluation_A4(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A4')
         value = self.evaluator.evaluate('Sheet1!A4')
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Problem evalling: #VALUE! for Sheet1!A5, xRound.roundup(31415.92654,Evaluator.apply_one("minus", 2, None, None))')
     def test_evaluation_A5(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A5')
         value = self.evaluator.evaluate('Sheet1!A5')

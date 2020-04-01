@@ -10,8 +10,9 @@ from koala_xlcalculator.exceptions import ExcelError
 from koala_xlcalculator import ModelCompiler
 from koala_xlcalculator import Evaluator
 
+from ..koala_test import KoalaTestCase
 
-class Test_Power(unittest.TestCase):
+class TestPower(KoalaTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
@@ -45,11 +46,10 @@ class Test_Power(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip("AssertionError: 2401077.2220695755 != 2401077.2220695773")
     def test_evaluation_A2(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A2')
         value = self.evaluator.evaluate('Sheet1!A2')
-        self.assertEqual( excel_value, value )
+        self.assertEqualTruncated( excel_value, value, 8 )
 
 
     @unittest.skip("""Problem evalling: unsupported operand type(s) for ** or pow(): 'int' and 'ExcelError' for Sheet1!A3, Power.power(4,Evaluator.apply("divide",4,5,None))""")

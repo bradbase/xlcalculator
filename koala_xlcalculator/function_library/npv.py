@@ -12,14 +12,16 @@ class NPV(KoalaBaseFunction):
     """"""
 
     @staticmethod
-    def npv(rate, *args):
+    def npv(discount_rate, *args):
         """"""
 
-        discount_rate = rate
         if len(args) < 1:
             raise Exception("NPV needs a value_1")
 
         cashflow = []
+
+        if isinstance(discount_rate, XLCell):
+            discount_rate = discount_rate.value
 
         for item in args:
             if isinstance(item, XLRange):

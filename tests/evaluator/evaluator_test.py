@@ -7,6 +7,7 @@ from jsonpickle import encode, decode
 
 from koala_xlcalculator.evaluator.evaluator import Evaluator
 from koala_xlcalculator.model.model import Model
+from koala_xlcalculator.model.model_compiler import ModelCompiler
 
 from ..formulas import *
 
@@ -68,3 +69,79 @@ class TestEvaluator(unittest.TestCase):
         result_00 = 88
         self.assertEqual(result_00, evaluated_result_00)
         self.evaluator.set_cell_value('First!A2', 0.1) # Put it back the way we found it.
+
+
+    def test_divide_eval(self):
+        div_compiler = ModelCompiler()
+        div_model = div_compiler.read_and_parse_archive(r"./tests/resources/division.xlsx")
+        div_model.build_code()
+        div_evaluator = Evaluator(div_model)
+
+        excel_value_00 = div_evaluator.get_cell_value('Sheet1!A1')
+        value_00 = div_evaluator.evaluate('Sheet1!A1')
+        self.assertEqual( excel_value_00, value_00 )
+
+        excel_value_01 = div_evaluator.get_cell_value('Sheet1!B1')
+        value_01 = div_evaluator.evaluate('Sheet1!B1')
+        self.assertEqual( excel_value_01, value_01 )
+
+
+    def test_subtract_eval(self):
+        sub_compiler = ModelCompiler()
+        sub_model = sub_compiler.read_and_parse_archive(r"./tests/resources/subtraction.xlsx")
+        sub_model.build_code()
+        sub_evaluator = Evaluator(sub_model)
+
+        excel_value_00 = sub_evaluator.get_cell_value('Sheet1!A1')
+        value_00 = sub_evaluator.evaluate('Sheet1!A1')
+        self.assertEqual( excel_value_00, value_00 )
+
+        excel_value_01 = sub_evaluator.get_cell_value('Sheet1!B1')
+        value_01 = sub_evaluator.evaluate('Sheet1!B1')
+        self.assertEqual( excel_value_01, value_01 )
+
+        excel_value_02 = sub_evaluator.get_cell_value('Sheet1!C1')
+        value_02 = sub_evaluator.evaluate('Sheet1!C1')
+        self.assertEqual( excel_value_02, value_02 )
+
+
+    def test_addition_eval(self):
+        add_compiler = ModelCompiler()
+        add_model = add_compiler.read_and_parse_archive(r"./tests/resources/addition.xlsx")
+        add_model.build_code()
+        add_evaluator = Evaluator(add_model)
+
+        excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')
+        value_00 = add_evaluator.evaluate('Sheet1!A1')
+        self.assertEqual( excel_value_00, value_00 )
+
+        excel_value_01 = add_evaluator.get_cell_value('Sheet1!B1')
+        value_01 = add_evaluator.evaluate('Sheet1!B1')
+        self.assertEqual( excel_value_01, value_01 )
+
+        excel_value_02 = add_evaluator.get_cell_value('Sheet1!C1')
+        value_02 = add_evaluator.evaluate('Sheet1!C1')
+        self.assertEqual( excel_value_02, value_02 )
+
+
+    def test_multiplication_eval(self):
+        add_compiler = ModelCompiler()
+        add_model = add_compiler.read_and_parse_archive(r"./tests/resources/multiplication.xlsx")
+        add_model.build_code()
+        add_evaluator = Evaluator(add_model)
+
+        excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')
+        value_00 = add_evaluator.evaluate('Sheet1!A1')
+        self.assertEqual( excel_value_00, value_00 )
+
+        excel_value_01 = add_evaluator.get_cell_value('Sheet1!B1')
+        value_01 = add_evaluator.evaluate('Sheet1!B1')
+        self.assertEqual( excel_value_01, value_01 )
+
+        excel_value_02 = add_evaluator.get_cell_value('Sheet1!C1')
+        value_02 = add_evaluator.evaluate('Sheet1!C1')
+        self.assertEqual( excel_value_02, value_02 )
+
+        excel_value_03 = add_evaluator.get_cell_value('Sheet1!D1')
+        value_03 = add_evaluator.evaluate('Sheet1!D1')
+        self.assertEqual( excel_value_03, value_03 )
