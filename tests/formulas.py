@@ -299,14 +299,19 @@ formula_range_address_with_different_sheets = Formula(
 #     print("edge", edge[0], edge[1], type(edge[0]), type(edge[1]))
 #
 ast_graph_range_address_union = nx.DiGraph()
-ast_graph_range_address_union.add_node(RangeNode(f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), None), pos=1)
-ast_graph_range_address_union.add_node(RangeNode(f_token(tvalue='A2:B2', ttype='operand', tsubtype='range'), None), pos=2)
-ast_graph_range_address_union.add_node(OperatorNode(f_token(tvalue=',', ttype='operator-infix', tsubtype='union'), None), pos=3)
-ast_graph_range_address_union.add_edge(RangeNode(f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), None), OperatorNode(f_token(tvalue=',', ttype='operator-infix', tsubtype='union'), None) )
-ast_graph_range_address_union.add_edge(RangeNode(f_token(tvalue='A2:B2', ttype='operand', tsubtype='range'), None), OperatorNode(f_token(tvalue=',', ttype='operator-infix', tsubtype='union'), None) )
+# the tokens need to be the same object value as we intialize with a UUID
+f_token_0 = f_token(tvalue='A1:B1', ttype='operand', tsubtype='range')
+f_token_1 = f_token(tvalue='A2:B2', ttype='operand', tsubtype='range')
+f_token_2 = f_token(tvalue=',', ttype='operator-infix', tsubtype='union')
+
+ast_graph_range_address_union.add_node(RangeNode(f_token_0, None), pos=1)
+ast_graph_range_address_union.add_node(RangeNode(f_token_1, None), pos=2)
+ast_graph_range_address_union.add_node(OperatorNode(f_token_2, None), pos=3)
+ast_graph_range_address_union.add_edge(RangeNode(f_token_0, None), OperatorNode(f_token_2, None) )
+ast_graph_range_address_union.add_edge(RangeNode(f_token_1, None), OperatorNode(f_token_2, None) )
 formula_range_address_union = Formula(
         'A1:B1,A2:B2',
-        [f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), f_token(tvalue=',', ttype='operator-infix', tsubtype='union'), f_token(tvalue='A2:B2', ttype='operand', tsubtype='range')],
+        [f_token_0, f_token_2, f_token_1],
         [], # reverse_polish_tokens
         ast_graph_range_address_union,
         None
@@ -314,13 +319,20 @@ formula_range_address_union = Formula(
 
 
 ast_graph_range_address_function = nx.DiGraph()
-ast_graph_range_address_function.add_node(RangeNode(f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), None), pos=1)
-ast_graph_range_address_function.add_node(FunctionNode(f_token(tvalue='SUM', ttype='function', tsubtype='start'), None), pos=2)
-ast_graph_range_address_function.add_edge(RangeNode(f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), None), FunctionNode(f_token(tvalue='SUM', ttype='function', tsubtype='start'), None))
+# the tokens need to be the same object value as we intialize with a UUID
+f_token_0 = f_token(tvalue='SUM', ttype='function', tsubtype='start')
+f_token_1 = f_token(tvalue='A1:B1', ttype='operand', tsubtype='range')
+f_token_2 = f_token(tvalue='', ttype='function', tsubtype='stop')
+
+range_1 = RangeNode(f_token_1, None)
+function_1 = FunctionNode(f_token_0, None)
+ast_graph_range_address_function.add_node(range_1, pos=1)
+ast_graph_range_address_function.add_node(function_1, pos=2)
+ast_graph_range_address_function.add_edge(range_1, function_1)
 formula_range_address_function = Formula(
         'SUM(A1:B1)',
-        [f_token(tvalue='SUM', ttype='function', tsubtype='start'), f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), f_token(tvalue='', ttype='function', tsubtype='stop')],
-        [FunctionNode(f_token(tvalue='SUM', ttype='function', tsubtype='start'), None), RangeNode(f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'), None)], # reverse_polish_tokens
+        [f_token_0, f_token_1, f_token_2],
+        [FunctionNode(f_token_0, None), RangeNode(f_token_1, None)], # reverse_polish_tokens
         ast_graph_range_address_function, # ast_graph
-        FunctionNode(f_token(tvalue='SUM', ttype='function', tsubtype=''), None) # stack
+        FunctionNode(f_token_0, None) # stack
     )

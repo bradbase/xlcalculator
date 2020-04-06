@@ -5,7 +5,7 @@ import json
 import gzip
 from collections import deque
 
-import networkx as nx
+from networkx import DiGraph
 import matplotlib.pyplot as plt
 from jsonpickle import encode, decode
 
@@ -22,7 +22,7 @@ from ..read_excel import ExcelParser
 
 # def init_graph():
 #     """Default factory to initialise Formula.ranges."""
-#     return nx.DiGraph()
+#     return DiGraph()
 
 
 def init_dict():
@@ -43,7 +43,7 @@ class Operator(object):
 @dataclass
 class Model():
 
-    # graph: nx.DiGraph = field(init=False, default_factory=init_graph, compare=True, hash=True, repr=True)
+    # graph: DiGraph = field(init=False, default_factory=init_graph, compare=True, hash=True, repr=True)
     cells: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
     defined_names: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
     formulae: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
@@ -438,7 +438,7 @@ class Model():
         """Build an AST from an Excel formula expression in reverse polish notation."""
 
         #use a directed graph to store the tree
-        ast_graph = nx.DiGraph()
+        ast_graph = DiGraph()
         stack = []
 
         for n in expression:
@@ -453,8 +453,8 @@ class Model():
                         if '!' in arg1.tvalue and arg2.ttype == 'operand' and '!' not in arg2.tvalue:
                             arg2.tvalue = arg1.tvalue.split('!')[0] + '!' + arg2.tvalue
 
-                    ast_graph.add_node(arg1, pos = 1)
-                    ast_graph.add_node(arg2, pos = 2)
+                    ast_graph.add_node(arg1, pos = 0)
+                    ast_graph.add_node(arg2, pos = 1)
                     ast_graph.add_edge(arg1, n)
                     ast_graph.add_edge(arg2, n)
 
@@ -467,7 +467,6 @@ class Model():
                 args = []
                 for _ in range(n.num_args):
                     try:
-
                         args.append(stack.pop())
 
                     except:

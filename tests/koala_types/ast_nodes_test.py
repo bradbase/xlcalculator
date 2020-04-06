@@ -1,5 +1,7 @@
 import unittest
 
+from networkx import info
+
 from koala_xlcalculator.koala_types import OperatorNode
 # from koala_xlcalculator.koala_types import OperandNode
 from koala_xlcalculator.koala_types import RangeNode
@@ -16,7 +18,7 @@ class TestASTNodes(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
+    
     def test_operator_node(self):
         operator_node = OperatorNode(formula_range_address_union.tokens[1], None)
         operator_node_emit = operator_node.emit(formula_range_address_union.ast_graph, 'Sheet1')
@@ -27,7 +29,6 @@ class TestASTNodes(unittest.TestCase):
     @unittest.skip("No examples currently exist in the example spreadsheet")
     def test_operand_node(self):
         pass
-
 
     # TODO: Might be good to resolve the address representation descrepency between RangeNode and XLRange. Maybe there's synergy for large ranges.
     def test_range_node(self):

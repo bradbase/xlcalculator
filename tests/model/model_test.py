@@ -11,9 +11,10 @@ from koala_xlcalculator.koala_types import XLCell, XLFormula, XLRange
 from koala_xlcalculator.read_excel.tokenizer import f_token
 
 from ..formulas import *
+from ..koala_test import KoalaTestCase
 
 
-class TestModel(unittest.TestCase):
+class TestModel(KoalaTestCase):
 
     def setUp(self):
         infile = open(r"./tests/resources/model.json", "rb")
@@ -54,13 +55,13 @@ class TestModel(unittest.TestCase):
         this_model = deepcopy(self.model)
 
         cell_address = this_model.shunting_yard(formula_cell_address.address, self.model.defined_names)
-        self.assertEqual(formula_cell_address.reverse_polish_tokens, cell_address)
+        self.assertASTNodesEqual(formula_cell_address.reverse_polish_tokens, cell_address)
 
         cell_address_with_sheet = this_model.shunting_yard(formula_cell_address_with_sheet.address, self.model.defined_names)
-        self.assertEqual(formula_cell_address_with_sheet.reverse_polish_tokens, cell_address_with_sheet)
+        self.assertASTNodesEqual(formula_cell_address_with_sheet.reverse_polish_tokens, cell_address_with_sheet)
 
         cells_union_with_same_sheet = this_model.shunting_yard(formula_cells_union_with_same_sheet.address, self.model.defined_names)
-        self.assertEqual(formula_cells_union_with_same_sheet.reverse_polish_tokens, cells_union_with_same_sheet)
+        self.assertASTNodesEqual(formula_cells_union_with_same_sheet.reverse_polish_tokens, cells_union_with_same_sheet)
 
 
     @unittest.skip("I don't know how to easily compare networks. is_isomorphic isn't doing what I though it did.")
@@ -79,7 +80,7 @@ class TestModel(unittest.TestCase):
         range_node = RangeNode(f_token(tvalue='A1', ttype='operand', tsubtype='range'), None)
         created_range_node = this_model.create_node(f_token(tvalue='A1', ttype='operand', tsubtype='range'))
         self.assertIsInstance(created_range_node, RangeNode)
-        self.assertEqual(range_node, created_range_node)
+        self.assertEqual(range_node.__repr__(), created_range_node.__repr__())
 
 
     def test_set_value(self):

@@ -52,7 +52,6 @@ class TestPower(KoalaTestCase):
         self.assertEqualTruncated( excel_value, value, 8 )
 
 
-    @unittest.skip("""Problem evalling: unsupported operand type(s) for ** or pow(): 'int' and 'ExcelError' for Sheet1!A3, Power.power(4,Evaluator.apply("divide",4,5,None))""")
     def test_evaluation_A3(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A3')
         value = self.evaluator.evaluate('Sheet1!A3')

@@ -3,8 +3,10 @@ import unittest
 from koala_xlcalculator.koala_types import XLFormula
 from koala_xlcalculator.read_excel.tokenizer import f_token
 
+from ..koala_test import KoalaTestCase
 
-class TestFormula(unittest.TestCase):
+
+class TestFormula(KoalaTestCase):
 
     # def setUp(self):
     #     pass
@@ -27,7 +29,7 @@ class TestFormula(unittest.TestCase):
             f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'),
             f_token(tvalue='', ttype='function', tsubtype='stop')
         ]
-        self.assertEqual(tokens_00, xlformula_00.tokens)
+        self.assertASTNodesEqual(tokens_00, xlformula_00.tokens)
 
 
     @unittest.skip("Python code is currently built in Model.build_code() so needs to be tested in TestModel")

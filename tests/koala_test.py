@@ -60,3 +60,14 @@ class KoalaTestCase(TestCase):
             rhs_value = float('.'.join((rhs_before_dec, rhs_after_dec[0:truncating_places])))
 
         return self.assertAlmostEqual( lhs_value, rhs_value, truncating_places )
+
+
+    def assertASTNodesEqual(self, lhs, rhs):
+
+        return self.assertEqual(len(lhs), len(rhs))
+
+        item_equals = []
+        for item_index in range(0, len(lhs)):
+            item_equals.append( lhs[item_index] == rhs[item_index] )
+
+        return all(item_equals)

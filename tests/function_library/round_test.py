@@ -81,7 +81,6 @@ class Test_Round(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Cant tokenize two minuses in one formula')
     def test_evaluation_A7(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A7')
         value = self.evaluator.evaluate('Sheet1!A7')

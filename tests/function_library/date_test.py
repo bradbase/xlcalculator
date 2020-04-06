@@ -104,8 +104,20 @@ class Test_Date(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip('Problem evalling: #VALUE! for Sheet1!A17, xDate.xdate(self.eval_ref("Sheet1!B17"),self.eval_ref("Sheet1!C17"),self.eval_ref("Sheet1!D17"))')
+    @unittest.skip("""AssertionError: 42370 != ExcelError('#VALUE!', '2016 is not an integer')""")
     def test_evaluation_A17(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A17')
         value = self.evaluator.evaluate('Sheet1!A17')
+        self.assertEqual( excel_value, value )
+
+
+    def test_evaluation_A18(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A18')
+        value = self.evaluator.evaluate('Sheet1!A18')
+        self.assertEqual( excel_value, value )
+
+    @unittest.skip("""AssertionError: 36526 != ExcelError('#VALUE!', '2000 is not an integer')""")
+    def test_evaluation_A19(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!A19')
+        value = self.evaluator.evaluate('Sheet1!A19')
         self.assertEqual( excel_value, value )

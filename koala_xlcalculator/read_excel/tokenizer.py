@@ -24,8 +24,8 @@
 #========================================================================
 
 import re
-import collections
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import uuid
 
 
 def old_div(a, b):
@@ -75,7 +75,10 @@ class ExcelParserTokens(object):
     TOK_SUBTYPE_UNION       = "union";
     TOK_SUBTYPE_NONE        = "none";
 
+def init_uuid():
+    """Default factory to initialise Formula.ranges."""
 
+    return uuid.uuid4()
 
 #========================================================================
 #       Class: f_token
@@ -93,6 +96,7 @@ class f_token():
     tvalue: str
     ttype: str
     tsubtype: str
+    unique_identifier: uuid = field(init=False, default_factory=init_uuid, compare=True, hash=True, repr=True)
 
 
     def __repr__(self):
