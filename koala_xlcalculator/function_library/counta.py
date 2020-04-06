@@ -7,25 +7,44 @@ from pandas import DataFrame
 
 from .excel_lib import KoalaBaseFunction
 from ..koala_types import XLRange
+from ..koala_types import XLCell
 from ..exceptions import ExcelError
 
 class Counta(KoalaBaseFunction):
     """"""
 
     @staticmethod
-    def counta(arg):
+    def counta(arg_1, *args):
         """The COUNTA function counts the number of cells that are not empty in a range."""
+        
+        def get_counta(arg):
+            if isinstance(arg, XLRange):
+                return len([element for element in [item for item in itertools.chain( *arg.value.values.tolist() ) ] if element not in ['', None] ])
 
-        if arg is None:
+            elif isinstance(arg, XLCell):
+                return 1
+
+            elif isinstance(arg, DataFrame):
+                # I don't like nesting list comprehensions. But here we are...
+                return len([element for element in [item for item in itertools.chain( *arg.values.tolist() ) ] if element not in ['', None]  ])
+
+            elif arg not in ['', None]:
+                return 1
+
+            else:
+                return 0
+
+
+        if arg_1 is None:
             return ExcelError('#VALUE', 'value1 is required')
 
-        if not isinstance(arg, (XLRange, DataFrame)):
-            return ExcelError('#VALUE', "COUNTA only takes a range, you provided {}".format(type(args)))
+        if len(list(args)) > 255:
+            return ExcelError('#VALUE', "Can only have up to 255 supplimentary arguments, you provided {}".format(len(args)))
 
+        total = 0
+        total += get_counta(arg_1)
 
-        if isinstance(arg, XLRange):
-            return len([element for element in [item for item in itertools.chain( *arg.value.values.tolist() ) ] if element not in ['', None] ])
+        for arg in args:
+            total += get_counta(arg)
 
-        elif isinstance(arg, DataFrame):
-            # I don't like nesting list comprehensions. But here we are...
-            return len([element for element in [item for item in itertools.chain( *arg.values.tolist() ) ] if element not in ['', None] ])
+        return total

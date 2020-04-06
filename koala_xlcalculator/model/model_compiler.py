@@ -98,6 +98,13 @@ class ModelCompiler():
             for range in self.model.formulae[formula].ranges:
                 if ":" in range:
                     self.model.ranges[range] = XLRange(range, range)
+
+                if range in self.model.ranges:
+                    for r_ange in self.model.ranges[range].cells:
+                        for cell_address in r_ange:
+                            if cell_address not in self.model.cells.keys():
+                                self.model.cells[cell_address] = XLCell(cell_address, '')
+
                 # else:
                 #     print("about to put a cell into the range dict", range)
                 #     if range not in self.model.defined_names:
