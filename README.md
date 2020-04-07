@@ -23,11 +23,9 @@ koala_xlcalculator currently supports:
 * Loading Python compatible state
 * Evaluating
   * Individual cells
-  * Defined Name (a "named cell" or range)
-    * Returns the value of a cell referenced by the name
+  * Defined Names (a "named cell" or range)
   * Ranges
-    * Evaluation of a function which has had a range passed to it
-  * Shared formulas (not an Array Formula)
+  * Shared formulas (not an Array Formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
   * Functions
@@ -66,7 +64,7 @@ koala_xlcalculator currently supports:
   * Get cell value
 
 Not currently supported:
-* Array Formulas
+* Array Formulas (not a shared formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
 * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
   * ABS
   * EXP
