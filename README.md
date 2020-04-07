@@ -71,6 +71,9 @@ Not currently supported:
   * ABS
   * EXP
   * DB
+* Functions
+  * OFFSET
+  * INDEX
 
 # Run tests
 From the root koala_xlcalculator directory
