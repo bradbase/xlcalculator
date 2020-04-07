@@ -116,6 +116,8 @@ class Reader():
         cells = {}
         formulae = {}
         ranges = {}
+        shared_formulae = {}
+        shared_formula_offset = 0
         for sheet_id in self.worksheet_metadata:
 
             sheet_name = self.worksheet_metadata[sheet_id]['name']
@@ -134,15 +136,32 @@ class Reader():
 
                         formula = column.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}f')
                         if formula is not None:
+                            shared_index = None
+                            shared_formula = None
+                            shared_formula_range = None
+                            
                             if formula.get('t') is not None:
                                 return_type = formula.get('t')
+
+                                if return_type == 'shared':
+                                    shared_index = formula.get('si')
+                                    shared_formula = column.get('r')
+                                    shared_formula_offset += 1
+                                    if formula.text is not None:
+                                        shared_formulae[formula.get('si')] = {'formula' : formula.text, 'ref' : formula.get('ref')}
+                                        shared_formula_offset = 0
+
                             else:
                                 return_type = "value"
 
-                            # # Need to support shared formulas
-                            # if formula.text is None:
-                            #     print("FORMULA", formula.text, sheet_name, column.get('r'))
-                            formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'))
+                            if  formula.get('t') == 'shared' and formula.text is not None:
+                                formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula=shared_formula, shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
+
+                            elif formula.get('t') == 'shared' and formula.text is None:
+                                formula = XLFormula(shared_formulae[shared_index]['formula'], sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula=shared_formula, shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
+
+                            else:
+                                formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'))
 
                         value = column.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v')
                         if value is not None:

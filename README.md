@@ -23,16 +23,14 @@ koala_xlcalculator currently supports:
 * Loading Python compatible state
 * Evaluating
   * Individual cells
-    * no mathematical operation,
-    * address like Sheet1!A1
-    * essentially just returns the value of the cell
   * Defined Name (a "named cell" or range)
     * Returns the value of a cell referenced by the name
   * Ranges
     * Evaluation of a function which has had a range passed to it
+  * Shared formulas (not an Array Formula)
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
-  * Supported Functions
+  * Functions
     * AVERAGE
     * CHOOSE
     * CONCAT
@@ -66,10 +64,13 @@ koala_xlcalculator currently supports:
       - Basis 1, Actual/actual, is only within 3 decimal places
   * Set cell value
   * Get cell value
-  * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
-    * ABS
-    * EXP
-    * DB
+
+Not currently supported:
+* Array Formulas
+* Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
+  * ABS
+  * EXP
+  * DB
 
 # Run tests
 From the root koala_xlcalculator directory
@@ -114,6 +115,4 @@ Further work will be required to keep numbers in-line with Excel throughout diff
 - BUGS:
   - If you delete the sheets which are associated with a defined name, file reading breaks.
   - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
-  - Reading some dates causes a tokenizing problem. eg; =DATE(2024,1,1)
   - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.
-  - Support needed for shared formulas
