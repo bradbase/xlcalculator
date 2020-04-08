@@ -3,7 +3,8 @@ import logging
 from copy import deepcopy
 from decimal import Decimal
 
-import pandas as pd
+from pandas import DataFrame
+from numpy import ndarray
 
 from ..exceptions import ExcelError
 from ..koala_types import XLCell, XLRange
@@ -66,7 +67,10 @@ class Evaluator():
                     cell.value = value.values[0]
 
                 else:
-                    cell.value = value if value != '' else None
+                    if isinstance(value, ndarray):
+                        cell.value = value if len(value) != 0 else None
+                    else:
+                        cell.value = value if value != '' else None
 
             else:
                 cell.value = 0
@@ -95,7 +99,7 @@ class Evaluator():
         elif address in self.model.defined_names:
             # this is problematic as a defined name could be a cell, range or formula
             # TODO: support defined name to be cell, range and formula
-            return pd.DataFrame([self.model.defined_names[address]])
+            return DataFrame([self.model.defined_names[address]])
 
         elif address in self.model.ranges:
             range_cells = []
@@ -107,7 +111,7 @@ class Evaluator():
 
                 range_cells.append(row)
 
-            self.model.ranges[address].value = pd.DataFrame(range_cells)
+            self.model.ranges[address].value = DataFrame(range_cells)
 
             return self.model.ranges[address]
 

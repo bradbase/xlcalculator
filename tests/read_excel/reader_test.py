@@ -35,7 +35,7 @@ class TestRead_excel(unittest.TestCase):
     def test_read_cells(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
-        cells, formulae = archive.read_cells()
+        cells, formulae, ranges = archive.read_cells()
 
         self.assertEqual(sorted(self.cells.keys()), sorted(cells.keys()))
 
@@ -43,7 +43,7 @@ class TestRead_excel(unittest.TestCase):
     def test_read_formulae(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
-        cells, formulae = archive.read_cells()
+        cells, formulae, ranges = archive.read_cells()
 
         self.assertEqual(sorted(self.formulae.keys()), sorted(formulae.keys()))
 

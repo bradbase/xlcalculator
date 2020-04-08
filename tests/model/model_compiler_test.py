@@ -44,7 +44,7 @@ class TestModelCompiler(unittest.TestCase):
     def test_build_defined_names(self):
         model_compiler = ModelCompiler()
         archive = ModelCompiler.read_excel_file(r"./tests/resources/reader.xlsm")
-        model_compiler.model.cells, model_compiler.model.formulae = archive.read_cells()
+        model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells()
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
 
@@ -54,7 +54,7 @@ class TestModelCompiler(unittest.TestCase):
     def test_link_cells_to_defined_names(self):
         model_compiler = ModelCompiler()
         archive = ModelCompiler.read_excel_file(r"./tests/resources/reader.xlsm")
-        model_compiler.model.cells, model_compiler.model.formulae = archive.read_cells()
+        model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells()
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
         model_compiler.link_cells_to_defined_names()
@@ -62,10 +62,11 @@ class TestModelCompiler(unittest.TestCase):
         self.assertEqual(self.model.cells, model_compiler.model.cells)
 
 
+    # @unittest.skip("""Ranges not correctly stored in reader.json""")
     def test_build_ranges(self):
         model_compiler = ModelCompiler()
         archive = ModelCompiler.read_excel_file(r"./tests/resources/reader.xlsm")
-        model_compiler.model.cells, model_compiler.model.formulae = archive.read_cells()
+        model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells()
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
         model_compiler.build_ranges()

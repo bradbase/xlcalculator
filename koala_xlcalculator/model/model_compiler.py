@@ -33,7 +33,7 @@ class ModelCompiler():
 
     def parse_archive(self, archive, ignore_sheets = [], ignore_hidden = False):
         """"""
-        self.model.cells, self.model.formulae = archive.read_cells(ignore_sheets, ignore_hidden)
+        self.model.cells, self.model.formulae, self.model.ranges = archive.read_cells(ignore_sheets, ignore_hidden)
         self.defined_names = archive.read_defined_names(ignore_sheets, ignore_hidden)
         self.build_defined_names()
         self.link_cells_to_defined_names()
@@ -105,8 +105,3 @@ class ModelCompiler():
                         for cell_address in r_ange:
                             if cell_address not in self.model.cells.keys():
                                 self.model.cells[cell_address] = XLCell(cell_address, '')
-
-                # else:
-                #     print("about to put a cell into the range dict", range)
-                #     if range not in self.model.defined_names:
-                #         self.model.ranges[range] = XLCell(range)

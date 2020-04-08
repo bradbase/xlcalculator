@@ -24,6 +24,7 @@ class Choose(KoalaBaseFunction):
             return ExcelError("#VALUE!", "{} must not be larger than the number of values: {}".format( str(index_num), len(values)) )
 
         else:
+
             if isinstance(values[index_num - 1], XLCell):
                 return values[index_num - 1].value
 

@@ -19,7 +19,6 @@ class Test_Roundup(unittest.TestCase):
         self.evaluator = Evaluator(self.model)
 
 
-
     def test_nb_must_be_number(self):
         self.assertIsInstance(xRound.roundup('er', 1), ExcelError )
 

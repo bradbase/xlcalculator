@@ -9,6 +9,7 @@ import re
 
 from ..koala_types import XLCell
 from ..koala_types import XLFormula
+from ..koala_types import XLRange
 
 
 class Reader():
@@ -148,6 +149,10 @@ class Reader():
                                         shared_formulae[formula.get('si')] = {'formula' : formula.text, 'ref' : formula.get('ref')}
                                         shared_formula_offset = 0
 
+                                if return_type == 'array' and ":" in formula.get('ref'):
+                                    range_address = "{}!{}".format(sheet_name, formula.get('ref'))
+                                    ranges[range_address] = XLRange(range_address, range_address, formula=formula.text)
+
                             else:
                                 return_type = "value"
 
@@ -214,7 +219,7 @@ class Reader():
                         if formula is not None:
                             formulae[address] = formula
 
-        return [cells, formulae]
+        return [cells, formulae, ranges]
 
 
     def read_defined_names(self, ignore_sheets = [], ignore_hidden = False):

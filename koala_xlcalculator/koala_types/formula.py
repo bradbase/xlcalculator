@@ -45,7 +45,7 @@ class XLFormula():
 
         parser = ExcelParser()
 
-        if self.return_type not in ['array', 'shared']:
+        if self.return_type != 'shared':
             self.tokens = parser.getTokens(self.formula, sheet_name=self.sheet_name).items
 
         elif self.return_type == 'shared':
@@ -54,7 +54,7 @@ class XLFormula():
         for item in self.tokens:
             if item.ttype == 'operand' and item.tsubtype == 'range':
                 self.ranges.append(item.tvalue)
-                
+
 
     def formula_direction(self):
         """"""

@@ -30,7 +30,6 @@ class TestVLookup(unittest.TestCase):
         self.assertEqual( excel_value, value )
 
 
-    @unittest.skip("""""")
     def test_evaluation_E7(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!E7')
         value = self.evaluator.evaluate('Sheet1!E7')
