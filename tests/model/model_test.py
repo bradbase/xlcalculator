@@ -54,13 +54,13 @@ class TestModel(KoalaTestCase):
     def test_shunting_yard(self):
         this_model = deepcopy(self.model)
 
-        cell_address = this_model.shunting_yard(formula_cell_address.address, self.model.defined_names)
+        cell_address = this_model.shunting_yard(formula_cell_address, self.model.defined_names)
         self.assertASTNodesEqual(formula_cell_address.reverse_polish_tokens, cell_address)
 
-        cell_address_with_sheet = this_model.shunting_yard(formula_cell_address_with_sheet.address, self.model.defined_names)
+        cell_address_with_sheet = this_model.shunting_yard(formula_cell_address_with_sheet, self.model.defined_names)
         self.assertASTNodesEqual(formula_cell_address_with_sheet.reverse_polish_tokens, cell_address_with_sheet)
 
-        cells_union_with_same_sheet = this_model.shunting_yard(formula_cells_union_with_same_sheet.address, self.model.defined_names)
+        cells_union_with_same_sheet = this_model.shunting_yard(formula_cells_union_with_same_sheet, self.model.defined_names)
         self.assertASTNodesEqual(formula_cells_union_with_same_sheet.reverse_polish_tokens, cells_union_with_same_sheet)
 
 
@@ -68,7 +68,7 @@ class TestModel(KoalaTestCase):
     def test_build_ast(self):
         this_model = deepcopy(self.model)
 
-        range_address_function = this_model.shunting_yard(formula_range_address_function.address, self.model.defined_names)
+        range_address_function = this_model.shunting_yard(formula_range_address_function, self.model.defined_names)
         ast_graph, stack = this_model.build_ast(range_address_function)
         self.assertTrue( is_isomorphic(formula_range_address_function.ast_graph, ast_graph) )
         self.assertEqual(formula_range_address_function.stack, stack)

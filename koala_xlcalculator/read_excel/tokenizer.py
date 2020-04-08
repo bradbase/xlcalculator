@@ -26,6 +26,7 @@
 import re
 from dataclasses import dataclass, field
 import uuid
+from string import ascii_uppercase
 
 
 def old_div(a, b):
@@ -40,6 +41,34 @@ def old_div(a, b):
         return a // b
     else:
         return a / b
+
+
+def col2num(col):
+    if not col:
+        raise Exception("Column may not be empty")
+
+    tot = 0
+    for i,c in enumerate([c for c in col[::-1] if c != "$"]):
+        if c == '$': continue
+        tot += (ord(c)-64) * 26 ** i
+
+    return tot
+
+
+def num2col(num):
+    if num < 1:
+        raise Exception("Number must be larger than 0: %s" % num)
+
+    s = ''
+    q = num
+    while q > 0:
+        (q,r) = divmod(q,26)
+        if r == 0:
+            q = q - 1
+            r = 26
+        s = ascii_uppercase[r-1] + s
+
+    return s
 
 
 #========================================================================
@@ -290,7 +319,7 @@ class ExcelParser(ExcelParserTokens):
             self.OPERATORS = "+-*/^&=><"
 
 
-    def getTokens(self, formula, sheet_name=None):
+    def getTokens(self, formula, sheet_name=None, formula_transpose_direction=None, formula_transpose_offset=None):
         """"""
 
         def currentChar():
@@ -663,8 +692,32 @@ class ExcelParser(ExcelParserTokens):
                             elif ":" not in token.tvalue and "!" not in token.tvalue:
                                 try:
                                     column, row = [_f for _f in re.split('([A-Z\$]+)', token.tvalue) if _f]
-                                    int(row)
-                                    token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
+                                    row = int(row)
+
+                                    # shared formula support we need to transpose
+                                    # ranges in the formula.
+                                    # We can assume the shared formula doesn't
+                                    # need a sheet specification.
+                                    # Currently ignoring the fact we would probably
+                                    # want to re-write the formula iself as transposed
+                                    # rather than just change the python code
+                                    # for it.
+                                    # That said, when it comes to evaluation it
+                                    # won't have any impact. And to support formula
+                                    # re-write we would need a secondry ASTNode.emit()
+                                    # pathway
+                                    if "$" not in token.tvalue and formula_transpose_direction == 'rows':
+                                        row += formula_transpose_offset
+                                        token.tvalue = "{}!{}{}".format(sheet_name, column, row)
+
+                                    elif "$" not in token.tvalue and formula_transpose_direction == 'columns':
+                                        column_ordinal = col2num(column)
+                                        column = num2col(column_ordinal + formula_transpose_offset)
+                                        token.tvalue = "{}!{}{}".format(sheet_name, column, row)
+
+                                    else:
+                                        token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
+
                                 except ValueError:
                                     # is likely to be a defined name
                                     pass
@@ -694,10 +747,10 @@ class ExcelParser(ExcelParserTokens):
         return tokens
 
 
-    def parse(self, formula, sheet_name=None):
+    def parse(self, formula, sheet_name=None, formula_transpose_direction=None, formula_transpose_offset=None):
         """"""
 
-        self.tokens = self.getTokens(formula, sheet_name=sheet_name)
+        self.tokens = self.getTokens(formula, sheet_name=sheet_name, formula_transpose_direction=formula_transpose_direction, formula_transpose_offset=formula_transpose_offset)
 
     # def render(self):
     #     output = ""

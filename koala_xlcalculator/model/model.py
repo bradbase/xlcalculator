@@ -194,12 +194,12 @@ class Model():
         for cell in self.cells:
             if self.cells[cell].formula is not None:
                 sheet_name = self.cells[cell].sheet
-                tokenized_formula = self.shunting_yard(self.cells[cell].formula.formula, self.defined_names.keys(), sheet_name=sheet_name, ref=None, tokenize_range=False)
+                tokenized_formula = self.shunting_yard(self.cells[cell].formula, self.defined_names.keys(), ref=None, tokenize_range=False)
                 ast, root = self.build_ast(tokenized_formula)
                 self.cells[cell].formula.python_code = root.emit(ast, sheet_name=sheet_name)
 
 
-    def shunting_yard(self, expression, named_ranges, sheet_name=None, ref=None, tokenize_range=False):
+    def shunting_yard(self, formula, named_ranges, ref=None, tokenize_range=False):
         """
         Tokenize an excel formula expression into reverse polish notation
 
@@ -218,12 +218,18 @@ class Model():
         The output will actually be A2 + B2, because the formula is relative to cell C2.
         """
 
+        expression = formula.formula
+        sheet_name = formula.sheet_name
+
         #remove leading =
         if expression.startswith('='):
             expression = expression[1:]
 
         excel_parser = ExcelParser(tokenize_range = tokenize_range);
-        excel_parser.parse(expression, sheet_name=sheet_name)
+        if formula.return_type == 'shared':
+            excel_parser.parse(expression, sheet_name=sheet_name, formula_transpose_direction=formula.formula_direction(), formula_transpose_offset=formula.shared_formula_offset)
+        else:
+            excel_parser.parse(expression, sheet_name=sheet_name)
 
         # insert tokens for '(' and ')', to make things clearer below
         tokens = []

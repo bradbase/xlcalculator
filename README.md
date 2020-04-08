@@ -64,7 +64,7 @@ koala_xlcalculator currently supports:
   * Get cell value
 
 Not currently supported:
-* Array Formulas (not a shared formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
+* Array Formulas or CSE Formulas (not a shared formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula or https://support.office.com/en-us/article/guidelines-and-examples-of-array-formulas-7d94a64e-3ff3-4686-9372-ecfd5caa57c7#ID0EAAEAAA=Office_2013_-_Office_2019)
 * Functions required to complete testing as per Microsoft Office Help website for SQRT and LN
   * ABS
   * EXP

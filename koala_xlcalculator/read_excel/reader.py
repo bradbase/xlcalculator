@@ -139,7 +139,7 @@ class Reader():
                             shared_index = None
                             shared_formula = None
                             shared_formula_range = None
-                            
+
                             if formula.get('t') is not None:
                                 return_type = formula.get('t')
 
@@ -155,10 +155,10 @@ class Reader():
                                 return_type = "value"
 
                             if  formula.get('t') == 'shared' and formula.text is not None:
-                                formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula=shared_formula, shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
+                                formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
 
                             elif formula.get('t') == 'shared' and formula.text is None:
-                                formula = XLFormula(shared_formulae[shared_index]['formula'], sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula=shared_formula, shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
+                                formula = XLFormula(shared_formulae[shared_index]['formula'], sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'), shared_formula_offset=shared_formula_offset, shared_formula_range=shared_formulae[shared_index]['ref'])
 
                             else:
                                 formula = XLFormula(formula.text, sheet_name=sheet_name, return_type=return_type, reference=formula.get('ref'))
@@ -213,6 +213,7 @@ class Reader():
 
                         address = "{}!{}".format(sheet_name, cell_address)
                         cells[address] = XLCell(address, value = value, formula = formula)
+                        
                         if formula is not None:
                             formulae[address] = formula
 
