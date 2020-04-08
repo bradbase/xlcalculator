@@ -124,5 +124,3 @@ Further work will be required to keep numbers in-line with Excel throughout diff
 - Improve testing
 - Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
 - Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
-- BUGS:
-  - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
