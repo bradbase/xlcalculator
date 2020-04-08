@@ -72,6 +72,12 @@ class TestRead_excel(unittest.TestCase):
         self.assertEqual(self.defined_name_metadata, archive.defined_name_metadata)
 
 
+    def test_build_defined_name_metadata_broken_name_range(self):
+        archive = Reader(r"./tests/resources/defined_names.xlsx")
+        archive.read()
+        self.assertEqual({}, archive.defined_name_metadata)
+
+
     def test_build_worksheet_metadata(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()

@@ -69,9 +69,20 @@ Not currently supported:
   * ABS
   * EXP
   * DB
-* Functions
-  * OFFSET
+* Functions (to be feature complete against Koala2 0.0.31)
+  * CONCATENATE
+  * COUNTIF
+  * COUNTIFS
+  * IFERROR
   * INDEX
+  * ISBLANK
+  * ISNA
+  * ISTEXT
+  * LINEST
+  * LOOKUP
+  * MATCH
+  * OFFSET
+  * VDB
 
 # Run tests
 From the root koala_xlcalculator directory
@@ -114,6 +125,4 @@ Further work will be required to keep numbers in-line with Excel throughout diff
 - Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
 - Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
 - BUGS:
-  - If you delete the sheets which are associated with a defined name, file reading breaks.
   - Ranges aren't being tokenized or eval properly. Example found in the function CHOOSE
-  - #NUM! raises an ExcelError which cascades. A #NUM! error is a legitimate value for a cell.

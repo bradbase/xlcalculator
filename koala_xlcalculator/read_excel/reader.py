@@ -14,15 +14,12 @@ from ..koala_types import XLFormula
 class Reader():
     """"""
 
-    worksheet_metadata = {} # keyed on xl/workbook.xml {http://schemas.openxmlformats.org/officeDocument/2006/relationships}id
-    defined_name_metadata = {} # keyed on xl/workbook.xml {http://schemas.openxmlformats.org/officeDocument/2006/relationships}definedNames
-    shared_strings_metadata = {} # keyed on xl/sharedStrings.xml {http://schemas.openxmlformats.org/spreadsheetml/2006/main}si
-    archive = None
-    excel_file_name = None
-
-
     def __init__(self, file_name):
+        self.archive = None
         self.excel_file_name = file_name
+        self.worksheet_metadata = {} # keyed on xl/workbook.xml {http://schemas.openxmlformats.org/officeDocument/2006/relationships}id
+        self.defined_name_metadata = {} # keyed on xl/workbook.xml {http://schemas.openxmlformats.org/officeDocument/2006/relationships}definedNames
+        self.shared_strings_metadata = {} # keyed on xl/sharedStrings.xml {http://schemas.openxmlformats.org/spreadsheetml/2006/main}si
 
 
     @staticmethod
@@ -90,7 +87,7 @@ class Reader():
             defined_names = defined_name_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}definedNames")
             if defined_names is not None and len(defined_names) > 0:
                 for name in defined_names:
-                    if name.get('hidden') is None:
+                    if name.get('hidden') is None and name.text not in ['#REF!']:
                         self.defined_name_metadata[name.get('name')] = name.text
 
 
@@ -213,7 +210,7 @@ class Reader():
 
                         address = "{}!{}".format(sheet_name, cell_address)
                         cells[address] = XLCell(address, value = value, formula = formula)
-                        
+
                         if formula is not None:
                             formulae[address] = formula
 

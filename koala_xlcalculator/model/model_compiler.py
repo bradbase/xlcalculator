@@ -19,6 +19,7 @@ class ModelCompiler():
     def __init__(self):
 
         self.model = Model()
+        self.defined_names = {}
 
 
     @staticmethod
