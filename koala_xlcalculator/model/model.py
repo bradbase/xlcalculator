@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import json
 import gzip
 from collections import deque
+from copy import copy
 
 from networkx import DiGraph
 import matplotlib.pyplot as plt
@@ -58,11 +59,15 @@ class Model():
 
     def set_cell_value(self, address, value):
         """Sets a new value for a specified cell."""
+        if address in self.defined_names:
+            if isinstance(self.defined_names[address], XLCell):
+                address = self.defined_names[address].address
+
         if isinstance(address, str):
             if address in self.cells:
-                self.cells[address].value = value
+                self.cells[address].value = copy(value)
             else:
-                self.cells[address] = XLCell(address, value)
+                self.cells[address] = XLCell(address, copy(value))
 
         elif isinstance(address, XLCell):
             if address.address in self.cells:
@@ -75,6 +80,10 @@ class Model():
 
 
     def get_cell_value(self, address):
+        if address in self.defined_names:
+            if isinstance(self.defined_names[address], XLCell):
+                address = self.defined_names[address].address
+
         if isinstance(address, str):
             if address in self.cells:
                 return self.cells[address].value
@@ -141,7 +150,6 @@ class Model():
         #             if range not in self.defined_names:
         #                 self.ranges[range] = XLCell(range)
         # logging.debug("Summary of the cells converted to a network graph:\r\n%s" % nx.info(self.graph))
-
 
     # def translate(self, outputs = [], inputs = []):
     #     """Translates a Microsoft Excel cell structure into a model representation."""

@@ -22,6 +22,7 @@ koala_xlcalculator currently supports:
 * Saving Python compatible state
 * Loading Python compatible state
 * Ignore worksheets
+* Extracting sub-portions of a model. "focussing" on provided cell addresses or defined names
 * Evaluating
   * Individual cells
   * Defined Names (a "named cell" or range)

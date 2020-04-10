@@ -2,6 +2,7 @@
 import os.path
 import logging
 import re
+from copy import deepcopy
 
 from ..read_excel import Reader
 from ..koala_types import XLCell
@@ -44,7 +45,7 @@ class ModelCompiler():
         """"""
         archive = ModelCompiler.read_excel_file(file_name)
         self.parse_archive(archive, ignore_sheets=ignore_sheets)
-        return self.model
+        return deepcopy(self.model)
 
 
     def build_defined_names(self):
@@ -108,3 +109,32 @@ class ModelCompiler():
                         for cell_address in r_ange:
                             if cell_address not in self.model.cells.keys():
                                 self.model.cells[cell_address] = XLCell(cell_address, '')
+
+    @staticmethod
+    def extract(model, focus):
+        extracted_model = Model()
+
+        for address in focus:
+            if isinstance(address, str) and address in model.cells:
+                extracted_model.cells[address] = deepcopy(model.cells[address])
+
+            elif isinstance(address, str) and address in model.defined_names:
+                extracted_model.defined_names[address] = deepcopy(model.defined_names[address])
+                if isinstance(extracted_model.defined_names[address], XLCell):
+                    extracted_model.cells[model.defined_names[address].address] = deepcopy(model.cells[ model.defined_names[address].address ])
+
+                elif isinstance(extracted_model.defined_names[address], XLRange):
+                    for row in extracted_model.defined_names[address].cells:
+                        for column in row:
+                            extracted_model.cells[column] = deepcopy(model.cells[column])
+
+        for cell in extracted_model.cells:
+            if extracted_model.cells[cell].formula is not None:
+                for term in extracted_model.cells[cell].formula.terms:
+                    if term in extracted_model.cells and extracted_model.cells[cell].formula != model.cells[cell].formula:
+                        extracted_model.cells[cell].formula = deepcopy(model.cells[cell].formula)
+
+                    elif term not in extracted_model.cells:
+                        extracted_model.cells[cell] = deepcopy(model.cells[cell])
+
+        return extracted_model
