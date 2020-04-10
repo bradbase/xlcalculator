@@ -21,6 +21,7 @@ koala_xlcalculator currently supports:
 * Loading an Excel file into a Python compatible state
 * Saving Python compatible state
 * Loading Python compatible state
+* Ignore worksheets
 * Evaluating
   * Individual cells
   * Defined Names (a "named cell" or range)
@@ -124,3 +125,6 @@ Further work will be required to keep numbers in-line with Excel throughout diff
 - Improve testing
 - Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
 - Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
+
+# BUGS
+- Formatted text in a cell (eg; a subscript) breaks the reader.

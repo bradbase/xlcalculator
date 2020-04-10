@@ -639,9 +639,8 @@ class FunctionNode(ASTNode):
                 return f + "(" + ",".join( [n.emit(ast, sheet_name=sheet_name) for n in args] ) + ")"
 
             else:
-                message = "Function {} is not supported.".format(fun.upper())
+                message = "Function {} is not supported in koala_xlcalcualtor.".format(fun.upper())
                 logging.error(message)
-                raise Exception(message)
 
     def __repr__(self):
         return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)

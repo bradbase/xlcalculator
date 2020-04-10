@@ -10,9 +10,10 @@ from typing import List
 
 from ..read_excel import f_token
 from ..read_excel import ExcelParser
+from ..read_excel import ExcelParserTokens
 
 
-def init_ranges():
+def init_terms():
     """Default factory to initialise Formula.ranges."""
 
     return []
@@ -34,7 +35,7 @@ class XLFormula():
     reference: str = field(default=None, repr=True)
     evaluate: bool = field(default=True, repr=True)
     tokens: List[f_token] = field(init=False, default_factory=init_tokens, repr=True)
-    ranges: List[str] = field(init=False, default_factory=init_ranges, repr=True)
+    terms: List[str] = field(init=False, default_factory=init_terms, repr=True)
     python_code: str = field(init=False, default=None, repr=True)
     shared_formula_offset: int = field(default=None, compare=False, repr=False)
     shared_formula_range: str = field(default=None, compare=False, repr=False)
@@ -51,9 +52,9 @@ class XLFormula():
         elif self.return_type == 'shared':
             self.tokens = parser.getTokens(self.formula, sheet_name=self.sheet_name, formula_transpose_direction=self.formula_direction(), formula_transpose_offset=self.shared_formula_offset).items
 
-        for item in self.tokens:
-            if item.ttype == 'operand' and item.tsubtype == 'range':
-                self.ranges.append(item.tvalue)
+        for token in self.tokens:
+            if token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND and token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE and token.tvalue not in self.terms:
+                self.terms.append(token.tvalue)
 
 
     def formula_direction(self):

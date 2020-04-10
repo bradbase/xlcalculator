@@ -782,13 +782,3 @@ class ExcelParser(ExcelParserTokens):
     #             if (t.tsubtype == self.TOK_SUBTYPE_START):
     #                 indent += 1;
     #     return output
-
-    # required for integration with xlwings
-    def getOperandRanges(self):
-        operand_ranges = []
-        if self.tokens:
-            for t in self.tokens.items:
-                if t.ttype == self.TOK_TYPE_OPERAND and t.tsubtype == self.TOK_SUBTYPE_RANGE and t.tvalue not in operand_ranges:
-                        operand_ranges.append(t.tvalue)
-
-        return operand_ranges

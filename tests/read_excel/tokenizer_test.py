@@ -215,17 +215,3 @@ class TestExcelParser(KoalaTestCase):
         parser = ExcelParser()
         parser.parse('SUM(A1:B1)')
         self.assertASTNodesEqual(formula_range_address_function.tokens, parser.tokens.items)
-
-
-    def test_operand_ranges_function(self):
-        parser = ExcelParser()
-        parser.parse('SUM(A1:B1)')
-        operand_ranges = parser.getOperandRanges()
-        self.assertEqual(self.operand_range_00, operand_ranges)
-
-
-    def test_operand_ranges_operand(self):
-        parser = ExcelParser()
-        parser.parse('A1+B1')
-        operand_ranges = parser.getOperandRanges()
-        self.assertEqual(self.operand_range_01, operand_ranges)

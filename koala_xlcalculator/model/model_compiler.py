@@ -43,7 +43,7 @@ class ModelCompiler():
     def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False):
         """"""
         archive = ModelCompiler.read_excel_file(file_name)
-        self.parse_archive( archive )
+        self.parse_archive(archive, ignore_sheets=ignore_sheets)
         return self.model
 
 
@@ -56,7 +56,7 @@ class ModelCompiler():
 
             # a cell has an address like; Sheet1!A1
             if ':' not in cell_address:
-                self.model.defined_names[name] = XLCell(cell_address)
+                self.model.defined_names[name] = self.model.cells[cell_address]
 
             # a range has an address like;
             # Sheet1!A1:A5
@@ -65,6 +65,9 @@ class ModelCompiler():
             else:
                 self.model.defined_names[name] = XLRange(name, cell_address)
                 self.model.ranges[cell_address] = self.model.defined_names[name]
+
+            if cell_address in self.model.formulae and name not in self.model.formulae:
+                self.model.formulae[name] = self.model.cells[cell_address].formula
 
 
     def link_cells_to_defined_names(self):
@@ -96,7 +99,7 @@ class ModelCompiler():
         """"""
 
         for formula in self.model.formulae:
-            for range in self.model.formulae[formula].ranges:
+            for range in self.model.formulae[formula].terms:
                 if ":" in range:
                     self.model.ranges[range] = XLRange(range, range)
 

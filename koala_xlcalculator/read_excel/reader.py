@@ -102,10 +102,12 @@ class Reader():
         if shared_string_root is not None:
             counter = 0
             for shared_string in shared_string_root.findall("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}si"):
-                sh_string = shared_string.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t').text
-                sh_string = sh_string.replace('x005F_', '')
-                self.shared_strings_metadata[counter] = sh_string
-                counter += 1
+                the_string = shared_string.find('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t')
+                if the_string is not None:
+                    sh_string = the_string.text
+                    sh_string = sh_string.replace('x005F_', '')
+                    self.shared_strings_metadata[counter] = sh_string
+                    counter += 1
 
 
     def read_cells(self, ignore_sheets=[], ignore_hidden=False):
@@ -117,7 +119,6 @@ class Reader():
         shared_formulae = {}
         shared_formula_offset = 0
         for sheet_id in self.worksheet_metadata:
-
             sheet_name = self.worksheet_metadata[sheet_id]['name']
             if sheet_name not in ignore_sheets:
 
@@ -169,20 +170,39 @@ class Reader():
                         if value is not None:
                             value = value.text
 
-                        if 't' in column.attrib.keys():
-                            # if column attribute 't' has value 's' there's only a text (string) in this cell
-                            # we need to resolve the link to the shared string table and put the text as the value in our cell object
-                            if column.attrib['t'] in ['s']:
-                                value = self.shared_strings_metadata[int(value)]
+                            if 't' in column.attrib.keys():
+                                # if column attribute 't' has value 's' there's only a text (string) in this cell
+                                # we need to resolve the link to the shared string table and put the text as the value in our cell object
+                                if column.attrib['t'] in ['s']:
+                                    # unicode strings don't work in the shared strings mechanism.
+                                    value = self.shared_strings_metadata[int(value)]
 
-                            # TODO: test a boolean value - could be legacy
-                            elif column.attrib['t'] in ['b']:
-                                value = self.shared_strings_metadata[bool(value)]
+                                # TODO: test a boolean value - could be legacy
+                                elif column.attrib['t'] in ['b']:
+                                    value = self.shared_strings_metadata[bool(value)]
 
-                            # TODO: test a numeric value - could be legacy
-                            # if column attribute 't' has value 'n' there's a number in this cell
-                            elif column.attrib['t'] in ['n']:
+                                # TODO: test a numeric value - could be legacy
+                                # if column attribute 't' has value 'n' there's a number in this cell
+                                elif column.attrib['t'] in ['n']:
 
+                                    if Reader.isInteger(value):
+                                        value = int(value)
+
+                                    elif Reader.isFloat(value):
+                                        decimal_from_float = decimal_context.create_decimal_from_float(float(value))
+                                        decimal_value = Decimal(value)
+                                        diff = decimal_value - decimal_from_float
+                                        value = float(decimal_from_float + diff)
+
+                                # if column attribute 't' has value 'array' we have found a dynamic array
+                                elif column.attrib['t'] in ['array']:
+                                    # this cell is part of a dynamic array.
+                                    # we are not allowed to mutate this cell.
+                                    # we are likely to see a formula which defines the dynamic array
+                                    # TODO: support dynamic arrays
+                                    pass
+
+                            else: # if the cell type is not specified there may be a number in the cell
                                 if Reader.isInteger(value):
                                     value = int(value)
 
@@ -191,24 +211,6 @@ class Reader():
                                     decimal_value = Decimal(value)
                                     diff = decimal_value - decimal_from_float
                                     value = float(decimal_from_float + diff)
-
-                            # if column attribute 't' has value 'array' we have found a dynamic array
-                            elif column.attrib['t'] in ['array']:
-                                # this cell is part of a dynamic array.
-                                # we are not allowed to mutate this cell.
-                                # we are likely to see a formula which defines the dynamic array
-                                # TODO: support dynamic arrays
-                                pass
-
-                        else: # if the cell type is not specified there may be a number in the cell
-                            if Reader.isInteger(value):
-                                value = int(value)
-
-                            elif Reader.isFloat(value):
-                                decimal_from_float = decimal_context.create_decimal_from_float(float(value))
-                                decimal_value = Decimal(value)
-                                diff = decimal_value - decimal_from_float
-                                value = float(decimal_from_float + diff)
 
                         cell_address = column.get('r')
                         should_eval = 'normal'
