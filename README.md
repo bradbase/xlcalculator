@@ -1,5 +1,5 @@
 
-# Koala Excel Calculator
+# Excel Calculator
 
 In short xlcalculator is an attempted re-write of the [koala2](https://github.com/vallettea/koala) library with intent to modernize the code, increase maintainability and keep compatibility with external software solutions (self-indulgently one is - [FlyingKoala](https://github.com/bradbase/flyingkoala) ).
 
@@ -11,7 +11,7 @@ Koala2 had a few features which enabled me to use koala2 quite differently. I ad
 
 This use case provides the ability to view Excel workbooks as definitions of a calculation (a model or part thereof). Where the model is an abstraction that just so happens to be expressed in the form of an Excel spreadsheet. So, in that sense, koala2 wasn't simply replacing the Excel calculation engine but was more a toolkit which uses Excel as an interface for defining parts or whole mathematical systems. I saw that as very useful.
 
-These features I so covet have broken after some (much needed) code cleanup and I've struggled to re-implement them. With that, I have decided to use some parts of koala2 and implement a library which will have the features I'm interested in. I'm happy if this implementation (or something similar) becomes adopted by the koala2 project (I'd prefer to not split a universe) but, equally, I accept my goals may not overlap enough with that project.
+These features I so covet have broken after some (much needed) code clean-up and I've struggled to re-implement them. With that, I have decided to use some parts of koala2 and implement a library which will have the features I'm interested in. I'm happy if this implementation (or something similar) becomes adopted by the koala2 project (I'd prefer to not split a universe) but, equally, I accept my goals may not overlap enough with that project.
 
 Moving forward, this project, if used in one way, would achieve the purposes of replacing the Excel calculation engine or even be analogous to openpyxl with a "go" button. But would also offer significantly more for those who are inextricably bound to Excel but need more from their math. Which is what FlyingKoala is intended to facilitate.
 
@@ -125,7 +125,7 @@ Further work will be required to keep numbers in-line with Excel throughout diff
 - Set up a travis continuous integration service
 - Improve testing
 - Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
-- Refactor to ensure the function library only ever gets a non-koala datatype (eg; should only ever get types from pandas, numpy or Python built-in)
+- Refactor to ensure the function library only ever gets a non-xlcalculator datatype (eg; should only ever get types from pandas, numpy or Python built-in)
 - Handle multi-file addresses
 
 # BUGS
