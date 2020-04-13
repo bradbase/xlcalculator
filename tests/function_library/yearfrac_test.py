@@ -7,18 +7,18 @@ from datetime import date
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Yearfrac
-from koala_xlcalculator.function_library import xDate
-from koala_xlcalculator.koala_types import XLCell
-from koala_xlcalculator.exceptions import ExcelError
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Yearfrac
+from xlcalculator.function_library import xDate
+from xlcalculator.xlcalculator_types import XLCell
+from xlcalculator.exceptions import ExcelError
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
-from ..koala_test import KoalaTestCase
+from ..xlcalculator_test import XlCalculatorTestCase
 
 # Basis 1, 	Actual/actual, is in error. can only go to 3 decimal places
 
-class TestYearfrac(KoalaTestCase):
+class TestYearfrac(XlCalculatorTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()

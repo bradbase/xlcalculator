@@ -5,9 +5,9 @@ from copy import deepcopy
 
 from jsonpickle import encode, decode
 
-from koala_xlcalculator.evaluator.evaluator import Evaluator
-from koala_xlcalculator.model.model import Model
-from koala_xlcalculator.model.model_compiler import ModelCompiler
+from xlcalculator.evaluator.evaluator import Evaluator
+from xlcalculator.model.model import Model
+from xlcalculator.model.model_compiler import ModelCompiler
 
 from ..formulas import *
 

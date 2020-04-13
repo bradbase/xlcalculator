@@ -5,14 +5,14 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Power
-from koala_xlcalculator.exceptions import ExcelError
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Power
+from xlcalculator.exceptions import ExcelError
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
-from ..koala_test import KoalaTestCase
+from ..xlcalculator_test import XlCalculatorTestCase
 
-class TestPower(KoalaTestCase):
+class TestPower(XlCalculatorTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()

@@ -6,15 +6,15 @@ from copy import deepcopy
 from jsonpickle import encode, decode
 from networkx import info, nodes, edges, is_isomorphic
 
-from koala_xlcalculator.model.model import Model
-from koala_xlcalculator.koala_types import XLCell, XLFormula, XLRange
-from koala_xlcalculator.read_excel.tokenizer import f_token
+from xlcalculator.model.model import Model
+from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
+from xlcalculator.read_excel.tokenizer import f_token
 
 from ..formulas import *
-from ..koala_test import KoalaTestCase
+from ..xlcalculator_test import XlCalculatorTestCase
 
 
-class TestModel(KoalaTestCase):
+class TestModel(XlCalculatorTestCase):
 
     def setUp(self):
         infile = open(r"./tests/resources/model.json", "rb")

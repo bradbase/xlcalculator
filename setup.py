@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="koala_xlcalculator-bradbase",
+    name="xlcalculator-bradbase",
     version="0.0.1b",
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
-    description="koala_xlcalcualtor converts MS Excel formulas to Python and evaluates them.",
+    description="xlcalcualtor converts MS Excel formulas to Python and evaluates them.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/bradbase/koala_xlcalculator",
+    url="https://github.com/bradbase/xlcalculator",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

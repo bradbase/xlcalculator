@@ -5,9 +5,9 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Count
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Count
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 """
 The COUNT function syntax has the following arguments:

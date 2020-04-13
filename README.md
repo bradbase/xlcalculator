@@ -1,7 +1,7 @@
 
 # Koala Excel Calculator
 
-In short Koala_xlcalculator is an attempted re-write of the [koala2](https://github.com/vallettea/koala) library with intent to modernize the code, increase maintainability and keep compatibility with external software solutions (self-indulgently one is - [FlyingKoala](https://github.com/bradbase/flyingkoala) ).
+In short xlcalculator is an attempted re-write of the [koala2](https://github.com/vallettea/koala) library with intent to modernize the code, increase maintainability and keep compatibility with external software solutions (self-indulgently one is - [FlyingKoala](https://github.com/bradbase/flyingkoala) ).
 
 Koala2's heritage has been "spreadsheet replacement" in order to get performant calculation. In essence replacing the calculation engine in Excel with one which works faster. And, all credit to the civic hacker crew at [we are ants](https://weareants.fr/#!/koala-the-faster-excel), they absolutely succeeded. In various iterations of the project since it appears as though the koala2 has tried moving toward the idea of something like openpyxl with a "calculate" button.
 
@@ -17,7 +17,7 @@ Moving forward, this project, if used in one way, would achieve the purposes of 
 
 We have some very basic functionality working. That said, the project is still evolving and has some way to go before it can claim to be feature compatible with koala2.
 
-koala_xlcalculator currently supports:
+xlcalculator currently supports:
 * Loading an Excel file into a Python compatible state
 * Saving Python compatible state
 * Loading Python compatible state
@@ -87,7 +87,7 @@ Not currently supported:
   * VDB
 
 # Run tests
-From the root koala_xlcalculator directory
+From the root xlcalculator directory
 ```python
 python -m unittest discover -p "*_test.py"
 ```
@@ -99,7 +99,7 @@ python use_case_01.py
 ```
 
 # How to add Excel functions
-Excel function support can be easily added to koala_xlcalculator.
+Excel function support can be easily added to xlcalculator.
 
 Do the git things.. fork, clone, branch. checkout the new branch and then;
 - Write a class for the function in function_library. Use existing supported function classes as template examples.

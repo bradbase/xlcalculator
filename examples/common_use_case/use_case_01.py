@@ -1,8 +1,8 @@
 
 import logging
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Model
-from koala_xlcalculator import Evaluator
+from xlcalculator import ModelCompiler
+from xlcalculator import Model
+from xlcalculator import Evaluator
 
 logging.basicConfig(level=logging.DEBUG)
 

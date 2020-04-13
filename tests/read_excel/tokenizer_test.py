@@ -1,13 +1,13 @@
 
 import unittest
 
-from koala_xlcalculator.read_excel.tokenizer import ExcelParser
+from xlcalculator.read_excel.tokenizer import ExcelParser
 
 from ..formulas import *
-from ..koala_test import KoalaTestCase
+from ..xlcalculator_test import XlCalculatorTestCase
 
 
-class TestExcelParser(KoalaTestCase):
+class TestExcelParser(XlCalculatorTestCase):
 
     def setUp(self):
 

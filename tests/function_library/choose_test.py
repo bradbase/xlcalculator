@@ -5,9 +5,9 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Choose
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Choose
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 class TestChoose(unittest.TestCase):
 

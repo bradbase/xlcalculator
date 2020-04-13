@@ -4,7 +4,7 @@
 import unittest
 from datetime import datetime
 
-from koala_xlcalculator.function_library import Today
+from xlcalculator.function_library import Today
 
 """
 We can't eval this function in a test as the date will need to move.

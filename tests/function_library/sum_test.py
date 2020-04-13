@@ -5,10 +5,10 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import xSum
-from koala_xlcalculator.koala_types import XLRange
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import xSum
+from xlcalculator.xlcalculator_types import XLRange
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 
 class TestSum(unittest.TestCase):

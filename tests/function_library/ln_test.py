@@ -5,15 +5,15 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Ln
-from koala_xlcalculator.koala_types import XLCell
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Ln
+from xlcalculator.xlcalculator_types import XLCell
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
-from ..koala_test import KoalaTestCase
+from ..xlcalculator_test import XlCalculatorTestCase
 
 
-class TestLn(KoalaTestCase):
+class TestLn(XlCalculatorTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()

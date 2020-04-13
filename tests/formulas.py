@@ -3,13 +3,13 @@ from collections import namedtuple
 
 import networkx as nx
 
-from koala_xlcalculator.read_excel.tokenizer import f_token
-from koala_xlcalculator.koala_types.ast_nodes import RangeNode
-from koala_xlcalculator.koala_types.ast_nodes import OperatorNode
-# from koala_xlcalculator.koala_types.ast_nodes import OperandNode
-from koala_xlcalculator.koala_types.ast_nodes import FunctionNode
+from xlcalculator.read_excel.tokenizer import f_token
+from xlcalculator.xlcalculator_types.ast_nodes import RangeNode
+from xlcalculator.xlcalculator_types.ast_nodes import OperatorNode
+# from xlcalculator.xlcalculator_types.ast_nodes import OperandNode
+from xlcalculator.xlcalculator_types.ast_nodes import FunctionNode
 
-from koala_xlcalculator.model.model import Model
+from xlcalculator.model.model import Model
 
 
 Formula = namedtuple('Formula', 'formula sheet_name return_type tokens reverse_polish_tokens ast_graph stack')

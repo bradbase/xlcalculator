@@ -5,9 +5,9 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Counta
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Counta
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 """
 COUNTA(value1, [value2], ...)
@@ -44,7 +44,7 @@ class TestCounta(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             Counta.counta(None)
-            self.assertTrue('koala_xlcalculator.exceptions.exceptions.ExcelError: #VALUE' in context.exception)
+            self.assertTrue('xlcalculator.exceptions.exceptions.ExcelError: #VALUE' in context.exception)
 
 
     def test_evaluation_A1(self):

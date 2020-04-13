@@ -5,10 +5,10 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import xRound
-from koala_xlcalculator.exceptions import ExcelError
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import xRound
+from xlcalculator.exceptions import ExcelError
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 class Test_Roundup(unittest.TestCase):
 

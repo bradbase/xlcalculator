@@ -4,9 +4,9 @@ import json
 
 from jsonpickle import encode, decode
 
-from koala_xlcalculator.read_excel.reader import Reader
-from koala_xlcalculator.koala_types import XLCell, XLFormula, XLRange
-from koala_xlcalculator.read_excel.tokenizer import f_token
+from xlcalculator.read_excel.reader import Reader
+from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
+from xlcalculator.read_excel.tokenizer import f_token
 
 
 class TestRead_excel(unittest.TestCase):

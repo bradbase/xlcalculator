@@ -5,10 +5,10 @@ from copy import deepcopy
 
 from jsonpickle import encode, decode
 
-from koala_xlcalculator.model.model_compiler import ModelCompiler
-from koala_xlcalculator.koala_types import XLCell, XLFormula, XLRange
-from koala_xlcalculator.read_excel.tokenizer import f_token
-from koala_xlcalculator.model.model import Model
+from xlcalculator.model.model_compiler import ModelCompiler
+from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
+from xlcalculator.read_excel.tokenizer import f_token
+from xlcalculator.model.model import Model
 
 
 class TestModelCompiler(unittest.TestCase):

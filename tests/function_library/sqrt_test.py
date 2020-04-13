@@ -5,10 +5,10 @@ import unittest
 
 import pandas as pd
 
-from koala_xlcalculator.function_library import Sqrt
-from koala_xlcalculator.exceptions import ExcelError
-from koala_xlcalculator import ModelCompiler
-from koala_xlcalculator import Evaluator
+from xlcalculator.function_library import Sqrt
+from xlcalculator.exceptions import ExcelError
+from xlcalculator import ModelCompiler
+from xlcalculator import Evaluator
 
 
 class Test_Sqrt(unittest.TestCase):
@@ -45,19 +45,19 @@ class Test_Sqrt(unittest.TestCase):
         ERROR: test_evaluation_B1 (tests.function_library.sqrt_test.Test_Sqrt)
         ----------------------------------------------------------------------
         Traceback (most recent call last):
-          File "C:\\Users\\bradb\\Documents\\Python\\koala_xlcalculator\\koala_xlcalculator\\evaluator\\evaluator.py", line 63, in evaluate
+          File "C:\\Users\\bradb\\Documents\\Python\\xlcalculator\\xlcalculator\\evaluator\\evaluator.py", line 63, in evaluate
             value = eval(cell.formula.python_code)
           File "<string>", line 1, in <module>
-          File "C:\\Users\\bradb\\Documents\\Python\\koala_xlcalculator\\koala_xlcalculator\\function_library\\sqrt.py", line 22, in sqrt
+          File "C:\\Users\\bradb\\Documents\\Python\\xlcalculator\\xlcalculator\\function_library\\sqrt.py", line 22, in sqrt
             raise ExcelError('#NUM!', '{} must be non-negative'.format( number ))
-        koala_xlcalculator.exceptions.exceptions.ExcelError: #NUM!
+        xlcalculator.exceptions.exceptions.ExcelError: #NUM!
 
         During handling of the above exception, another exception occurred:
 
         Traceback (most recent call last):
-          File "C:\\Users\\bradb\\Documents\\Python\\koala_xlcalculator\\tests\\function_library\\sqrt_test.py", line 44, in test_evaluation_B1
+          File "C:\\Users\\bradb\\Documents\\Python\\xlcalculator\\tests\\function_library\\sqrt_test.py", line 44, in test_evaluation_B1
             self.evaluator.evaluate('Sheet1!B1')
-          File "C:\\Users\\bradb\\Documents\\Python\\koala_xlcalculator\\koala_xlcalculator\\evaluator\\evaluator.py", line 80, in evaluate
+          File "C:\\Users\\bradb\\Documents\\Python\\xlcalculator\\xlcalculator\\evaluator\\evaluator.py", line 80, in evaluate
             raise Exception("Problem evalling: {} for {}, {}".format(exception, cell.address, cell.formula.python_code))
         Exception: Problem evalling: #NUM! for Sheet1!B1, Sqrt.sqrt(self.eval_ref("Sheet1!A2"))
         """
