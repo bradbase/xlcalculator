@@ -50,10 +50,11 @@ class Reader():
         """Extracts data from a paricular part of the given Excel file."""
 
         self.build_archive(self.excel_file_name)
-        try:
-            return ET.fromstring( self.archive.read(archive_address) )
-        except KeyError:
-            return None
+        # try:
+        return ET.fromstring( self.archive.read(archive_address) )
+        # except KeyError:
+        #
+        #     return None
 
 
 
@@ -123,7 +124,14 @@ class Reader():
             if sheet_name not in ignore_sheets:
 
                 logging.info( "Reading cells from {}".format(sheet_name) )
-                worksheet_root = self._parse_archive("xl/%s" % self.worksheet_metadata[sheet_id]['Target'])
+                target = self.worksheet_metadata[sheet_id]['Target']
+                if target[:1] is '/':
+                    target = target[1:]
+
+                elif target[:3] is not 'xl/':
+                    target = "xl/{}".format(target)
+
+                worksheet_root = self._parse_archive(target)
 
                 decimal_context = Context(prec=15, rounding=ROUND_FLOOR)
 
