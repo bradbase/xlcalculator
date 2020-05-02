@@ -161,4 +161,4 @@ class xDate(XlCalculatorBaseFunction):
                     current_day = nb
                     nb = 0
 
-        return (current_year, current_month, current_day)
+        return (int(current_year), int(current_month), int(current_day))

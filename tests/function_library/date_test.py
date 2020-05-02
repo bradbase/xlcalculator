@@ -124,19 +124,19 @@ class Test_Date(unittest.TestCase):
     def test_evaluation_A12(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A12')
         value = self.evaluator.evaluate('Sheet1!A12')
-        self.assertEqual( excel_value, value.value )
+        self.assertEqual( excel_value, value )
 
 
     def test_evaluation_A13(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A13')
         value = self.evaluator.evaluate('Sheet1!A13')
-        self.assertEqual( excel_value, value.value )
+        self.assertEqual( excel_value, value )
 
 
     def test_evaluation_A14(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A14')
         value = self.evaluator.evaluate('Sheet1!A14')
-        self.assertEqual( excel_value, value.value )
+        self.assertEqual( excel_value, value )
 
 
     def test_evaluation_A15(self):
