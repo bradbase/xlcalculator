@@ -7,22 +7,21 @@ import logging
 import re
 from dataclasses import dataclass, field
 
+from .xltype import XLType
 from .cell import XLCell
 from .formula import XLFormula
 
 
 @dataclass
-class XLRange():
+class XLRange(XLType):
     """"""
 
     name: str = field(compare=True, hash=True, repr=True)
     cells: list = field(compare=True, hash=True, repr=True)
     _cells:  list = field(init=False, repr=False)
     sheet: str = field(init=False, default=None, repr=False)
-    row: str = field(init=False, default=None, repr=False)
     value: list = field(default=None, repr=True)
-    formula: XLFormula = field(default=None, repr=True)
-    length: int = field(init=False, default=0, repr=False)
+
 
 
     @property
@@ -70,7 +69,6 @@ class XLRange():
             range_cells = XLRange.cell_address_infill(cells)
 
         self._cells = range_cells
-        self.length = len(range_cells[0])
 
 
     @staticmethod
@@ -79,6 +77,7 @@ class XLRange():
 
         cells = []
         address = address.replace(' ', '')
+
         start_address, end_cell_address = address.split(':')
         if start_address.count("!") > 0:
             sheet, start_cell_address = start_address.split('!')
@@ -130,16 +129,12 @@ class XLRange():
     def __hash__(self):
         """Override the hash builtin to hash the address only."""
 
-        return hash( self.name, self.sheet, self.row, self.formula, self.length )
+        return hash( self.name )
 
 
     def __eq__(self, other):
         truths = []
         truths.append(self.__class__ == other.__class__)
         truths.append( self.name == other.name )
-        truths.append( self.sheet == other.sheet )
-        truths.append( self.row == other.row )
-        truths.append( self.formula == other.formula )
-        truths.append( self.length == other.length )
 
         return all(truths)

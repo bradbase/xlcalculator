@@ -126,7 +126,7 @@ class f_token():
     ttype: str
     tsubtype: str
     unique_identifier: uuid = field(init=False, default_factory=init_uuid, compare=True, hash=True, repr=True)
-
+    
 
     def __repr__(self):
         return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)

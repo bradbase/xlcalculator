@@ -3,7 +3,6 @@ import logging
 from dataclasses import dataclass, field
 import json
 import gzip
-from collections import deque
 from copy import copy
 
 from networkx import DiGraph
@@ -44,11 +43,10 @@ class Operator(object):
 @dataclass
 class Model():
 
-    # graph: DiGraph = field(init=False, default_factory=init_graph, compare=True, hash=True, repr=True)
     cells: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
-    defined_names: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
     formulae: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
     ranges: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
+    defined_names: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
 
 
     # def draw_graph(self):
@@ -285,7 +283,7 @@ class Model():
         operators['>='] = Operator('>=',1,'left')
         operators['<>'] = Operator('<>',1,'left')
 
-        output = deque()
+        output = []
         stack = []
         were_values = []
         arg_count = []

@@ -27,6 +27,9 @@ class xSum(XlCalculatorBaseFunction):
                 elif isinstance(arg, XLCell):
                     sum_list.append(arg.value)
 
+                elif isinstance(arg, (int, float)):
+                    sum_list.append(arg)
+
                 else:
                     sum_list.append(arg.sum().sum())
 

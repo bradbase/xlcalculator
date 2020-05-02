@@ -20,7 +20,6 @@ class ModelCompiler():
     def __init__(self):
 
         self.model = Model()
-        self.defined_names = {}
 
 
     @staticmethod
@@ -100,15 +99,23 @@ class ModelCompiler():
         """"""
 
         for formula in self.model.formulae:
+            associated_cells = set()
             for range in self.model.formulae[formula].terms:
                 if ":" in range:
                     self.model.ranges[range] = XLRange(range, range)
+                    associated_cells.update( [cell for row in self.model.ranges[range].cells for cell in row] )
+                else:
+                    associated_cells.add( range )
 
                 if range in self.model.ranges:
-                    for r_ange in self.model.ranges[range].cells:
-                        for cell_address in r_ange:
+                    for row in self.model.ranges[range].cells:
+                        for cell_address in row:
                             if cell_address not in self.model.cells.keys():
                                 self.model.cells[cell_address] = XLCell(cell_address, '')
+
+            self.model.cells[formula].formula.associated_cells = associated_cells
+            self.model.formulae[formula].associated_cells = associated_cells
+
 
     @staticmethod
     def extract(model, focus):
@@ -138,3 +145,18 @@ class ModelCompiler():
                         extracted_model.cells[cell] = deepcopy(model.cells[cell])
 
         return extracted_model
+
+
+    @staticmethod
+    def associated_cells(model, cell_address):
+        associated_cells = set()
+
+        if cell_address in model.cells and model.cells[cell_address].formula is not None:
+            terms = model.cells[cell_address].formula.terms
+            for term in terms:
+                if ':' in term:
+                    associated_cells.update( [cell for row in XLRange.cell_address_infill(term) for cell in row] )
+                else:
+                    associated_cells.add( term )
+
+        return associated_cells

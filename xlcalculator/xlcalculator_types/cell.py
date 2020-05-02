@@ -8,6 +8,7 @@ import re
 from dataclasses import dataclass, field
 from string import ascii_uppercase
 
+from .xltype import XLType
 from .formula import XLFormula
 
 def init_list():
@@ -15,7 +16,7 @@ def init_list():
 
 
 @dataclass
-class XLCell():
+class XLCell(XLType):
     """Representing an Excel Cell"""
 
     address: str = field(compare=True, hash=True, repr=True)
@@ -45,7 +46,11 @@ class XLCell():
     @address.setter
     def address(self, address):
         """Overrides the address setter so we can break the address up into consitiuent parts."""
+        self._address, self.sheet, self.row, self.column = XLCell.extract_address(address)
 
+
+    @staticmethod
+    def extract_address(address):
         if ":" in address:
             raise Exception("This is a Range {}".format(address))
 
@@ -53,14 +58,9 @@ class XLCell():
         if "!" in address:
             sheet, cell_address = address.split('!')
             column, row = [_f for _f in re.split('([A-Z\$]+)', cell_address) if _f]
-            self._address = address
-            self.sheet = sheet
-            self.row = row
-            self.column = column
             logging.debug("Cell address {} sheet {} row {} column {}".format(address, sheet, row, column))
-        else: # this is a defined names
-            self._address = address
-            self.sheet = sheet
+
+        return (address, sheet, row, column)
 
 
     @staticmethod
@@ -106,12 +106,59 @@ class XLCell():
         return hash( self._address )
 
 
-    def __eq__(self, other):
+    def __lt__(self, other):
+        other_address, other_sheet, other_row, other_column = XLCell.extract_address(other)
         truths = []
-        truths.append(self.__class__ == other.__class__)
-        truths.append(self.address == other.address)
+        truths.append(self.sheet == other_sheet)
+        truths.append(self.row < other_row or XLCell.column_ordinal(self.column) < XLCell.column_ordinal(other_column))
+
+        print("__LT__", truths)
 
         return all(truths)
+
+
+    def __le__(self, other):
+        other_address, other_sheet, other_row, other_column = XLCell.extract_address(other)
+        truths = []
+        truths.append(self.sheet == other_sheet)
+        truths.append(self.row <= other_row or XLCell.column_ordinal(self.column) <= XLCell.column_ordinal(other_column))
+
+        print("__LE__", truths)
+
+        return all(truths)
+
+
+    def __gt__(self, other):
+        other_address, other_sheet, other_row, other_column = XLCell.extract_address(other)
+        truths = []
+        truths.append(self.sheet == other_sheet)
+        truths.append(self.row > other_row or XLCell.column_ordinal(self.column) > XLCell.column_ordinal(other_column))
+
+        print("__GT__", truths)
+
+        return all(truths)
+
+
+    def __ge__(self):
+        other_address, other_sheet, other_row, other_column = XLCell.extract_address(other)
+        truths = []
+        truths.append(self.sheet == other_sheet)
+        truths.append(self.row >= other_row or XLCell.column_ordinal(self.column) >= XLCell.column_ordinal(other_column))
+
+        print("__GE__", truths)
+
+        return all(truths)
+
+
+    def __eq__(self, other):
+        if self.__class__ == other.__class__:
+            truths = []
+            truths.append(self.address == other.address)
+
+            return all(truths)
+            
+        else:
+            return False
 
 
     def __float__(self):

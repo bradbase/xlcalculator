@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 import re
 from typing import List
 
+from .xltype import XLType
 from ..read_excel import f_token
 from ..read_excel import ExcelParser
 from ..read_excel import ExcelParserTokens
@@ -19,6 +20,12 @@ def init_terms():
     return []
 
 
+def init_associated_cells():
+    """Default factory to initialise Formula.ranges."""
+
+    return set()
+
+
 def init_tokens():
     """Default factory to initialise Formula.tokens."""
 
@@ -26,7 +33,7 @@ def init_tokens():
 
 
 @dataclass
-class XLFormula():
+class XLFormula(XLType):
     """Representing an Excel Formula"""
 
     formula: str = field(compare=True, hash=True, repr=True)
@@ -35,10 +42,11 @@ class XLFormula():
     reference: str = field(default=None, repr=True)
     evaluate: bool = field(default=True, repr=True)
     tokens: List[f_token] = field(init=False, default_factory=init_tokens, repr=True)
-    terms: List[str] = field(init=False, default_factory=init_terms, repr=True)
+    terms: List[XLType] = field(init=False, default_factory=init_terms, repr=True)
     python_code: str = field(init=False, default=None, repr=True)
     shared_formula_offset: int = field(default=None, compare=False, repr=False)
     shared_formula_range: str = field(default=None, compare=False, repr=False)
+    associated_cells: set = field(init=False, default_factory=init_associated_cells, repr=True)
 
 
     def __post_init__(self):

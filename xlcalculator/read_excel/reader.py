@@ -31,6 +31,9 @@ class Reader():
 
     @staticmethod
     def isFloat(value):
+        if value is None:
+            return False
+
         try:
             float(value)
             return True
@@ -50,11 +53,11 @@ class Reader():
         """Extracts data from a paricular part of the given Excel file."""
 
         self.build_archive(self.excel_file_name)
-        # try:
-        return ET.fromstring( self.archive.read(archive_address) )
-        # except KeyError:
-        #
-        #     return None
+        try:
+            return ET.fromstring( self.archive.read(archive_address) )
+        except KeyError:
+
+            return None
 
 
 
@@ -160,7 +163,7 @@ class Reader():
 
                                 if return_type == 'array' and ":" in formula.get('ref'):
                                     range_address = "{}!{}".format(sheet_name, formula.get('ref'))
-                                    ranges[range_address] = XLRange(range_address, range_address, formula=formula.text)
+                                    ranges[range_address] = XLRange(range_address, range_address)
 
                             else:
                                 return_type = "value"
@@ -224,10 +227,15 @@ class Reader():
                         should_eval = 'normal'
 
                         address = "{}!{}".format(sheet_name, cell_address)
-                        cells[address] = XLCell(address, value = value, formula = formula)
 
                         if formula is not None:
                             formulae[address] = formula
+                            if XLCell(address) not in cells:
+                                cells[address] = XLCell(address, value=value, formula=formula)
+
+                        else:
+                            if XLCell(address) not in cells:
+                                cells[address] = XLCell(address, value=value)
 
         return [cells, formulae, ranges]
 
