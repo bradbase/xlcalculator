@@ -1,10 +1,10 @@
 
 # Excel reference: https://support.office.com/en-us/article/VDB-function-dde4e207-f3fa-488d-91d2-66d55e861d73
 
+from xlfunctions import SLN
+from xlfunctions.exceptions import ExcelError
 
 from .excel_lib import XlCalculatorBaseFunction
-from ..exceptions import ExcelError
-from .sln import SLN
 
 class VDB(XlCalculatorBaseFunction):
     """"""

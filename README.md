@@ -30,7 +30,9 @@ xlcalculator currently supports:
   * Shared formulas (not an Array Formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
-  * Functions
+  * Set cell value
+  * Get cell value
+  * Functions as implemented in (xlfunctions)[https://github.com/bradbase/xlfunctions].
     * AVERAGE
     * CHOOSE
     * CONCAT
@@ -48,7 +50,6 @@ xlcalculator currently supports:
     * PMT
     * POWER
     * RIGHT
-      - The anthill implementation of Koala was wacky, refers: "hack to deal with naca section numbers" so have introduced an optional ANTHILL compatibility for this method
     * ROUND
     * ROUNDDOWN
     * ROUNDUP
@@ -62,8 +63,6 @@ xlcalculator currently supports:
     * XNPV
     * YEARFRAC
       - Basis 1, Actual/actual, is only within 3 decimal places
-  * Set cell value
-  * Get cell value
 
 Not currently supported:
 * Array Formulas or CSE Formulas (not a shared formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula or https://support.office.com/en-us/article/guidelines-and-examples-of-array-formulas-7d94a64e-3ff3-4686-9372-ecfd5caa57c7#ID0EAAEAAA=Office_2013_-_Office_2019)
@@ -99,33 +98,21 @@ python use_case_01.py
 ```
 
 # How to add Excel functions
-Excel function support can be easily added to xlcalculator.
+Excel function support can be easily added.
 
-Do the git things.. fork, clone, branch. checkout the new branch and then;
-- Write a class for the function in function_library. Use existing supported function classes as template examples.
-- Add the function name and related class to excel_lib.py SUPPORTED_FUNCTIONS dict
-- Add the class to function_library\\\_\_init\_\_.py
-- Write a test for it in tests\\function_library. Use existing tests as template examples. Ensure you include an associated .xlsx file and implement one or more evaluate test methods. Often a great place for example test ideas is found on the Microsoft Office Excel help page for that function.
-- Update the README.md to state that function is supported.
-- Put your code, tests and doco forward as a pull request.
+Fundamental function support is supplied by (xlfunctions)[https://github.com/bradbase/xlfunctions], so to add the "recipe for calculation" please submit a pull request to that project. There are instructions in that project. Please be conscientious with writing tests in that project as they are the tests for _how_ the calculation operates.
+
+It is also best for your submission to have an evaluation test here in xlcalculator so we can ensure that the results of the xlfunction implementation are aligning with what we see in Excel.
+
 
 # Excel number precision
-Excel number precision is a complex discussion.
+Excel number precision is a complex discussion. There is further detail on the README at (xlfunctions)[https://github.com/bradbase/xlfunctions].
 
-It has been discussed in a (Wikipedia page)[https://en.wikipedia.org/wiki/Numeric_precision_in_Microsoft_Excel].
-
-The fundamentals come down to floating point numbers and a contention between how they are represented in memory Vs how they are stored on disk Vs how they are presented on screen. A (Microsoft article)[https://www.microsoft.com/en-us/microsoft-365/blog/2008/04/10/understanding-floating-point-precision-aka-why-does-excel-give-me-seemingly-wrong-answers/] explains the contention.
-
-This project is taking care while reading numbers from the Excel file to try and remove a variety of representation errors.
-
-Further work will be required to keep numbers in-line with Excel throughout different transformations.
 
 # TODO
-- Fix all functions in the function_library so that they work.
 - Set up a travis continuous integration service
 - Improve testing
 - Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
-- Refactor to ensure the function library only ever gets a non-xlcalculator datatype (eg; should only ever get types from pandas, numpy or Python built-in)
 - Handle multi-file addresses
 
 # BUGS

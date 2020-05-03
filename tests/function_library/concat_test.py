@@ -3,9 +3,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Concat
 
-from xlcalculator.function_library import Concat
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -19,21 +18,6 @@ class TestConcat(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-    def test_concat(self):
-
-        concat_result_00 = Concat.concat("SPAM", " ", "SPAM", " ", "SPAM", " ", "SPAM")
-        result_00 = "SPAM SPAM SPAM SPAM"
-        self.assertTrue(result_00, concat_result_00)
-
-        concat_result_01 = Concat.concat("SPAM", " ", pd.DataFrame([[1, 2],[3, 4]]), " ", "SPAM", " ", "SPAM")
-        result_01 = "SPAM 1234 SPAM SPAM"
-        self.assertTrue(result_01, concat_result_01)
-
-        concat_result_02 = Concat.concat("SPAM", "SPAM", "SPAM")
-        result_02 = "SPAMSPAMSPAM"
-        self.assertTrue(result_02, concat_result_02)
-
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

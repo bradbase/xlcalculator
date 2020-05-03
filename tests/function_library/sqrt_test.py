@@ -3,10 +3,9 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Sqrt
 
-from xlcalculator.function_library import Sqrt
-from xlcalculator.exceptions import ExcelError
+from xlfunctions.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -18,19 +17,7 @@ class Test_Sqrt(unittest.TestCase):
         self.model = compiler.read_and_parse_archive(r"./tests/resources/SQRT.xlsx")
         self.model.build_code()
         self.evaluator = Evaluator(self.model)
-
-
-    def test_first_argument_validity(self):
-        self.assertIsInstance(Sqrt.sqrt(-16), ExcelError )
-
-
-    def test_positive_integers(self):
-        self.assertEqual(Sqrt.sqrt(16), 4)
-
-
-    def test_float(self):
-        self.assertEqual(Sqrt.sqrt(.25), .5)
-
+        
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
@@ -50,7 +37,7 @@ class Test_Sqrt(unittest.TestCase):
           File "<string>", line 1, in <module>
           File "C:\\Users\\bradb\\Documents\\Python\\xlcalculator\\xlcalculator\\function_library\\sqrt.py", line 22, in sqrt
             raise ExcelError('#NUM!', '{} must be non-negative'.format( number ))
-        xlcalculator.exceptions.exceptions.ExcelError: #NUM!
+        xlfunctions.exceptions.exceptions.ExcelError: #NUM!
 
         During handling of the above exception, another exception occurred:
 

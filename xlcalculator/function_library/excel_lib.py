@@ -19,46 +19,19 @@ from pandas import DataFrame
 # in the FunctionNode code, so adding them here will have no effect.
 
 SUPPORTED_FUNCTIONS = {
-    "AVERAGE":"Average.average",
-    "CHOOSE":"Choose.choose",
-    "_XLFN.CONCAT":"Concat.concat",
-    "COUNT":"Count.count",
-    "COUNTA":"Counta.counta",
     # "COUNTIF":"Countif.countif",
     # "COUNTIFS":"Countifs.countifs",
-    "DATE":"xDate.xdate",
     # "IFERROR":"Iferror.iferror", # Can't happen outside the evaluator.
     # "INDEX":"Index.index",
-    "IRR":"IRR.irr",
     # "ISBLANK":"Isblank.isblank",
     # "ISNA":"Isna.isna",
     # "ISTEXT":"Istext.istext",
     # "LINEST":"Linest.linest",
-    "LN":"Ln.ln",
     # "LOOKUP":"Lookup.lookup",
     # "MATCH":"Match.match",
-    "MAX":"xMax.xmax",
-    "MID":"Mid.mid",
-    "MIN":"xMin.xmin",
-    "MOD":"Mod.mod",
-    "NPV":"NPV.npv",
     # "OFFSET":"Offset.offset",  # Can't happen outside the evaluator.
-    "PMT":"PMT.pmt",
-    "POWER":"Power.power",
-    "RIGHT":"Right.right",
-    "ROUND":"xRound.xround",
-    "ROUNDDOWN":"xRound.rounddown",
-    "ROUNDUP":"xRound.roundup",
-    "SLN":"SLN.sln",
-    "SQRT":"Sqrt.sqrt",
-    "SUM":"xSum.xsum",
     # "SUMIF":"SumIf.sumif",
-    "SUMPRODUCT":"Sumproduct.sumproduct",
-    "TODAY":"Today.today",
-    # "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
-    "VLOOKUP":"VLookup.vlookup", # need to support shared formulas and XLRange.ncols
-    "XNPV":"XNPV.xnpv",
-    "YEARFRAC":"Yearfrac.yearfrac",
+    "VDB":"VDB.vdb", # need to support shared formulas before this example sheet can work
     # # "GAMMALN":"lgamma",
 }
 

@@ -3,9 +3,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import SLN
 
-from xlcalculator.function_library import SLN
 from xlcalculator.xlcalculator_types import XLCell
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
@@ -21,19 +20,6 @@ class TestSLN(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-    def test_sln(self):
-        sln_result_00 = SLN.sln(30000, 7500, 10)
-        result_00 = 2250
-        self.assertEqual(result_00, sln_result_00)
-
-        cell_01 = XLCell("Sheet1!A2", 30000)
-        cell_02 = XLCell("Sheet1!A3", 7500)
-        cell_03 = XLCell("Sheet1!A4", 10)
-        xsum_result_01 = SLN.sln(cell_01, cell_02, cell_03)
-        result_01 = 2250
-        self.assertEqual(result_01, xsum_result_01)
-
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

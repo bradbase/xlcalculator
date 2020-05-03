@@ -5,11 +5,11 @@ from datetime import datetime
 
 from pandas import DataFrame
 from numpy import ndarray
+from xlfunctions.exceptions import ExcelError
+from xlfunctions import *
 
-from ..exceptions import ExcelError
 from ..xlcalculator_types import XLCell
 from ..xlcalculator_types import XLRange
-from ..function_library import *
 
 
 class Evaluator():
@@ -26,12 +26,6 @@ class Evaluator():
     @staticmethod
     def recurse_evaluate(cells, data, cells_to_evaluate, recursed_cells, recurse_depth=0):
         """Sometimes (maybe most of the time) we need to 'chase' the dependency tree to eval the correct value of a cell."""
-
-        # escape
-        # if len(data) == 1:
-        #     for level in cells_to_evaluate:
-        #         if data[0] in cells_to_evaluate[level]:
-        #             return
 
         if len(data) == 0:
             return
@@ -145,7 +139,10 @@ class Evaluator():
                     if isinstance(value, ndarray):
                         cells[cell_address].value = value if len(value) != 0 else None
                     else:
-                        cells[cell_address].value = value if value != '' else None
+                        if isinstance(value, DataFrame):
+                            cells[cell_address].value = value if not value.empty else None
+                        else:
+                            cells[cell_address].value = value if value != '' else None
 
             else:
                 cells[cell_address].value = 0
@@ -167,8 +164,8 @@ class Evaluator():
     def eval_ref(self, address):
         """"""
         if address in self.model.cells:
-            # return self.model.cells[address].value
-            return self.model.cells[address]
+            return self.model.cells[address].value
+            # return self.model.cells[address]
 
         elif address in self.model.defined_names:
             # this is problematic as a defined name could be a cell, range or formula
@@ -186,7 +183,7 @@ class Evaluator():
                 range_cells.append(row)
 
             self.model.ranges[address].value = DataFrame(range_cells)
-            return self.model.ranges[address]
+            return self.model.ranges[address].value
 
 
     @staticmethod

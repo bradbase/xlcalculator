@@ -3,9 +3,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Counta
 
-from xlcalculator.function_library import Counta
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -29,23 +28,6 @@ class TestCounta(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-    def test_counta(self):
-        range_00 = pd.DataFrame([[1, 2],[3, 4]])
-        choose_result_00 = Counta.counta(range_00)
-        result_00 = 4
-        self.assertEqual(result_00, choose_result_00)
-
-        range_01 = pd.DataFrame([[2, 1],[3, '']])
-        choose_result_01 = Counta.counta(range_01)
-        result_01 = 3
-        self.assertEqual(result_01, choose_result_01)
-
-
-        with self.assertRaises(Exception) as context:
-            Counta.counta(None)
-            self.assertTrue('xlcalculator.exceptions.exceptions.ExcelError: #VALUE' in context.exception)
-
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

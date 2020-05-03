@@ -5,3 +5,4 @@ numpy >= 1.18.1
 openpyxl >= 3.0.3
 pandas >= 1.0.1
 numpy_financial >= 1.0.0
+xlfunctions >= 0.0.1b

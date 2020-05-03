@@ -3,10 +3,9 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import xRound
+from xlfunctions.exceptions import ExcelError
 
-from xlcalculator.function_library import xRound
-from xlcalculator.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -17,29 +16,7 @@ class Test_Roundup(unittest.TestCase):
         self.model = compiler.read_and_parse_archive(r"./tests/resources/ROUNDUP.xlsx")
         self.model.build_code()
         self.evaluator = Evaluator(self.model)
-
-
-    def test_nb_must_be_number(self):
-        self.assertIsInstance(xRound.roundup('er', 1), ExcelError )
-
-
-    def test_nb_digits_must_be_number(self):
-        self.assertIsInstance(xRound.roundup(2.323, 'ze'), ExcelError )
-
-
-    def test_positive_number_of_digits(self):
-        self.assertEqual(xRound.roundup(3.2,0), 4)
-
-
-    def test_negative_number_of_digits(self):
-        self.assertEqual(xRound.roundup(31415.92654, -2), 31500)
-
-
-    def test_round(self):
-        self.assertEqual(xRound.roundup(76.9,0), 77)
-        self.assertEqual(xRound.roundup(3.14159, 3), 3.142)
-        self.assertEqual(xRound.roundup(-3.14159, 1), -3.2)
-
+        
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

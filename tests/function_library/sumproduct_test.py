@@ -3,10 +3,9 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Sumproduct
+from xlfunctions.exceptions import ExcelError
 
-from xlcalculator.function_library import Sumproduct
-from xlcalculator.exceptions import ExcelError
 from xlcalculator.xlcalculator_types import XLRange
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
@@ -22,21 +21,6 @@ class TestSumProduct(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-
-    def test_ranges_with_different_sizes(self):
-        range1 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[1], [10], [3]]))
-        range2 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[3], [3], [1], [2]]))
-
-        self.assertIsInstance(Sumproduct.sumproduct(range1, range2), ExcelError )
-
-
-    def test_regular(self):
-        range1 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[1], [10], [3]]))
-        range2 = XLRange("Sheet1!A1:A3", "Sheet1!A1:A3", value = pd.DataFrame([[3], [1], [2]]))
-
-        self.assertEqual(Sumproduct.sumproduct(range1, range2), 19)
-
 
     def test_evaluation_D7(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!D7')

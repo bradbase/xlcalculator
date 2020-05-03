@@ -2,9 +2,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Right
 
-from xlcalculator.function_library import Right
 from xlcalculator.xlcalculator_types import XLCell
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
@@ -20,12 +19,7 @@ class TestRight(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-
-    def test_right(self):
-        self.assertEqual(Right.right("Sale Price", 5), "Price")
-        self.assertEqual(Right.right("Stock Number"), "r")
-
+    
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

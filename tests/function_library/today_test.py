@@ -4,7 +4,7 @@
 import unittest
 from datetime import datetime
 
-from xlcalculator.function_library import Today
+from xlfunctions import Today
 
 """
 We can't eval this function in a test as the date will need to move.

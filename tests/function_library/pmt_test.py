@@ -3,11 +3,10 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import PMT
+from xlfunctions.exceptions import ExcelError
 
-from xlcalculator.function_library import PMT
 from xlcalculator.xlcalculator_types import XLCell
-from xlcalculator.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -24,11 +23,7 @@ class TestPMT(XlCalculatorTestCase):
 
     # def teardown(self):
     #     pass
-
-
-    def test_pmt_basic(self):
-        self.assertEqualTruncated( PMT.pmt(0.08/12, 10, 10000), -1037.03)
-
+    
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')

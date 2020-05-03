@@ -3,11 +3,10 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import IRR
+from xlfunctions.exceptions import ExcelError
 
-from xlcalculator.function_library import IRR
 from xlcalculator.xlcalculator_types import XLCell
-from xlcalculator.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -24,17 +23,6 @@ class TestIRR(XlCalculatorTestCase):
 
     # def teardown(self):
     #     pass
-
-
-    def test_irr_basic(self):
-        range_00 = pd.DataFrame([[-100, 39, 59, 55, 20]])
-        self.assertEqual(round(IRR.irr(range_00, 0), 7), 0.2809484)
-
-
-    def test_irr_with_guess_non_null(self):
-        with self.assertRaises(ValueError):
-            IRR.irr([-100, 39, 59, 55, 20], 2)
-
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

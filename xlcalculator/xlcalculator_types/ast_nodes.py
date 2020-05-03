@@ -3,8 +3,10 @@ import logging
 import re
 from string import ascii_uppercase
 
-from ..function_library import *
-from ..exceptions import ExcelError
+from xlfunctions import *
+
+# from ..function_library import *
+from xlfunctions.exceptions import ExcelError
 
 INTERPRETER_OBJECT = "Evaluator"
 

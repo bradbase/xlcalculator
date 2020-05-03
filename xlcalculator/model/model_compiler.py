@@ -4,11 +4,12 @@ import logging
 import re
 from copy import deepcopy
 
+from xlfunctions.exceptions import ExcelError
+
 from ..read_excel import Reader
 from ..xlcalculator_types import XLCell
 from ..xlcalculator_types import XLRange
 from .model import Model
-from ..exceptions import ExcelError
 
 
 class ModelCompiler():

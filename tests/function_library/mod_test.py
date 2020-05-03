@@ -3,10 +3,9 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Mod
+from xlfunctions.exceptions import ExcelError
 
-from xlcalculator.function_library import Mod
-from xlcalculator.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -18,19 +17,7 @@ class TestMod(unittest.TestCase):
         self.model = compiler.read_and_parse_archive(r"./tests/resources/MOD.xlsx")
         self.model.build_code()
         self.evaluator = Evaluator(self.model)
-
-
-    def test_first_argument_validity(self):
-        self.assertIsInstance(Mod.mod(2.2, 1), ExcelError )
-
-
-    def test_second_argument_validity(self):
-        self.assertIsInstance(Mod.mod(2, 1.1), ExcelError )
-
-
-    def test_output_value(self):
-        self.assertEqual(Mod.mod(10, 4), 2)
-
+        
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

@@ -3,9 +3,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import VLookup
 
-from xlcalculator.function_library import VLookup
 from xlcalculator.xlcalculator_types import XLCell
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator

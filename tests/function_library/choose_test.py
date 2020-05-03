@@ -3,9 +3,8 @@
 
 import unittest
 
-import pandas as pd
+from xlfunctions import Choose
 
-from xlcalculator.function_library import Choose
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
@@ -19,15 +18,6 @@ class TestChoose(unittest.TestCase):
 
     # def teardown(self):
     #     pass
-
-    def test_choose(self):
-        range_00 = pd.DataFrame([[1, 2],[3, 4]])
-        range_01 = pd.DataFrame([[2, 1],[3, 4]])
-        range_02 = pd.DataFrame([[1, 2],[4, 3]])
-        choose_result_00 = Choose.choose('2', range_00, range_01, range_02)
-        result_00 = pd.DataFrame([[2, 1],[3, 4]])
-        self.assertTrue(result_00.equals(choose_result_00))
-
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
@@ -44,4 +34,4 @@ class TestChoose(unittest.TestCase):
     def test_evaluation_A3(self):
         excel_value = [[1, 2, 3]]
         value_00 = self.evaluator.evaluate('Sheet1!A3')
-        self.assertEqual( excel_value, value_00.tolist() )
+        self.assertEqual( excel_value, value_00.values.tolist() )

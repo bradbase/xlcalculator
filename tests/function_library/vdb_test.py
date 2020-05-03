@@ -3,9 +3,9 @@
 import unittest
 
 import pandas as pd
+from xlfunctions.exceptions import ExcelError
 
 from xlcalculator.function_library import VDB
-from xlcalculator.exceptions import ExcelError
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 
