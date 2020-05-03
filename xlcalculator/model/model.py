@@ -6,7 +6,7 @@ import gzip
 from copy import copy
 
 from networkx import DiGraph
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from jsonpickle import encode, decode
 
 from ..xlcalculator_types import XLCell
