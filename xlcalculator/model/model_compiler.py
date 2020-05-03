@@ -44,6 +44,7 @@ class ModelCompiler():
     def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False):
         """"""
         archive = ModelCompiler.read_excel_file(file_name)
+        print("file_name", file_name, "ignore_sheets", ignore_sheets)
         self.parse_archive(archive, ignore_sheets=ignore_sheets)
         return deepcopy(self.model)
 
@@ -114,7 +115,12 @@ class ModelCompiler():
                             if cell_address not in self.model.cells.keys():
                                 self.model.cells[cell_address] = XLCell(cell_address, '')
 
-            self.model.cells[formula].formula.associated_cells = associated_cells
+            if formula in self.model.cells:
+                self.model.cells[formula].formula.associated_cells = associated_cells
+
+            if formula in self.model.defined_names:
+                self.model.defined_names[formula].formula.associated_cells = associated_cells
+
             self.model.formulae[formula].associated_cells = associated_cells
 
 
@@ -144,6 +150,8 @@ class ModelCompiler():
 
                     elif term not in extracted_model.cells:
                         extracted_model.cells[cell] = deepcopy(model.cells[cell])
+
+        extracted_model.build_code()
 
         return extracted_model
 

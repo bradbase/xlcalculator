@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="xlcalculator",
-    version="0.0.1b",
+    version="0.0.2b",
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="xlcalcualtor converts MS Excel formulas to Python and evaluates them.",
