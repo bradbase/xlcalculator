@@ -32,7 +32,9 @@ xlcalculator currently supports:
     * on cells only
   * Set cell value
   * Get cell value
-  * Functions as implemented in (xlfunctions)[https://github.com/bradbase/xlfunctions].
+  * [Parsing a dict into the Model object] (https://stackoverflow.com/questions/31260686/excel-formula-evaluation-in-pandas/61586912#61586912)
+    * Code is in examples\\third_party_datastructure
+  * Functions as implemented in [xlfunctions](https://github.com/bradbase/xlfunctions).
     * AVERAGE
     * CHOOSE
     * CONCAT
@@ -100,13 +102,13 @@ python use_case_01.py
 # How to add Excel functions
 Excel function support can be easily added.
 
-Fundamental function support is supplied by (xlfunctions)[https://github.com/bradbase/xlfunctions], so to add the "recipe for calculation" please submit a pull request to that project. There are instructions in that project. Please be conscientious with writing tests in that project as they are the tests for _how_ the calculation operates.
+Fundamental function support is supplied by [xlfunctions](https://github.com/bradbase/xlfunctions), so to add the "recipe for calculation" please submit a pull request to that project. There are instructions in that project. Please be conscientious with writing tests in that project as they are the tests for _how_ the calculation operates.
 
 It is also best for your submission to have an evaluation test here in xlcalculator so we can ensure that the results of the xlfunction implementation are aligning with what we see in Excel.
 
 
 # Excel number precision
-Excel number precision is a complex discussion. There is further detail on the README at (xlfunctions)[https://github.com/bradbase/xlfunctions].
+Excel number precision is a complex discussion. There is further detail on the README at [xlfunctions](https://github.com/bradbase/xlfunctions).
 
 
 # TODO
