@@ -588,7 +588,7 @@ class Evaluator():
             return str(a) == str(b)
 
 
-    def set_cell_value(self, address, value, clear_cache=False):
+    def set_cell_value(self, address, value, clear_cache=True):
         """Sets the value of a cell in the model."""
         self.model.set_cell_value(address, value)
         if clear_cache:
