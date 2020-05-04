@@ -27,7 +27,7 @@ xlcalculator currently supports:
   * Individual cells
   * Defined Names (a "named cell" or range)
   * Ranges
-  * Shared formulas (not an Array Formula: https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
+  * Shared formulas [not an Array Formula](https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula)
   * Operands (+, -, /, \*, ==, <>, <=, >=)
     * on cells only
   * Set cell value
