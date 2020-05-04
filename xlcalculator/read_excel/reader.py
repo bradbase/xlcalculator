@@ -348,10 +348,10 @@ class Reader():
                         if event == "end" and elem.tag == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}row":
                             cellparts = {'address' : None, 'value': None, 'formula': None, 'ref' : None}
                             rowcounter += 1
-                            if rowcounter % 10000 == 0 and cellcounter == rowcounter * 26:
-                                time_now = datetime.now()
-                                print("done {} rows. cell count {}, {} {}".format(rowcounter, cellcounter, time_now - time_before, time_now - start_time))
-                                time_before = time_now
+                            # if rowcounter % 10000 == 0 and cellcounter == rowcounter * 26:
+                            #     time_now = datetime.now()
+                            #     print("done {} rows. cell count {}, {} {}".format(rowcounter, cellcounter, time_now - time_before, time_now - start_time))
+                            #     time_before = time_now
                             root.clear()
 
         return [cells, formulae, ranges]

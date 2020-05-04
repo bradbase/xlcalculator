@@ -132,17 +132,13 @@ class Evaluator():
                                 cells[recursed_cell_address].value = eval(active_cell.formula.python_code)
 
                 value = eval(cells[cell_address].formula.python_code)
-                if isinstance(value, Evaluator): # this should mean that vv is the result of RangeCore.apply_all, but with only one value inside
-                    cells[cell_address].value = value.values[0]
-
+                if isinstance(value, ndarray):
+                    cells[cell_address].value = value if len(value) != 0 else None
                 else:
-                    if isinstance(value, ndarray):
-                        cells[cell_address].value = value if len(value) != 0 else None
+                    if isinstance(value, DataFrame):
+                        cells[cell_address].value = value if not value.empty else None
                     else:
-                        if isinstance(value, DataFrame):
-                            cells[cell_address].value = value if not value.empty else None
-                        else:
-                            cells[cell_address].value = value if value != '' else None
+                        cells[cell_address].value = value if value != '' else None
 
             else:
                 cells[cell_address].value = 0

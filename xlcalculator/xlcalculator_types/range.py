@@ -19,7 +19,7 @@ class XLRange(XLType):
     name: str = field(compare=True, hash=True, repr=True)
     cells: list = field(compare=True, hash=True, repr=True)
     _cells:  list = field(init=False, repr=False)
-    sheet: str = field(init=False, default=None, repr=False)
+    sheet: str = field(init=False, default="Sheet1", repr=False)
     value: list = field(default=None, repr=True)
 
 
@@ -57,7 +57,7 @@ class XLRange(XLType):
             addresses = cells.split(',')
             counter = 0
             for address in addresses:
-                xlrange = XLRange.cell_address_infill(address, sheet=sheet)
+                xlrange = XLRange.cell_address_infill(address, sheet=self.sheet)
                 if range_cells == []:
                     range_cells.extend(xlrange)
                 else:
@@ -66,7 +66,7 @@ class XLRange(XLType):
 
         # only one cell group in this range (no gaps eg; Sheet1!A1:E5)
         else:
-            range_cells = XLRange.cell_address_infill(cells)
+            range_cells = XLRange.cell_address_infill(cells, sheet=self.sheet)
 
         self._cells = range_cells
 

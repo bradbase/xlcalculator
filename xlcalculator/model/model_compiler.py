@@ -9,6 +9,7 @@ from xlfunctions.exceptions import ExcelError
 from ..read_excel import Reader
 from ..xlcalculator_types import XLCell
 from ..xlcalculator_types import XLRange
+from ..xlcalculator_types import XLFormula
 from .model import Model
 
 
@@ -44,8 +45,27 @@ class ModelCompiler():
     def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False):
         """"""
         archive = ModelCompiler.read_excel_file(file_name)
-        print("file_name", file_name, "ignore_sheets", ignore_sheets)
         self.parse_archive(archive, ignore_sheets=ignore_sheets)
+        return deepcopy(self.model)
+
+
+    def read_and_parse_dict(self, input_dict, default_sheet="Sheet1"):
+        """"""
+        for item in input_dict:
+            if "!" in item:
+                cell_address = item
+            else:
+                cell_address = "{}!{}".format(default_sheet, item)
+
+            if not Reader.isFloat(input_dict[item]) and input_dict[item][0] == '=':
+                self.model.cells[cell_address] = XLCell(cell_address, None, formula=XLFormula(input_dict[item]))
+                self.model.formulae[cell_address] = self.model.cells[cell_address].formula
+
+            else:
+                self.model.cells[cell_address] = XLCell(cell_address, input_dict[item])
+
+        self.build_ranges(default_sheet=default_sheet)
+
         return deepcopy(self.model)
 
 
@@ -97,15 +117,19 @@ class ModelCompiler():
                 raise Exception(message)
 
 
-    def build_ranges(self):
+    def build_ranges(self, default_sheet=None):
         """"""
 
         for formula in self.model.formulae:
             associated_cells = set()
             for range in self.model.formulae[formula].terms:
+                if "!" not in range:
+                    range = "{}!{}".format(default_sheet, range)
+
                 if ":" in range:
                     self.model.ranges[range] = XLRange(range, range)
                     associated_cells.update( [cell for row in self.model.ranges[range].cells for cell in row] )
+
                 else:
                     associated_cells.add( range )
 
@@ -154,18 +178,3 @@ class ModelCompiler():
         extracted_model.build_code()
 
         return extracted_model
-
-
-    @staticmethod
-    def associated_cells(model, cell_address):
-        associated_cells = set()
-
-        if cell_address in model.cells and model.cells[cell_address].formula is not None:
-            terms = model.cells[cell_address].formula.terms
-            for term in terms:
-                if ':' in term:
-                    associated_cells.update( [cell for row in XLRange.cell_address_infill(term) for cell in row] )
-                else:
-                    associated_cells.add( term )
-
-        return associated_cells
