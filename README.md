@@ -119,3 +119,4 @@ Excel number precision is a complex discussion. There is further detail on the R
 
 # BUGS
 - Formatted text in a cell (eg; a subscript) breaks the reader.
+- Improve integration with pyopenxl for reading and writing files (Maybe integrating xlcalculator with pyopenxl is actually Koala3?) Example of problem space [here](https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python)
