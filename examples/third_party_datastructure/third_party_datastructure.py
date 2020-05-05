@@ -21,7 +21,6 @@ from xlcalculator import Evaluator
 
 compiler = ModelCompiler()
 my_model = compiler.read_and_parse_dict(input_dict)
-my_model.build_code()
 evaluator = Evaluator(my_model)
 
 for formula in my_model.formulae:

@@ -120,7 +120,7 @@ class Model():
         outfile.close()
 
 
-    def construct_from_json_file(self, fname):
+    def construct_from_json_file(self, fname, build_code=False):
         """Constructs a graph from a state persisted to disk."""
 
         if fname.split('.')[-1:][0].upper() in ['GZIP', 'GZ']:
@@ -136,62 +136,8 @@ class Model():
         self.ranges = data['ranges']
         self.formulae = data['formulae']
 
-        # for cell_key in self.cells.keys():
-        #     if self.cells[cell_key].formula is not None:
-        #         self.formulae[cell_key] = self.cells[cell_key].formula
-
-        # for formula in self.formulae:
-        #     for range in self.formulae[formula].ranges:
-        #         if ":" in range:
-        #             self.ranges[range] = XLRange(range, range)
-        #         else:
-        #             if range not in self.defined_names:
-        #                 self.ranges[range] = XLCell(range)
-        # logging.debug("Summary of the cells converted to a network graph:\r\n%s" % nx.info(self.graph))
-
-    # def translate(self, outputs = [], inputs = []):
-    #     """Translates a Microsoft Excel cell structure into a model representation."""
-    #
-    #     # We need the defined names in the graph so we can "back-link"/associate the cells to them
-    #     for name in self.defined_names:
-    #         self.graph.add_node(self.defined_names[name])
-    #
-    #     # add all the cells to the graph
-    #     for cell in self.cells.values():
-    #         self.graph.add_node(cell)
-    #
-    #         # define the "back-link"/association between the cell and the defined name
-    #         if cell.defined_names != []:
-    #             for name in cell.defined_names:
-    #                 self.graph.add_edge(cell, self.defined_names[name])
-    #
-    #         # Associate cells if they are involved with a calculation (formula)
-    #         if cell.formula is not None:
-    #             has_infix_operator = False
-    #             for token in cell.formula.tokens:
-    #                 if token.ttype in ['operator-infix']:
-    #                     has_infix_operator = True
-    #
-    #             if has_infix_operator:
-    #                 for range in cell.formula.ranges:
-    #                     if range in self.cells.keys():
-    #                         self.graph.add_edge(cell, self.cells[range])
-    #
-    #                     else:
-    #                         if ':' in range:
-    #                             message = "Will need to resolve the range. {} referenced from cell {}".format(range, cell.address)
-    #                             logging.error( message )
-    #                             raise Exception( message )
-    #
-    #                         else:
-    #                             potential_cell = "{}!{}".format(cell.sheet, range)
-    #                             if potential_cell in self.cells.keys():
-    #                                 self.graph.add_edge(cell, potential_cell)
-    #
-    #                             else:
-    #                                 message = "I can't seem to find this cell: {}".format(potential_cell)
-    #                                 logging.error( message )
-    #                                 raise Exception( message )
+        if build_code:
+            self.build_code()
 
 
     def build_code(self):

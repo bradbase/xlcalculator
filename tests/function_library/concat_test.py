@@ -13,7 +13,6 @@ class TestConcat(unittest.TestCase):
     def setUp(self):
         compiler = ModelCompiler()
         self.model = compiler.read_and_parse_archive(r"./tests/resources/CONCAT.xlsx")
-        self.model.build_code()
         self.evaluator = Evaluator(self.model)
 
     # def teardown(self):

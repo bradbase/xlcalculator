@@ -16,8 +16,7 @@ class TestEvaluator(unittest.TestCase):
 
     def setUp(self):
         self.model = Model()
-        self.model.construct_from_json_file(r"./tests/resources/model.json")
-        self.model.build_code()
+        self.model.construct_from_json_file(r"./tests/resources/model.json", build_code=True)
         self.evaluator = Evaluator(self.model)
 
 
@@ -74,7 +73,6 @@ class TestEvaluator(unittest.TestCase):
     def test_divide_eval(self):
         div_compiler = ModelCompiler()
         div_model = div_compiler.read_and_parse_archive(r"./tests/resources/division.xlsx")
-        div_model.build_code()
         div_evaluator = Evaluator(div_model)
 
         excel_value_00 = div_evaluator.get_cell_value('Sheet1!A1')
@@ -89,7 +87,6 @@ class TestEvaluator(unittest.TestCase):
     def test_subtract_eval(self):
         sub_compiler = ModelCompiler()
         sub_model = sub_compiler.read_and_parse_archive(r"./tests/resources/subtraction.xlsx")
-        sub_model.build_code()
         sub_evaluator = Evaluator(sub_model)
 
         excel_value_00 = sub_evaluator.get_cell_value('Sheet1!A1')
@@ -108,7 +105,6 @@ class TestEvaluator(unittest.TestCase):
     def test_addition_eval(self):
         add_compiler = ModelCompiler()
         add_model = add_compiler.read_and_parse_archive(r"./tests/resources/addition.xlsx")
-        add_model.build_code()
         add_evaluator = Evaluator(add_model)
 
         excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')
@@ -127,7 +123,6 @@ class TestEvaluator(unittest.TestCase):
     def test_multiplication_eval(self):
         add_compiler = ModelCompiler()
         add_model = add_compiler.read_and_parse_archive(r"./tests/resources/multiplication.xlsx")
-        add_model.build_code()
         add_evaluator = Evaluator(add_model)
 
         excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')

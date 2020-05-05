@@ -10,14 +10,11 @@ json_file_name = r'use_case_01.json'
 
 filename = r'use_case_01.xlsm'
 compiler = ModelCompiler()
-new_model = compiler.read_and_parse_archive(filename)
-# new_model.build_code()
+new_model = compiler.read_and_parse_archive(filename, build_code=False)
 new_model.persist_to_json_file(json_file_name)
 
 reconstituted_model = Model()
-reconstituted_model.construct_from_json_file(json_file_name)
-# reconstituted_model.draw_graph()
-reconstituted_model.build_code()
+reconstituted_model.construct_from_json_file(json_file_name, build_code=True)
 
 evaluator = Evaluator(reconstituted_model)
 val1 = evaluator.evaluate('First!A2')

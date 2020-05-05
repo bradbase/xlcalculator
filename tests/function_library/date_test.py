@@ -16,7 +16,6 @@ class Test_Date(unittest.TestCase):
     def setUp(self):
         compiler = ModelCompiler()
         self.model = compiler.read_and_parse_archive(r"./tests/resources/DATE.xlsx")
-        self.model.build_code()
         self.evaluator = Evaluator(self.model)
 
         # tokenizer.py", line 335, in getTokens

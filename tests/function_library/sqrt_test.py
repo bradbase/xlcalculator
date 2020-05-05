@@ -15,9 +15,8 @@ class Test_Sqrt(unittest.TestCase):
     def setUp(self):
         compiler = ModelCompiler()
         self.model = compiler.read_and_parse_archive(r"./tests/resources/SQRT.xlsx")
-        self.model.build_code()
         self.evaluator = Evaluator(self.model)
-        
+
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

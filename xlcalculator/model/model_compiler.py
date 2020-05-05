@@ -42,14 +42,18 @@ class ModelCompiler():
         self.build_ranges()
 
 
-    def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False):
+    def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False, build_code=True):
         """"""
         archive = ModelCompiler.read_excel_file(file_name)
         self.parse_archive(archive, ignore_sheets=ignore_sheets)
+
+        if build_code:
+            self.model.build_code()
+
         return deepcopy(self.model)
 
 
-    def read_and_parse_dict(self, input_dict, default_sheet="Sheet1"):
+    def read_and_parse_dict(self, input_dict, default_sheet="Sheet1", build_code=True):
         """"""
         for item in input_dict:
             if "!" in item:
@@ -65,6 +69,9 @@ class ModelCompiler():
                 self.model.cells[cell_address] = XLCell(cell_address, input_dict[item])
 
         self.build_ranges(default_sheet=default_sheet)
+
+        if build_code:
+            self.model.build_code()
 
         return deepcopy(self.model)
 
