@@ -21,7 +21,6 @@ setuptools.setup(
     install_requires=[
             'jsonpickle >= 1.3',
             'networkx >= 2.4',
-            # 'matplotlib >= 3.1.1',
             'numpy >= 1.18.1',
             'pandas >= 1.0.1',
             'openpyxl >= 3.0.3',

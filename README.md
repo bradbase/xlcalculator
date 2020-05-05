@@ -111,6 +111,11 @@ It is also best for your submission to have an evaluation test here in xlcalcula
 Excel number precision is a complex discussion. There is further detail on the README at [xlfunctions](https://github.com/bradbase/xlfunctions).
 
 
+# Unit testing Excel formulas directly from the workbook.
+
+If you are interested in unit testing formulas in your workbook, you can use [FlyingKoala](https://github.com/bradbase/flyingkoala). An example on how can be found [here](https://github.com/bradbase/flyingkoala/tree/master/flyingkoala/unit_testing_formulas).
+
+
 # TODO
 - Set up a travis continuous integration service
 - Improve testing
