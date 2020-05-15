@@ -83,7 +83,13 @@ class ModelCompiler():
 
             # a cell has an address like; Sheet1!A1
             if ':' not in cell_address:
-                self.model.defined_names[name] = self.model.cells[cell_address]
+                if cell_address not in self.model.cells:
+                    logging.warning("Defined name {} refers to empty cell {}. Is not being loaded.".format(name, cell_address))
+                    continue
+                    
+                else:
+                    if self.model.cells[cell_address] is not None:
+                        self.model.defined_names[name] = self.model.cells[cell_address]
 
             # a range has an address like;
             # Sheet1!A1:A5

@@ -51,8 +51,8 @@ class Reader():
         """Reads and parses the Excel file."""
         self.archive = Reader.build_archive(self.excel_file_name) # the file handle for the Excel file
         self.build_worksheet_metadata()
-        # self.build_defined_name_metadata()
         # self.build_shared_string_metadata()
+
 
     def _parse_archive(self, archive_address):
         """Extracts data from a paricular part of the given Excel file."""
@@ -129,18 +129,6 @@ class Reader():
 
             except:
                 logging.info( "File {} is not in archive.".format(fname) )
-
-
-    # def build_defined_name_metadata(self):
-    #     """Extracts data about the named cells in this particular Excel file."""
-    #
-    #     defined_name_root = self._parse_archive('xl/workbook.xml')
-    #     if defined_name_root is not None:
-    #         defined_names = defined_name_root.find("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}definedNames")
-    #         if defined_names is not None and len(defined_names) > 0:
-    #             for name in defined_names:
-    #                 if name.get('hidden') is None and name.text not in ['#REF!']:
-    #                     self.defined_name_metadata[name.get('name')] = name.text
 
 
     # def build_shared_string_metadata(self):
