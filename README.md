@@ -35,6 +35,7 @@ xlcalculator currently supports:
   * [Parsing a dict into the Model object](https://stackoverflow.com/questions/31260686/excel-formula-evaluation-in-pandas/61586912#61586912)
     * Code is in examples\\third_party_datastructure
   * Functions as implemented in [xlfunctions](https://github.com/bradbase/xlfunctions).
+    * ABS
     * AVERAGE
     * CHOOSE
     * CONCAT

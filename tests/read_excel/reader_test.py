@@ -54,7 +54,9 @@ class TestRead_excel(unittest.TestCase):
         archive.read()
         defined_names = archive.read_defined_names()
 
-        self.assertEqual(sorted(self.defined_names.keys()), sorted(defined_names.keys()))
+        its_a_blank = set(sorted(defined_names.keys())) - set(sorted(self.defined_names.keys()))
+
+        self.assertEqual(list(its_a_blank), ['Its_a_blank'])
 
 
     def test_build_shared_string_metadata(self):
