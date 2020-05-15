@@ -25,9 +25,8 @@ class ModelCompiler():
 
 
     @staticmethod
-    def read_excel_file(file):
+    def read_excel_file(file_name):
         """"""
-        file_name = os.path.abspath(file)
         archive = Reader(file_name)
         archive.read()
         return archive
