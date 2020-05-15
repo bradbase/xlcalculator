@@ -24,7 +24,6 @@ class ModelCompiler():
         self.model = Model()
 
 
-    @staticmethod
     def read_excel_file(file_name):
         """"""
         archive = Reader(file_name)
