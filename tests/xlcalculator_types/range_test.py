@@ -57,6 +57,18 @@ class TestXLRange(unittest.TestCase):
         self.assertEqual(address_04, xlrange_04.address)
 
 
+        # xlrange_05 = XLRange('Sheet1!1:1', 'Sheet1!1:1')
+        # print("xlrange_05")
+        # print(xlrange_05)
+        # address_05 = [['Sheet1!A1', 'Sheet1!B1', 'Sheet1!C1'],
+        #                 ['Sheet1!A2', 'Sheet1!B2', 'Sheet1!C2'],
+        #                 ['Sheet1!A3', 'Sheet1!B3', 'Sheet1!C3'],
+        #                 ['Sheet1!A4', 'Sheet1!B4', 'Sheet1!C4'],
+        #                 ['Sheet1!A5', 'Sheet1!B5', 'Sheet1!C5']
+        #                 ]
+        # self.assertEqual(address_05, xlrange_05.address)
+
+
     def test_cells(self):
         cells = [['Sheet1!A1'], ['Sheet1!A2'], ['Sheet1!A3'], ['Sheet1!A4'], ['Sheet1!A5']]
         xlrange = XLRange('Sheet1!A1:A5', 'Sheet1!A1:A5')

@@ -76,7 +76,7 @@ class XLRange(XLType):
         """"""
 
         cells = []
-        address = address.replace(' ', '')
+        address = address.strip()
 
         start_address, end_cell_address = address.split(':')
         if start_address.count("!") > 0:
@@ -93,8 +93,23 @@ class XLRange(XLType):
         else:
             end_address = "{}".format(end_cell_address)
 
-        start_column, start_row = [_f for _f in re.split('([A-Z\$]+)', start_cell_address) if _f]
-        end_column, end_row = [_f for _f in re.split('([A-Z\$]+)', end_cell_address) if _f]
+        start = [_f for _f in re.split('([A-Z\$]+)', start_cell_address) if _f]
+        if len(start) > 1:
+            start_column, start_row = start
+        elif len(start) == 1:
+            if start[0].isdigit():
+                start_column = 'A'
+                start_row = start[0]
+
+        end = [_f for _f in re.split('([A-Z\$]+)', end_cell_address) if _f]
+        if len(end) > 1:
+            end_column, end_row = end
+        elif len(end) == 1:
+            if end[0][0].isdigit():
+                end_column = "XFD"
+                end_row = end[0]
+
+
         start_row = int(start_row)
         end_row = int(end_row)
         start_column_ordinal = XLCell.column_ordinal(start_column)

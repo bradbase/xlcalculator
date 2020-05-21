@@ -138,13 +138,6 @@ def resolve_range(rng, should_flatten = False, sheet_name=''):
     else:
         pass
 
-    # Python strings are unicode capable
-    # # `unicode` != `str` in Python2. See `from openpyxl.compat import unicode`
-    # if type(sheet_name) == str and str != unicode:
-    #     sheet_name = unicode(sheet_name, 'utf-8')
-    # if type(rng) == str and str != unicode:
-    #     rng = unicode(rng, 'utf-8')
-
     key = rng + str(should_flatten) + sheet_name
 
     if not is_range(rng):  return ([sheet_name + rng],1,1)
@@ -164,30 +157,6 @@ def resolve_range(rng, should_flatten = False, sheet_name=''):
 
     start_row = int(start_row)
     end_row = int(end_row)
-
-    # Attempt to use Numpy, not relevant for now
-
-    # num2col_vec = np.vectorize(num2col)
-    # r = np.array([range(start_row, end_row + 1),]*nb_col, dtype='a5').T
-    # c = num2col_vec(np.array([range(start_col_idx, end_col_idx + 1),]*nb_row))
-    # if len(sheet_name)>0:
-    #     s = np.chararray((nb_row, nb_col), itemsize=len(sheet_name))
-    #     s[:] = sheet_name
-    #     c = np.core.defchararray.add(s, c)
-    # B = np.core.defchararray.add(c, r)
-
-
-    # if start_col == end_col:
-    #     data = B.T.tolist()[0]
-    #     return data, len(data), 1
-    # elif start_row == end_row:
-    #     data = B.tolist()[0]
-    #     return data, 1, len(data)
-    # else:
-    #     if should_flatten:
-    #         return B.flatten().tolist(), 1, nb_col*nb_row
-    #     else:
-    #         return B.tolist(), nb_row, nb_col
 
     # single column
     if  start_col == end_col:

@@ -24,7 +24,7 @@ class ModelCompiler():
         self.model = Model()
 
 
-    def read_excel_file(file_name):
+    def read_excel_file(self, file_name):
         """"""
         archive = Reader(file_name)
         archive.read()
@@ -42,13 +42,13 @@ class ModelCompiler():
 
     def read_and_parse_archive(self, file_name=None, ignore_sheets = [], ignore_hidden = False, build_code=True):
         """"""
-        archive = ModelCompiler.read_excel_file(file_name)
+        archive = self.read_excel_file(file_name)
         self.parse_archive(archive, ignore_sheets=ignore_sheets)
 
         if build_code:
             self.model.build_code()
 
-        return deepcopy(self.model)
+        return self.model
 
 
     def read_and_parse_dict(self, input_dict, default_sheet="Sheet1", build_code=True):
@@ -86,7 +86,7 @@ class ModelCompiler():
                 if cell_address not in self.model.cells:
                     logging.warning("Defined name {} refers to empty cell {}. Is not being loaded.".format(name, cell_address))
                     continue
-                    
+
                 else:
                     if self.model.cells[cell_address] is not None:
                         self.model.defined_names[name] = self.model.cells[cell_address]

@@ -25,7 +25,9 @@ class TestRead_excel(unittest.TestCase):
 
         self.defined_name_metadata = {'Hundred': 'Eighth!$B$1', 'Its_a_blank' : 'First!$E$1', 'My_Range': 'Eighth!$A$1:$A$10', 'Split_range': 'Eighth!$A$1:$A$10,Eighth!$C$1:$C$10'}
 
-        self.worksheet_metadata = {'rId1': {'name': 'First', 'sheetId': '1', 'Target': 'worksheets/sheet1.xml'}, 'rId2': {'name': 'Second', 'sheetId': '2', 'Target': 'worksheets/sheet2.xml'}, 'rId3': {'name': 'Third', 'sheetId': '3', 'Target': 'worksheets/sheet3.xml'}, 'rId4': {'name': 'Fourth', 'sheetId': '4', 'Target': 'worksheets/sheet4.xml'}, 'rId5': {'name': 'Fifth', 'sheetId': '5', 'Target': 'worksheets/sheet5.xml'}, 'rId6': {'name': 'Sixth', 'sheetId': '6', 'Target': 'worksheets/sheet6.xml'}, 'rId7': {'name': 'Seventh', 'sheetId': '7', 'Target': 'worksheets/sheet7.xml'}, 'rId8': {'name': 'Eighth', 'sheetId': '8', 'Target': 'worksheets/sheet8.xml'}, 'rId9': {'name': 'Ninth', 'sheetId': '9', 'Target': 'worksheets/sheet9.xml'}, 'rId10': {'name': 'Tenth', 'sheetId': '10', 'Target': 'worksheets/sheet10.xml'}}
+        self.worksheet_metadata = {'rId1': {'name': 'First', 'sheetId': '1', 'Target': 'worksheets/sheet1.xml'}, 'rId2': {'name': 'Second', 'sheetId': '2', 'Target': 'worksheets/sheet2.xml'}, 'rId3': {'name': 'Third', 'sheetId': '3', 'Target': 'worksheets/sheet3.xml'}, 'rId4': {'name': 'Fourth', 'sheetId': '4', 'Target': 'worksheets/sheet4.xml'}, 'rId5': {'name': 'Fifth', 'sheetId': '5', 'Target': 'worksheets/sheet5.xml'}, 'rId6': {'name': 'Sixth', 'sheetId': '6', 'Target': 'worksheets/sheet6.xml'}, 'rId7': {'name': 'Seventh', 'sheetId': '7', 'Target': 'worksheets/sheet7.xml'}, 'rId8': {'name': 'Eighth', 'sheetId': '8', 'Target': 'worksheets/sheet8.xml'}, 'rId9': {'name': 'Ninth', 'sheetId': '9', 'Target': 'worksheets/sheet9.xml'}, 'rId10': {'name': 'Tenth', 'sheetId': '10', 'Target': 'worksheets/sheet10.xml'}, 'rId11': {'name': 'Eleventh', 'sheetId': '11', 'Target': 'worksheets/sheet11.xml'}}
+
+
 
 
     # def teardown(self):
@@ -35,7 +37,7 @@ class TestRead_excel(unittest.TestCase):
     def test_read_cells(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
-        cells, formulae, ranges = archive.read_cells()
+        cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.cells.keys()), sorted(cells.keys()))
 
@@ -44,7 +46,7 @@ class TestRead_excel(unittest.TestCase):
     def test_read_formulae(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
-        cells, formulae, ranges = archive.read_cells()
+        cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.formulae.keys()), sorted(formulae.keys()))
 
@@ -70,7 +72,6 @@ class TestRead_excel(unittest.TestCase):
     def test_build_defined_name_metadata(self):
         archive = Reader(r"./tests/resources/reader.xlsm")
         archive.read()
-
         self.assertEqual(self.defined_name_metadata, archive.defined_name_metadata)
 
 
