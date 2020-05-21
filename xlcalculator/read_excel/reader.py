@@ -185,6 +185,7 @@ class Reader():
                     cellcounter = 0
                     time_before = datetime.now()
                     is_shared_string = False
+                    inline_str = None
                     for event, elem in context:
 
                         if event == 'start':
@@ -216,6 +217,16 @@ class Reader():
 
                                 if elem.get('t') == 'array':
                                     cellparts['ref'] = elem.get('ref')
+
+                            if elem.tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}is':
+                                inline_str = ''
+
+                            if elem.tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t' and inline_str is not None:
+                                inline_str += elem.text
+
+                        if event == "end" and elem.tag == '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}is':
+                            cellparts['value'] = inline_str
+                            inline_str = None
 
                         if event == "end" and elem.tag == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c":
                             address = "{}!{}".format(sheet_name, cellparts['address'])
