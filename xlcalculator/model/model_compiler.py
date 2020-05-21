@@ -71,7 +71,7 @@ class ModelCompiler():
         if build_code:
             self.model.build_code()
 
-        return deepcopy(self.model)
+        return self.model
 
 
     def build_defined_names(self):
