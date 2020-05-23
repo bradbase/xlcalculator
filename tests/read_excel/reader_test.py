@@ -8,11 +8,13 @@ from xlcalculator.read_excel.reader import Reader
 from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
 from xlcalculator.read_excel.tokenizer import f_token
 
+from ..function_library import testing
+
 
 class TestRead_excel(unittest.TestCase):
 
     def setUp(self):
-        infile = open(r"./tests/resources/reader.json", "rb")
+        infile = open(testing.get_resource("reader.json"), "rb")
         json_bytes = infile.read()
         infile.close()
         data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))
@@ -27,32 +29,23 @@ class TestRead_excel(unittest.TestCase):
 
         self.worksheet_metadata = {'rId1': {'name': 'First', 'sheetId': '1', 'Target': 'worksheets/sheet1.xml'}, 'rId2': {'name': 'Second', 'sheetId': '2', 'Target': 'worksheets/sheet2.xml'}, 'rId3': {'name': 'Third', 'sheetId': '3', 'Target': 'worksheets/sheet3.xml'}, 'rId4': {'name': 'Fourth', 'sheetId': '4', 'Target': 'worksheets/sheet4.xml'}, 'rId5': {'name': 'Fifth', 'sheetId': '5', 'Target': 'worksheets/sheet5.xml'}, 'rId6': {'name': 'Sixth', 'sheetId': '6', 'Target': 'worksheets/sheet6.xml'}, 'rId7': {'name': 'Seventh', 'sheetId': '7', 'Target': 'worksheets/sheet7.xml'}, 'rId8': {'name': 'Eighth', 'sheetId': '8', 'Target': 'worksheets/sheet8.xml'}, 'rId9': {'name': 'Ninth', 'sheetId': '9', 'Target': 'worksheets/sheet9.xml'}, 'rId10': {'name': 'Tenth', 'sheetId': '10', 'Target': 'worksheets/sheet10.xml'}, 'rId11': {'name': 'Eleventh', 'sheetId': '11', 'Target': 'worksheets/sheet11.xml'}}
 
-
-
-
-    # def teardown(self):
-    #     pass
-
-
     def test_read_cells(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.cells.keys()), sorted(cells.keys()))
 
-
     @unittest.skip("need to re-create reader.json as some elements of dynamic arrays are not being read correctly")
     def test_read_formulae(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.formulae.keys()), sorted(formulae.keys()))
 
-
     def test_read_defined_names(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         defined_names = archive.read_defined_names()
 
@@ -60,29 +53,25 @@ class TestRead_excel(unittest.TestCase):
 
         self.assertEqual(list(its_a_blank), ['Its_a_blank'])
 
-
     def test_build_shared_string_metadata(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         # archive.build_shared_string_metadata()
 
         self.assertEqual(self.shared_strings_metadata, archive.shared_strings_metadata)
 
-
     def test_build_defined_name_metadata(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         self.assertEqual(self.defined_name_metadata, archive.defined_name_metadata)
 
-
     def test_build_defined_name_metadata_broken_name_range(self):
-        archive = Reader(r"./tests/resources/defined_names.xlsx")
+        archive = Reader(testing.get_resource("defined_names.xlsx"))
         archive.read()
         self.assertEqual({}, archive.defined_name_metadata)
 
-
     def test_build_worksheet_metadata(self):
-        archive = Reader(r"./tests/resources/reader.xlsm")
+        archive = Reader(testing.get_resource("reader.xlsm"))
         archive.read()
         archive.build_worksheet_metadata()
 

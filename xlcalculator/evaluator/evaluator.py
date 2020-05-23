@@ -5,11 +5,9 @@ from datetime import datetime
 
 from pandas import DataFrame
 from numpy import ndarray
-from xlfunctions.exceptions import ExcelError
-from xlfunctions import *
+from xlfunctions import FUNCTIONS, ExcelError
 
-from ..xlcalculator_types import XLCell
-from ..xlcalculator_types import XLRange
+from ..xlcalculator_types import XLCell, XLRange
 
 
 class Evaluator():
@@ -71,6 +69,15 @@ class Evaluator():
     def evaluate(self, cell_address, clear_cache=False):
         """Evaluates Python code as defined in formula.python_code"""
 
+        ns = {
+            'eval_ref': self.eval_ref,
+            'apply': self.apply,
+            'apply_one': self.apply_one,
+            'apply_all': self.apply_all,
+            'filter': filter,
+        }
+        ns.update(FUNCTIONS)
+
         defined_names = self.model.defined_names
         cells = self.model.cells
         ranges = self.model.cells
@@ -129,9 +136,10 @@ class Evaluator():
                         for recursed_cell_address in self.cells_to_evaluate[item]:
                             active_cell = cells[recursed_cell_address]
                             if active_cell.formula is not None:
-                                cells[recursed_cell_address].value = eval(active_cell.formula.python_code)
+                                cells[recursed_cell_address].value = eval(
+                                    active_cell.formula.python_code, ns)
 
-                value = eval(cells[cell_address].formula.python_code)
+                value = eval(cells[cell_address].formula.python_code, ns)
                 if isinstance(value, ndarray):
                     cells[cell_address].value = value if len(value) != 0 else None
                 else:

@@ -3,12 +3,11 @@
 
 import unittest
 
-from xlfunctions import NPV
-from xlfunctions.exceptions import ExcelError
-
 from xlcalculator.xlcalculator_types import XLCell
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
+
+from . import testing
 
 from ..xlcalculator_test import XlCalculatorTestCase
 
@@ -17,17 +16,14 @@ class TestNPV(XlCalculatorTestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
-        self.model = compiler.read_and_parse_archive(r"./tests/resources/NPV.xlsx")
+        self.model = compiler.read_and_parse_archive(
+            testing.get_resource("NPV.xlsx"))
         self.evaluator = Evaluator(self.model)
-
-    # def teardown(self):
-    #     pass
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')
         value = self.evaluator.evaluate('Sheet1!A1')
         self.assertEqualTruncated( excel_value, value, 11 )
-
 
     def test_evaluation_B1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!B1')

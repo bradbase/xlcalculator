@@ -1,4 +1,4 @@
 
 
-class XLType():
+class XLType:
     pass

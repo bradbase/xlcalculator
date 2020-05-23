@@ -3,21 +3,19 @@
 
 import unittest
 
-from xlfunctions import xAbs
-
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
+
+from . import testing
 
 
 class TestABS(unittest.TestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
-        self.model = compiler.read_and_parse_archive(r"./tests/resources/ABS.xlsx")
+        self.model = compiler.read_and_parse_archive(
+            testing.get_resource("ABS.xlsx"))
         self.evaluator = Evaluator(self.model)
-
-    # def teardown(self):
-    #     pass
 
     def test_evaluation_A1(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A1')

@@ -1,8 +1,8 @@
 
 # Excel reference: https://support.office.com/en-us/article/VDB-function-dde4e207-f3fa-488d-91d2-66d55e861d73
 
-from xlfunctions import SLN
-from xlfunctions.exceptions import ExcelError
+from xlfunctions.financial import SLN
+from xlfunctions import ExcelError
 
 from .excel_lib import XlCalculatorBaseFunction
 
@@ -23,7 +23,7 @@ class VDB(XlCalculatorBaseFunction):
 
         start_period = start_period
         end_period = end_period
-        sln_depr = SLN.sln(cost, salvage, life)
+        sln_depr = SLN(cost, salvage, life)
         depr_rate = factor / life
         acc_depr = 0
         depr = 0
@@ -56,7 +56,7 @@ class VDB(XlCalculatorBaseFunction):
                     depr = (cost - acc_depr) * depr_rate
                     acc_depr += depr
 
-                    temp_sln_depr = SLN.sln(cost, salvage, life)
+                    temp_sln_depr = SLN(cost, salvage, life)
 
                     if depr < temp_sln_depr:
                         switch_to_sln = True
@@ -64,7 +64,7 @@ class VDB(XlCalculatorBaseFunction):
                         fixed_remaining_cost = cost - acc_depr
 
                          # we need to check future sln: current depr should never be smaller than sln to come
-                        sln_depr = SLN.sln(fixed_remaining_cost, salvage, fixed_remaining_years)
+                        sln_depr = SLN(fixed_remaining_cost, salvage, fixed_remaining_years)
 
                         if sln_depr > depr: # if it's the case, we switch to sln earlier than the regular case
                             # cancel what has been done
@@ -73,7 +73,7 @@ class VDB(XlCalculatorBaseFunction):
                             fixed_remaining_cost = cost - acc_depr
 
                             # recalculate depreciation
-                            sln_depr = SLN.sln(fixed_remaining_cost, salvage, fixed_remaining_years)
+                            sln_depr = SLN(fixed_remaining_cost, salvage, fixed_remaining_years)
                             depr = sln_depr
                             acc_depr += depr
 

@@ -10,11 +10,14 @@ from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
 from xlcalculator.read_excel.tokenizer import f_token
 from xlcalculator.model.model import Model
 
+from ..function_library import testing
+
 
 class TestModelCompiler(unittest.TestCase):
+    maxDiff = None
 
     def setUp(self):
-        infile = open(r"./tests/resources/reader.json", "rb")
+        infile = open(testing.get_resource("reader.json"), "rb")
         json_bytes = infile.read()
         infile.close()
         data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))
@@ -29,21 +32,17 @@ class TestModelCompiler(unittest.TestCase):
         self.model.ranges = deepcopy(self.ranges)
         self.model.formulae = deepcopy(self.formulae)
 
-
-    # def teardown(self):
-    #     pass
-
-
     def test_read_and_parse_archive(self):
         model_compiler = ModelCompiler()
-        new_model = model_compiler.read_and_parse_archive(r"./tests/resources/reader.xlsm", ignore_sheets=['Eleventh'])
-
+        new_model = model_compiler.read_and_parse_archive(
+            testing.get_resource("reader.xlsm"), ignore_sheets=['Eleventh'])
         self.assertEqual(self.model, new_model)
 
 
     def test_build_defined_names(self):
         model_compiler = ModelCompiler()
-        archive = model_compiler.read_excel_file(r"./tests/resources/reader.xlsm")
+        archive = model_compiler.read_excel_file(
+            testing.get_resource("reader.xlsm"))
         model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells(ignore_sheets=['Eleventh'])
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
@@ -53,7 +52,8 @@ class TestModelCompiler(unittest.TestCase):
 
     def test_link_cells_to_defined_names(self):
         model_compiler = ModelCompiler()
-        archive = model_compiler.read_excel_file(r"./tests/resources/reader.xlsm")
+        archive = model_compiler.read_excel_file(
+            testing.get_resource("reader.xlsm"))
         model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells(ignore_sheets=['Eleventh'])
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
@@ -64,7 +64,8 @@ class TestModelCompiler(unittest.TestCase):
 
     def test_build_ranges(self):
         model_compiler = ModelCompiler()
-        archive = model_compiler.read_excel_file(r"./tests/resources/reader.xlsm")
+        archive = model_compiler.read_excel_file(
+            testing.get_resource("reader.xlsm"))
         model_compiler.model.cells, model_compiler.model.formulae, model_compiler.model.ranges = archive.read_cells(ignore_sheets=['Eleventh'])
         model_compiler.defined_names = archive.read_defined_names()
         model_compiler.build_defined_names()
@@ -75,7 +76,8 @@ class TestModelCompiler(unittest.TestCase):
 
     def test_extract_cells(self):
         model_compiler = ModelCompiler()
-        reader_model = model_compiler.read_and_parse_archive(r"./tests/resources/reader.xlsm", ignore_sheets=['Eleventh'])
+        reader_model = model_compiler.read_and_parse_archive(
+            testing.get_resource("reader.xlsm"), ignore_sheets=['Eleventh'])
         extracted_model = ModelCompiler.extract(reader_model, focus=['First!A2', 'First!B2', 'First!C2'])
 
         reference_model = Model()
@@ -88,7 +90,8 @@ class TestModelCompiler(unittest.TestCase):
 
     def test_extract_defined_names(self):
         model_compiler = ModelCompiler()
-        reader_model = model_compiler.read_and_parse_archive(r"./tests/resources/reader.xlsm", ignore_sheets=['Eleventh'])
+        reader_model = model_compiler.read_and_parse_archive(
+            testing.get_resource("reader.xlsm"), ignore_sheets=['Eleventh'])
         extracted_model = ModelCompiler.extract(reader_model, focus=['Hundred', 'My_Range'])
 
         reference_model = Model()
@@ -113,7 +116,8 @@ class TestModelCompiler(unittest.TestCase):
 
     def test_extract(self):
         model_compiler = ModelCompiler()
-        reader_model = model_compiler.read_and_parse_archive(r"./tests/resources/reader.xlsm", ignore_sheets=['Eleventh'])
+        reader_model = model_compiler.read_and_parse_archive(
+            testing.get_resource("reader.xlsm"), ignore_sheets=['Eleventh'])
         extracted_model = ModelCompiler.extract(reader_model,
                                                 focus=['First!A2',
                                                     'First!B2',

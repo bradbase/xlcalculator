@@ -1,194 +1,7 @@
-
 import logging
-import re
-from string import ascii_uppercase
 
-from xlfunctions import *
-
-# from ..function_library import *
-from xlfunctions.exceptions import ExcelError
-
-INTERPRETER_OBJECT = "Evaluator"
-
-
-def to_str(my_string):
-    """"""
-
-    try:
-
-        return str(my_string)
-
-    except:
-        logging.warning("Couldnt parse {} as string {}".format(my_string, type(my_string)))
-        return my_string
-
-
-def is_range(address):
-    """"""
-
-    if isinstance(address, Exception):
-        return address
-
-    return address.find(':') > 0
-
-
-def split_range(rng):
-    """"""
-
-    if rng.find('!') > 0:
-        start, end = rng.split(':')
-        if start.find('!') > 0:
-            sh, start = start.split("!")
-
-        if end.find('!') > 0:
-            sh, end = end.split("!")
-
-    else:
-        sh = None
-        start, end = rng.split(':')
-
-    return (sh, start, end)
-
-
-def split_address(address):
-    """"""
-
-    sheet = None
-    if address.find('!') > 0:
-        sheet, addr = address.split('!')
-
-    else:
-        addr = address
-
-    #ignore case
-    addr = addr.upper()
-
-    # regular <col><row> format
-    if re.match('^[A-Z\$]+[\d\$]+$', addr):
-        logging.debug("WE MATCH <col><row> {}".format(addr))
-        col, row = [_f for _f in re.split('([A-Z\$]+)', addr) if _f]
-
-    # R<row>C<col> format
-    elif re.match('^R\d+C\d+$', addr):
-        logging.debug("WE MATCH R<row>C<col> {}".format(addr))
-        row, col = addr.split('C')
-        row = row[1:]
-
-    # R[<row>]C[<col>] format
-    elif re.match('^R\[\d+\]C\[\d+\]$', addr):
-        logging.debug("WE MATCH R[<row>]C[<col>] {}".format(addr))
-        row, col = addr.split('C')
-        row = row[2:-1]
-        col = col[2:-1]
-
-    else:
-        print("WE DONT MATCH ANYTHING {}".format(addr))
-        message = 'Invalid address format ' + addr
-        logging.debug(message)
-        raise Exception(message)
-
-    return (sheet, col, row)
-
-
-def col2num(col):
-    if not col:
-        raise Exception("Column may not be empty")
-
-    tot = 0
-    for i,c in enumerate([c for c in col[::-1] if c != "$"]):
-        if c == '$': continue
-        tot += (ord(c)-64) * 26 ** i
-
-    return tot
-
-
-def num2col(num):
-    if num < 1:
-        raise Exception("Number must be larger than 0: %s" % num)
-
-    s = ''
-    q = num
-    while q > 0:
-        (q,r) = divmod(q,26)
-        if r == 0:
-            q = q - 1
-            r = 26
-        s = ascii_uppercase[r-1] + s
-
-    return s
-
-
-def resolve_range(rng, should_flatten = False, sheet_name=''):
-    # print 'RESOLVE RANGE splitting', rng
-    if ':' not in rng:
-        if '!' in rng:
-            rng = rng.split('!')
-        return ExcelError('#REF!', info = '%s is not a regular range, nor a named_range' % rng)
-    sh, start, end = split_range(rng)
-
-    if sh and sheet_name:
-        if sh != sheet_name:
-            raise Exception("Mismatched sheets %s and %s" % (sh, sheet_name))
-        else:
-            sheet_name += '!'
-    elif sh and not sheet_name:
-        sheet_name = sh + "!"
-    elif sheet_name and not sh:
-        sheet_name += "!"
-    else:
-        pass
-
-    key = rng + str(should_flatten) + sheet_name
-
-    if not is_range(rng):  return ([sheet_name + rng],1,1)
-    # single cell, no range
-    if start.isdigit() and end.isdigit():
-		# This copes with 5:5 style ranges
-        start_col = "A"
-        start_row = start
-        end_col = "XFD"
-        end_row = end
-    else:
-        sh, start_col, start_row = split_address(start)
-        sh, end_col, end_row = split_address(end)
-
-    start_col_idx = col2num(start_col)
-    end_col_idx = col2num(end_col);
-
-    start_row = int(start_row)
-    end_row = int(end_row)
-
-    # single column
-    if  start_col == end_col:
-        nrows = end_row - start_row + 1
-        data = [ "%s%s%s" % (s, c, r) for (s, c, r) in zip([sheet_name]*nrows,[start_col]*nrows,list(range(start_row,end_row+1)))]
-
-        output = data, len(data), 1
-
-    # single row
-    elif start_row == end_row:
-        ncols = end_col_idx - start_col_idx + 1
-        data = [ "%s%s%s" % (s, num2col(c), r) for (s, c, r) in zip([sheet_name]*ncols,list(range(start_col_idx,end_col_idx+1)),[start_row]*ncols)]
-        output = data, 1, len(data)
-
-    # rectangular range
-    else:
-        cells = []
-        for r in range(start_row, end_row + 1):
-            row = []
-            for c in range(start_col_idx, end_col_idx + 1):
-                row.append(sheet_name + num2col(c) + str(r))
-
-            cells.append(row)
-
-        if should_flatten:
-            # flatten into one list
-            l = list(flatten(cells, only_lists=True))
-            output = l, len(cells), len(cells[0])
-        else:
-            output = cells, len(cells), len(cells[0])
-
-    return output
+from xlfunctions import FUNCTIONS, ExcelError
+from . import utils
 
 
 class ASTNode(object):
@@ -197,22 +10,17 @@ class ASTNode(object):
     def __init__(self, token):
         self.token = token
 
-
     def __str__(self):
         return self.token.tvalue
-
 
     def __getattr__(self, name):
         return getattr(self.token, name)
 
-
     def __hash__(self):
         return hash( self.token.tvalue )
 
-
     def __eq__(self, other):
         return self.token == other.token
-
 
     def children(self, ast):
         """"""
@@ -221,13 +29,11 @@ class ASTNode(object):
         args = sorted(args, key=lambda x: ast.nodes[x]['pos'])
         return args
 
-
     def parent(self, ast):
         """"""
 
         args = list(ast.successors(self))
         return args[0] if args else None
-
 
     def find_special_function(self, ast):
         """"""
@@ -250,7 +56,6 @@ class ASTNode(object):
 
         return found
 
-
     def has_operator_or_func_parent(self, ast):
         """"""
 
@@ -258,7 +63,9 @@ class ASTNode(object):
         current = self
 
         while current is not None:
-            if (current.ttype[:8] == 'operator' or current.ttype == 'function') and current.tvalue.lower() != 'if':
+            if ((current.ttype[:8] == 'operator'
+                     or current.ttype == 'function')
+                    and current.tvalue.lower() != 'if'):
                 found = True
                 break
 
@@ -266,7 +73,6 @@ class ASTNode(object):
                 current = current.parent(ast)
 
         return found
-
 
     def has_ind_func_parent(self, ast):
         """"""
@@ -277,11 +83,21 @@ class ASTNode(object):
         else:
             return False
 
-
     def emit(self, ast, sheet_name=None, pointer=False):
         """Emit code"""
 
         self.token.tvalue
+
+    def __repr__(self):
+        return (
+            f"<{self.__class__.__name__} "
+            f"tvalue: {self.tvalue} "
+            f"ttype: {self.ttype} "
+            f"tsubtype: {self.tsubtype}"
+            f">"
+        )
+
+    __str__ = __repr__
 
 
 class OperatorNode(ASTNode):
@@ -289,7 +105,8 @@ class OperatorNode(ASTNode):
 
     def __init__(self, args, ref):
         super().__init__(args)
-        self.ref = ref if ref != '' else 'None' # ref is the address of the reference cell
+        # ref is the address of the reference cell
+        self.ref = ref if ref != '' else 'None'
         # convert the operator to python equivalents
         self.opmap = {
                  "^":"**",
@@ -323,51 +140,44 @@ class OperatorNode(ASTNode):
         parent = self.parent(ast)
         # convert ":" operator to a range function
         if op == ":":
-            # OFFSET HANDLER, when the first argument of OFFSET is a range i.e "A1:A2"
-            if (parent is not None and (parent.tvalue == 'OFFSET' and parent.children(ast)[0] == self)):
-                return '"%s"' % ':'.join([a.emit(ast, sheet_name=sheet_name).replace('"', '') for a in args])
-
-            else:
-                return "self.eval_ref(%s)" % (','.join([a.emit(ast, sheet_name=sheet_name) for a in args]))
-
+            return "eval_ref(%s)" % (','.join([
+                a.emit(ast, sheet_name=sheet_name) for a in args]))
 
         if self.ttype == "operator-prefix":
-            return '{}.apply_one("minus", {}, None, {})'.format(INTERPRETER_OBJECT, args[0].emit(ast, sheet_name=sheet_name), to_str(self.ref))
+            return 'apply_one("minus", {}, None, {})'.format(
+                args[0].emit(ast, sheet_name=sheet_name), str(self.ref))
 
         if op in ["+", "-", "*", "/", "==", "<>", ">", "<", ">=", "<="]:
             is_special = self.find_special_function(ast)
             call = 'apply' + ('_all' if is_special else '')
             function = self.op_range_translator.get(op)
-            arg1 = args[0]
-            arg2 = args[1]
 
-            return INTERPRETER_OBJECT + "." + call + "(%s)" % ','.join(['"'+function+'"', to_str(arg1.emit(ast,sheet_name=sheet_name)), to_str(arg2.emit(ast,sheet_name=sheet_name)), to_str(self.ref)])
+            arg1 = str(args[0].emit(ast,sheet_name=sheet_name))
+            arg2 = str(args[1].emit(ast,sheet_name=sheet_name))
+            return f'{call}("{function}", {arg1}, {arg2})'
 
         parent = self.parent(ast)
 
-        #TODO silly hack to work around the fact that None < 0 is True (happens on blank cells)
+        # TODO silly hack to work around the fact that None < 0 is True
+        # (happens on blank cells)
+        # This is just wrong. Implement this handling properly in the operator
+        # functions.
+        left = args[0].emit(ast, sheet_name=sheet_name)
+        right = args[1].emit(ast,sheet_name=sheet_name)
         if op == "<" or op == "<=":
-            aa = args[0].emit(ast, sheet_name=sheet_name)
-            ss = "(" + aa + " if " + aa + " is not None else float('inf'))" + op + args[1].emit(ast,sheet_name=sheet_name)
+            ss = f"({left} if {left} is not None else float('inf')){op}{right}"
 
         elif op == ">" or op == ">=":
-            aa = args[1].emit(ast, sheet_name=sheet_name)
-            ss =  args[0].emit(ast, sheet_name=sheet_name) + op + '(' + aa + ' if ' + aa + ' is not None else float("inf"))'
+            ss = f'{left}{op}({right} if {right} is not None else float("inf"))'
 
         else:
-            ss = args[0].emit(ast, sheet_name=sheet_name) + op + args[1].emit(ast, sheet_name=sheet_name)
+            ss = f'{left}{op}{right}'
 
-        #avoid needless parentheses
+        # avoid needless parentheses
         if parent and not isinstance(parent, FunctionNode):
             ss = "("+ ss + ")"
 
         return ss
-
-    def __repr__(self):
-        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
-
-    def __str__(self):
-        return self.__repr__()
 
 
 class OperandNode(ASTNode):
@@ -383,34 +193,30 @@ class OperandNode(ASTNode):
         t = self.tsubtype
 
         if t == "logical":
-            return to_str(self.tvalue.lower() == "true")
+            return str(self.tvalue.lower() == "true")
 
         elif t == "text" or t == "error":
             val = self.tvalue.replace('"','\\"').replace("'","\\'")
-            return to_str('"' + val + '"')
+            return str('"' + val + '"')
 
         else:
-            return to_str(self.tvalue)
-
-    def __repr__(self):
-        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
-
-    def __str__(self):
-        return self.__repr__()
+            return str(self.tvalue)
 
 
 class RangeNode(OperandNode):
-    """Represents a spreadsheet cell, range, named_range, e.g., A5, B3:C20 or INPUT """
+    """Represents a spreadsheet cell, range, named_range.
+
+       e.g., A5, B3:C20 or INPUT
+    """
 
     def __init__(self, args, ref):
         super().__init__(args)
-        self.ref = ref if ref != '' else 'None' # ref is the address of the reference cell
-
+        # ref is the address of the reference cell
+        self.ref = ref if ref != '' else 'None'
 
     def get_cells(self):
-        """"""
-
-        return resolve_range(self.tvalue)[0]
+        cells = utils.resolve_ranges(self.tvalue, default_sheet='')[1]
+        return cells[0] if len(cells) == 1 else cells
 
 
     def emit(self, ast, sheet_name=None, pointer=False):
@@ -420,7 +226,6 @@ class RangeNode(OperandNode):
             logging.warning( "Excel Error Code found {}".format(self.tvalue) )
             return self.tvalue
 
-        is_a_range = False
         is_a_named_range = self.tsubtype == "named_range"
 
         if is_a_named_range:
@@ -428,144 +233,36 @@ class RangeNode(OperandNode):
 
         else:
             rng = self.tvalue.replace('$','')
-            is_a_range = is_range(rng)
             if self.tsubtype == 'pointer':
                 print("I FOUND A POINTER!!!", rng)
                 my_str = '"' + rng + '"'
 
             else:
-                if is_a_range:
-                    sh, start, end = split_range(rng)
-
-                else:
-                    try:
-                        sh, col, row = split_address(rng)
-
-                    except Exception as exception:
-                        logging.warning("Unknown address: {} is not a cell/range reference, nor a named range. Exception type {}".format( to_str(rng), type(exception) ))
-                        sh = None
-
-                if sh:
+                if '!' in rng:
                     my_str = '"' + rng + '"'
 
                 else:
                     my_str = '"' + sheet_name + "!" + rng + '"'
 
-        to_eval = True
-        # exception for formulas which use the address and not it content as ":" or "OFFSET"
-        parent = self.parent(ast)
-        # for OFFSET, it will also depends on the position in the formula (1st position required)
-        if (parent is not None and
-            (parent.tvalue == ':' or
-            (parent.tvalue == 'OFFSET' and parent.children(ast)[0] == self) or
-            (parent.tvalue == 'CHOOSE' and parent.children(ast)[0] != self and self.tsubtype == "named_range")) or
-            pointer):
-
-            to_eval = False
-
-        # if parent is None and is_a_named_range: # When a named range is referenced in a cell without any prior operation
-        #     return 'self.eval_ref(%s)' % (my_str)
-
-        if to_eval == False:
-            output = my_str
-
-        # OFFSET HANDLER
-        elif (parent is not None and parent.tvalue == 'OFFSET' and
-             parent.children(ast)[1] == self and self.tsubtype == "named_range"):
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        elif (parent is not None and parent.tvalue == 'OFFSET' and
-             parent.children(ast)[2] == self and self.tsubtype == "named_range"):
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        # INDEX HANDLER
-        elif (parent is not None and parent.tvalue == 'INDEX' and
-             parent.children(ast)[0] == self):
-
-            # we don't use eval_ref here to avoid empty cells (which are not included in Ranges)
-            if is_a_named_range:
-                output = 'resolve_range(self.named_ranges[%s])' % my_str
-            else:
-                output = 'resolve_range(%s)' % my_str
-
-        elif (parent is not None and parent.tvalue == 'INDEX' and
-             parent.children(ast)[1] == self and self.tsubtype == "named_range"):
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        elif (parent is not None and parent.tvalue == 'INDEX' and len(parent.children(ast)) == 3 and
-             parent.children(ast)[2] == self and self.tsubtype == "named_range"):
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        # MATCH HANDLER
-        elif parent is not None and parent.tvalue == 'MATCH' \
-             and (parent.children(ast)[0] == self or len(parent.children(ast)) == 3 and parent.children(ast)[2] == self):
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        elif self.find_special_function(ast) or self.has_ind_func_parent(ast):
-            output = 'self.eval_ref(%s)' % my_str
-
-        else:
-            output = 'self.eval_ref(%s)' % (my_str)
-
-        return output
-
-    def __repr__(self):
-        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
-
-    def __str__(self):
-        return self.__repr__()
+        return f'eval_ref({my_str})'
 
 
 class FunctionNode(ASTNode):
     """AST node representing a function call"""
 
     def __init__(self, args, ref):
-
         super().__init__(args)
-        self.ref = ref if ref != '' else 'None' # ref is the address of the reference cell
-
+        # ref is the address of the reference cell
+        self.ref = ref if ref != '' else 'None'
 
     def emit(self, ast, sheet_name=None, pointer=False):
-        fun = self.tvalue.lower()
+        func = self.tvalue.upper()
 
         # Get the arguments
         args = self.children(ast)
 
-        if fun == "atan2":
-            # swap arguments
-            return "atan2(%s,%s)" % (args[1].emit(ast, sheet_name=sheet_name),args[0].emit(ast, sheet_name=sheet_name))
-
-        elif fun == "pi":
-            # constant, no parens
-            return "pi"
-
-        elif fun == "if":
-            # inline the if
-
-            # check if the 'if' is concerning a Range
-            is_range = False
-            range = None
-            childs = args[0].children(ast)
-
-            for child in childs:
-                if ':' in child.tvalue and child.tvalue != ':':
-                    is_range = True
-                    range = child.tvalue
-                    break
-
-            if is_range: # hack to filter Ranges when necessary,for instance situations like {=IF(A1:A3 > 0; A1:A3; 0)}
-                return '{}.filter(self.eval_ref("{}"))'.format(INTERPRETER_OBJECT, range)
-
-            if len(args) == 2:
-                return "{} if {} else 0".format(args[1].emit(ast, sheet_name=sheet_name), args[0].emit(ast, sheet_name=sheet_name))
-
-            elif len(args) == 3:
-                return "({} if {} else {})".format(args[1].emit(ast, sheet_name=sheet_name), args[0].emit(ast, sheet_name=sheet_name), args[2].emit(ast, sheet_name=sheet_name))
-
-            else:
-                raise Exception("if with {} arguments not supported".format(len(args)))
-
-        elif fun == "array":
+        # ARRAY and ARRAYROW are two special functions created by the tokenizer.
+        if func == "ARRAY":
             my_str = '['
             if len(args) == 1:
                 # only one row
@@ -573,48 +270,30 @@ class FunctionNode(ASTNode):
 
             else:
                 # multiple rows
-                my_str += ",".join(['[' + n.emit(ast, sheet_name=sheet_name) + ']' for n in args])
+                my_str += ",".join([
+                    '[' + n.emit(ast, sheet_name=sheet_name) + ']'
+                    for n in args
+                ])
 
             my_str += ']'
 
             return my_str
 
-        elif fun == "arrayrow":
+        elif func == "ARRAYROW":
             #simply create a list
             return ",".join([n.emit(ast, sheet_name=sheet_name) for n in args])
 
-        elif fun == "and":
-            return "all([" + ",".join([n.emit(ast, sheet_name=sheet_name) for n in args]) + "])"
-
-        elif fun == "or":
-            return "any([" + ",".join([n.emit(ast, sheet_name=sheet_name) for n in args]) + "])"
-
-        elif fun == "index":
-            if pointer or self.parent(ast) is not None and self.parent(ast).tvalue == ':':
-                return 'index(' + ",".join([n.emit(ast, sheet_name=sheet_name) for n in args]) + ")"
-
-            else:
-                return 'self.eval_ref(index(%s))' % (",".join([n.emit(ast, sheet_name=sheet_name) for n in args]))
-
-        elif fun == "offset":
-            if pointer or self.parent(ast) is None or self.parent(ast).tvalue == ':':
-                return 'offset(' + ",".join([n.emit(ast, sheet_name=sheet_name) for n in args]) + ")"
-
-            else:
-                return 'self.eval_ref(offset(%s))' % (",".join([n.emit(ast, sheet_name=sheet_name) for n in args]))
         else:
+            # Remove the BBB namespace, since we are just supporting
+            # everything in one large one.
+            func = func.replace('_XLFN.', '')
             # map to the correct name
-            if fun.upper() in SUPPORTED_FUNCTIONS:
-
-                f = SUPPORTED_FUNCTIONS[fun.upper()]
-                return f + "(" + ",".join( [n.emit(ast, sheet_name=sheet_name) for n in args] ) + ")"
+            if func in FUNCTIONS:
+                args_str = ','.join(
+                    [n.emit(ast, sheet_name=sheet_name) for n in args])
+                return f'{func}({args_str})'
 
             else:
-                message = "Function {} is not supported in xlcalcualtor.".format(fun.upper())
+                message = f"Function {func} is not supported in xlcalculator."
                 logging.error(message)
 
-    def __repr__(self):
-        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
-
-    def __str__(self):
-        return self.__repr__()

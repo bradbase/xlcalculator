@@ -12,12 +12,13 @@ from xlcalculator.read_excel.tokenizer import f_token
 
 from ..formulas import *
 from ..xlcalculator_test import XlCalculatorTestCase
+from ..function_library import testing
 
 
 class TestModel(XlCalculatorTestCase):
 
     def setUp(self):
-        infile = open(r"./tests/resources/model.json", "rb")
+        infile = open(testing.get_resource("model.json"), "rb")
         json_bytes = infile.read()
         infile.close()
         data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))

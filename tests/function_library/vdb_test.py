@@ -3,7 +3,6 @@
 import unittest
 
 import pandas as pd
-from xlfunctions.exceptions import ExcelError
 
 from xlcalculator.function_library import VDB
 from xlcalculator import ModelCompiler
@@ -11,11 +10,6 @@ from xlcalculator import Evaluator
 
 
 class Test_VDB(unittest.TestCase):
-
-    # def setUp(self):
-    #     compiler = ModelCompiler()
-    #     self.model = compiler.read_and_parse_archive(r"./tests/resources/VDB.xlsx")
-    #     self.evaluator = Evaluator(self.model)
 
     def test_vdb_basic(self):
         cost = 575000

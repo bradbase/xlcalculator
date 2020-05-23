@@ -3,23 +3,20 @@
 
 import unittest
 
-from xlfunctions import Sumproduct
-from xlfunctions.exceptions import ExcelError
-
 from xlcalculator.xlcalculator_types import XLRange
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
+
+from . import testing
 
 
 class TestSumProduct(unittest.TestCase):
 
     def setUp(self):
         compiler = ModelCompiler()
-        self.model = compiler.read_and_parse_archive(r"./tests/resources/SUMPRODUCT.xlsx")
+        self.model = compiler.read_and_parse_archive(
+            testing.get_resource("SUMPRODUCT.xlsx"))
         self.evaluator = Evaluator(self.model)
-
-    # def teardown(self):
-    #     pass
 
     def test_evaluation_D7(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!D7')

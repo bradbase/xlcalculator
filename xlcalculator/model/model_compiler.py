@@ -4,7 +4,7 @@ import logging
 import re
 from copy import deepcopy
 
-from xlfunctions.exceptions import ExcelError
+from xlfunctions import ExcelError
 
 from ..read_excel import Reader
 from ..xlcalculator_types import XLCell
@@ -89,14 +89,14 @@ class ModelCompiler():
 
                 else:
                     if self.model.cells[cell_address] is not None:
-                        self.model.defined_names[name] = self.model.cells[cell_address]
+                        self.model.defined_names[name] = cell = self.model.cells[cell_address]
 
             # a range has an address like;
             # Sheet1!A1:A5
             # Sheet1!A1:E5
             # Sheet1!A1:A5,C1:C5,E1:E5
             else:
-                self.model.defined_names[name] = XLRange(name, cell_address)
+                self.model.defined_names[name] = XLRange(cell_address, name=name)
                 self.model.ranges[cell_address] = self.model.defined_names[name]
 
             if cell_address in self.model.formulae and name not in self.model.formulae:

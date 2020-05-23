@@ -178,10 +178,7 @@ class Model():
             expression = expression[1:]
 
         excel_parser = ExcelParser(tokenize_range = tokenize_range);
-        if formula.return_type == 'shared':
-            excel_parser.parse(expression, sheet_name=sheet_name, formula_transpose_direction=formula.formula_direction(), formula_transpose_offset=formula.shared_formula_offset)
-        else:
-            excel_parser.parse(expression, sheet_name=sheet_name)
+        excel_parser.parse(expression, sheet_name=sheet_name)
 
         # insert tokens for '(' and ')', to make things clearer below
         tokens = []
