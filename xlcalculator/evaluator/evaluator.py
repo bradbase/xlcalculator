@@ -1,16 +1,15 @@
-
 import logging
 from functools import lru_cache
 from datetime import datetime
 
 from pandas import DataFrame
 from numpy import ndarray
-from xlfunctions import FUNCTIONS, ExcelError
+from xlfunctions import xl
 
 from ..xlcalculator_types import XLCell, XLRange
 
 
-class Evaluator():
+class Evaluator:
     """Traverses and evaluates a given model."""
 
     def __init__(self, model):
@@ -20,11 +19,15 @@ class Evaluator():
         self.cache_count = 0
         self.cells_to_evaluate = {}
 
+    def recurse_evaluate(
+            self, cells, data, cells_to_evaluate, recursed_cells,
+            recurse_depth=0
+    ):
+        """Determine the execution dependency tree.
 
-    @staticmethod
-    def recurse_evaluate(cells, data, cells_to_evaluate, recursed_cells, recurse_depth=0):
-        """Sometimes (maybe most of the time) we need to 'chase' the dependency tree to eval the correct value of a cell."""
-
+        Sometimes (maybe most of the time) we need to 'chase' the dependency
+        tree to eval the correct value of a cell.
+        """
         if len(data) == 0:
             return
 
@@ -41,12 +44,19 @@ class Evaluator():
                     recursed_cells.add(data[0])
 
         # Recursive cases
-        elif len(data) == 1 and isinstance(data[0], str) and cells[data[0]].formula is not None:
-            Evaluator.recurse_evaluate(cells, list( cells[data[0]].formula.associated_cells ), cells_to_evaluate, recursed_cells, recurse_depth=recurse_depth+1)
+        elif (len(data) == 1 and isinstance(data[0], str)
+                  and cells[data[0]].formula is not None
+        ):
+            self.recurse_evaluate(
+                cells,
+                list(cells[data[0]].formula.associated_cells),
+                cells_to_evaluate, recursed_cells,
+                recurse_depth=recurse_depth+1
+            )
+
             if recurse_depth in cells_to_evaluate:
                 cells_to_evaluate[recurse_depth].add( data[0] )
                 recursed_cells.add(data[0])
-
             else:
                 for level in cells_to_evaluate:
                     if data[0] in cells_to_evaluate[level]:
@@ -55,15 +65,22 @@ class Evaluator():
                 recursed_cells.add(data[0])
 
         elif len(data) == 1 and isinstance(data[0], list):
-            Evaluator.recurse_evaluate(cells, data, cells_to_evaluate, recursed_cells, recurse_depth=recurse_depth+1)
+            self.recurse_evaluate(
+                cells, data, cells_to_evaluate, recursed_cells,
+                recurse_depth=recurse_depth+1)
 
         else:
             mid = len(data) // 2
             first_half = data[:mid]
             second_half = data[mid:]
-            Evaluator.recurse_evaluate(cells, first_half, cells_to_evaluate, recursed_cells, recurse_depth=recurse_depth)
-            Evaluator.recurse_evaluate(cells, second_half, cells_to_evaluate, recursed_cells, recurse_depth=recurse_depth)
-
+            self.recurse_evaluate(
+                cells, first_half, cells_to_evaluate, recursed_cells,
+                recurse_depth=recurse_depth
+            )
+            self.recurse_evaluate(
+                cells, second_half, cells_to_evaluate, recursed_cells,
+                recurse_depth=recurse_depth
+            )
 
     @lru_cache(maxsize=None)
     def evaluate(self, cell_address, clear_cache=False):
@@ -76,7 +93,7 @@ class Evaluator():
             'apply_all': self.apply_all,
             'filter': filter,
         }
-        ns.update(FUNCTIONS)
+        ns.update(xl.FUNCTIONS)
 
         defined_names = self.model.defined_names
         cells = self.model.cells
@@ -96,14 +113,20 @@ class Evaluator():
                     cell_address = name_definition.address
 
                 elif isinstance(name_definition, XLRange):
-                    message = "I can't resolve {} to a cell. It's a range and they aren't supported yet.".format(cell)
+                    message = (
+                        f"I can't resolve {cell} to a cell. It's a range and "
+                        f"they aren't supported yet."
+                    )
                     logging.error(message)
-                    raise Exception(message)
+                    raise ValueError(message)
 
                 elif isinstance(name_definition, XLFormula):
-                    message = "I can't resolve {} to a cell. It's a formula and they aren't supported as a cell reference.".format(cell)
+                    message = (
+                        f"I can't resolve {cell} to a cell. It's a formula "
+                        f"and they aren't supported as a cell reference."
+                    )
                     logging.error(message)
-                    raise Exception(message)
+                    raise ValueError(message)
 
             elif cell_address in ranges:
                 cell = ranges[cell_address]
@@ -113,11 +136,16 @@ class Evaluator():
 
         except:
             logging.error('Empty cell at {}'.format(cell_address))
-            return ExcelError('#NULL', 'Cell {} is empty'.format(cell_address))
+            return xl.NullExcelError('Cell {cell_address} is empty')
 
-        # no formula, or no evaluation means fixed value but could be defined name
-        if cells[cell_address].formula is None or cells[cell_address].formula.evaluate == False:
-            logging.debug("\r\nCell {} has no formula \r\nbut its value is {}".format(cells[cell_address].address, cells[cell_address].value))
+        # No formula, or no evaluation means fixed value but could be a defined
+        # name.
+        if (cells[cell_address].formula is None
+                or cells[cell_address].formula.evaluate == False
+        ):
+            logging.debug(
+                f"Cell {cells[cell_address].address} has no formula "
+                f"but its value is {cells[cell_address].value}")
             return cells[cell_address].value
 
         try:
@@ -128,42 +156,61 @@ class Evaluator():
                         skip = True
 
                 if not skip:
-                    recursed_cells = Evaluator.recurse_evaluate(cells, list( cells[cell_address].formula.associated_cells ), self.cells_to_evaluate, self.recursed_cells)
-                    cells_to_evaluate_keys = list( self.cells_to_evaluate.keys() )
+                    recursed_cells = self.recurse_evaluate(
+                        cells,
+                        list(cells[cell_address].formula.associated_cells),
+                        self.cells_to_evaluate, self.recursed_cells
+                    )
+                    cells_to_evaluate_keys = list(self.cells_to_evaluate.keys())
                     sorted(cells_to_evaluate_keys)
                     cells_to_evaluate_keys.reverse()
                     for item in cells_to_evaluate_keys:
-                        for recursed_cell_address in self.cells_to_evaluate[item]:
-                            active_cell = cells[recursed_cell_address]
+                        for recursed_cell_addr in self.cells_to_evaluate[item]:
+                            active_cell = cells[recursed_cell_addr]
                             if active_cell.formula is not None:
-                                cells[recursed_cell_address].value = eval(
+                                cells[recursed_cell_addr].value = eval(
                                     active_cell.formula.python_code, ns)
 
                 value = eval(cells[cell_address].formula.python_code, ns)
                 if isinstance(value, ndarray):
-                    cells[cell_address].value = value if len(value) != 0 else None
+                    cells[cell_address].value = value \
+                        if len(value) != 0 else None
                 else:
                     if isinstance(value, DataFrame):
-                        cells[cell_address].value = value if not value.empty else None
+                        cells[cell_address].value = value \
+                            if not value.empty else None
                     else:
-                        cells[cell_address].value = value if value != '' else None
+                        cells[cell_address].value = value \
+                            if value != '' else None
 
             else:
                 cells[cell_address].value = 0
 
             cells[cell_address].need_update = False
 
-        except Exception as exception:
-            if str(exception).startswith("Problem evalling"):
-                raise exception
-
+        except Exception as err:
+            if str(err).startswith("Problem evalling"):
+                raise err
             else:
-                raise Exception("Problem evalling: {} for {}, {}".format(exception, cells[cell_address].address, cells[cell_address].formula.python_code))
+                raise RuntimeError(
+                    "Problem evalling: {} for {}, {}".format(
+                        err,
+                        cells[cell_address].address,
+                        cells[cell_address].formula.python_code
+                    )
+                )
 
-        logging.debug("\r\nCell {} has a formula, {} \r\nwhich has been translated to Python as {} which evaluates to {}\r\n".format(cells[cell_address].address, cells[cell_address].formula.formula, cells[cell_address].formula.python_code, cells[cell_address].value))
+        logging.debug(
+            "Cell {} has a formula, {} \r\n"
+            "which has been translated to Python as {} "
+            "which evaluates to {}\r\n".format(
+                cells[cell_address].address,
+                cells[cell_address].formula.formula,
+                cells[cell_address].formula.python_code,
+                cells[cell_address].value)
+        )
 
         return cells[cell_address].value
-
 
     def eval_ref(self, address):
         """"""
@@ -172,7 +219,8 @@ class Evaluator():
             # return self.model.cells[address]
 
         elif address in self.model.defined_names:
-            # this is problematic as a defined name could be a cell, range or formula
+            # This is problematic as a defined name could be a cell, range or
+            # formula
             # TODO: support defined name to be cell, range and formula
             return DataFrame([self.model.defined_names[address]])
 
@@ -189,18 +237,14 @@ class Evaluator():
             self.model.ranges[address].value = DataFrame(range_cells)
             return self.model.ranges[address].value
 
-
-    @staticmethod
-    def apply(func, first, second, ref=None):
-        """"""
+    def apply(self, func, first, second, ref=None):
         # TODO: need to support ranges
-        return Evaluator.apply_all(func, first, second)
+        return self.apply_all(func, first, second)
 
-
-    @staticmethod
-    def apply_one(func, first, second, ref=None):
+    def apply_one(self, func, first, second, ref=None):
         """"""
-        #TODO: This can't be called ATM, but needs to be - once we fully support ranges.
+        # TODO: This can't be called ATM, but needs to be - once we fully
+        #support ranges.
         function = SUPPORTED_OPERATORS[func]
 
         if ref is None:
@@ -213,16 +257,13 @@ class Evaluator():
 
         return function(first_value, second_value)
 
-
-    @staticmethod
-    def apply_all(func, first, second, ref=None):
-        """"""
-
+    def apply_all(self, func, first, second, ref=None):
         function = SUPPORTED_OPERATORS[func]
 
         if isinstance(first, XLRange) and isinstance(second, XLRange):
             if first.length != second.length:
-                return ExcelError('#VALUE!', 'apply_all must have 2 Ranges of identical length')
+                return xl.ValueExcelError(
+                    'apply_all must have 2 Ranges of identical length')
 
             vals = [function(
                 x.value if isinstance(x, CellBase) else x,
@@ -250,56 +291,54 @@ class Evaluator():
         else:
             return function(first, second)
 
-
-    @staticmethod
-    def find_associated_cell(ref, range):
+    def find_associated_cell(self, ref, range):
         """This function retrieves the cell associated to ref in a Range
         For instance, in the range [A1, B1, C1], the cell associated to B2 is B1
         This is useful to mimic the way Excel works.
         """
+        if ref is None:
+            return None
 
-        if ref is not None:
-            row, col = ref
+        row, col = ref
 
-            if (range.length) == 0:  # if a Range is empty, it means normally that all its cells are empty
+        # if a Range is empty, it means normally that all its cells are
+        # empty
+        if (range.length) == 0:
+            return None
+
+        elif range.type == "vertical":
+            if (row, range.origin[1]) in range.order:
+                return range.addresses[
+                    range.order.index((row, range.origin[1]))
+                ]
+
+            else:
                 return None
 
-            elif range.type == "vertical":
-                if (row, range.origin[1]) in range.order:
-                    return range.addresses[
-                        range.order.index((row, range.origin[1]))
-                    ]
+        elif range.type == "horizontal":
+            if (range.origin[0], col) in range.order:
+                return range.addresses[
+                    range.order.index((range.origin[0], col))
+                ]
 
-                else:
-                    return None
+            else:
+                return None
 
-            elif range.type == "horizontal":
-                if (range.origin[0], col) in range.order:
-                    return range.addresses[
-                        range.order.index((range.origin[0], col))
-                    ]
+        elif range.type == "scalar":
+            if (row, range.origin[1]) in range.order:
+                return range.addresses[
+                    range.order.index((row, range.origin[1]))
+                ]
 
-                else:
-                    return None
+            elif (range.origin[0], col) in range.order:
+                return range.addresses[
+                    range.order.index((range.origin[0], col))
+                ]
 
-            elif range.type == "scalar":
-                if (row, range.origin[1]) in range.order:
-                    return range.addresses[
-                        range.order.index((row, range.origin[1]))
-                    ]
-
-                elif (range.origin[0], col) in range.order:
-                    return range.addresses[
-                        range.order.index((range.origin[0], col))
-                    ]
-
-                elif (row, col) in range.order:
-                    return range.addresses[
-                        range.order.index((row, col))
-                    ]
-
-                else:
-                    return None
+            elif (row, col) in range.order:
+                return range.addresses[
+                    range.order.index((row, col))
+                ]
 
             else:
                 return None
@@ -307,43 +346,45 @@ class Evaluator():
         else:
             return None
 
-
-    @staticmethod
-    def find_associated_value(ref, item):
+    def find_associated_value(self, ref, item):
         """retrieves the value and not the Cell."""
 
         row, col = ref
 
         if isinstance(item, Evaluator):
             try:
-                if (item.length) == 0:  # if a Range is empty, it means normally that all its cells are empty
+                # If a Range is empty, it means normally that all its cells
+                # are empty
+                if (item.length) == 0:
                     item_value = 0
 
                 elif item.type == "vertical":
                     if item.__cellmap is not None:
-                        item_value = item[(row, item.origin[1])].value if (row, item.origin[1]) in item else None
+                        item_value = item[(row, item.origin[1])].value \
+                            if (row, item.origin[1]) in item else None
 
                     else:
-                        item_value = item[(row, item.origin[1])] if (row, item.origin[1]) in item else None
+                        item_value = item[(row, item.origin[1])] \
+                            if (row, item.origin[1]) in item else None
 
                 elif item.type == "horizontal":
 
                     if item.__cellmap is not None:
-                        try:
-
-                            item_value = item[(item.origin[0], col)].value if (item.origin[0], col) in item else None
-
-                        except:
-                            raise Exception
-
+                        item_value = item[(item.origin[0], col)].value \
+                            if (item.origin[0], col) in item else None
                     else:
-                        item_value = item[(item.origin[0], col)] if (item.origin[0], col) in item else None
+                        item_value = item[(item.origin[0], col)] \
+                            if (item.origin[0], col) in item else None
 
                 else:
-                    return ExcelError('#VALUE!', 'cannot use find_associated_value on %s' % item.type)
+                    return xl.ValueExcelError(
+                        f'cannot use find_associated_value on {item.type}')
 
-            except ExcelError as e:
-                raise Exception('First argument of Range operation is not valid: ' + e.value)
+            except xl.ExcelError as err:
+                raise RuntimeError(
+                    f'First argument of Range operation is not '
+                    f'valid: {err.value}'
+                )
 
         elif item is None:
             item_value = 0
@@ -353,39 +394,34 @@ class Evaluator():
 
         return item_value
 
-
     @staticmethod
-    def check_value(a):
-        """"""
+    def check_value(val):
+        if isinstance(val, xl.ExcelError):
+            return val
 
-        if isinstance(a, ExcelError):
-            return a
+        elif isinstance(val, str) and val in ErrorCodes:
+            return cl.ExcelError(val)
 
-        elif isinstance(a, str) and a in ErrorCodes:
-            return ExcelError(a)
-
-        try:  # This is to avoid None or Exception returned by Range operations
-            if float(a) or isinstance(a, (str)):
-                return a
+        # This is to avoid None or Exception returned by Range operations
+        try:
+            if float(val) or isinstance(val, (str)):
+                return val
 
             else:
                 return 0
-
         except:
-            if a == 'True':
-                return True
+            pass
 
-            elif a == 'False':
-                return False
+        if val == 'True':
+            return True
 
-            else:
-                return 0
+        elif val == 'False':
+            return False
 
+        return 0
 
     @staticmethod
     def add(lhs, rhs):
-        """"""
-
         if isinstance(lhs, XLCell):
             lhs = lhs.value
 
@@ -394,15 +430,11 @@ class Evaluator():
 
         try:
             return Evaluator.check_value(lhs) + Evaluator.check_value(rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def substract(lhs, rhs):
-        """"""
-
         if isinstance(lhs, XLCell):
             lhs = lhs.value
 
@@ -410,12 +442,9 @@ class Evaluator():
             rhs = rhs.value
 
         try:
-
             return Evaluator.check_value(lhs) - Evaluator.check_value(rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def minus(a, b=None):
@@ -425,12 +454,9 @@ class Evaluator():
         try:
             if isinstance(a, XLCell):
                 a = a.value
-
             return a * -1
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def multiply(lhs, rhs):
@@ -443,17 +469,13 @@ class Evaluator():
             rhs = rhs.value
 
         try:
-
             return Evaluator.check_value( lhs ) * Evaluator.check_value( rhs )
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def divide(numerator, denominator):
         """"""
-
         if isinstance(numerator, XLCell):
             numerator = numerator.value
 
@@ -461,7 +483,7 @@ class Evaluator():
             denominator = denominator.value
 
         if denominator == 0:
-            return ExcelError('#DIV/0!', e)
+            return xl.DivZeroExcelError()
 
         return numerator / denominator
 
@@ -477,10 +499,8 @@ class Evaluator():
 
         try:
             return Evaluator.check_value(lhs) > Evaluator.check_value(rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_strictly_inferior(lhs, rhs):
@@ -493,10 +513,8 @@ class Evaluator():
 
         try:
             return Evaluator.check_value(lhs) < Evaluator.check_value(rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_superior_or_equal(lhs, rhs):
@@ -510,12 +528,9 @@ class Evaluator():
         try:
             lhs = Evaluator.check_value(lhs)
             rhs = Evaluator.check_value(rhs)
-
             return a > b or Evaluator.is_almost_equal(lhs, rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_inferior_or_equal(lhs, rhs):
@@ -529,17 +544,12 @@ class Evaluator():
         try:
             lhs = Evaluator.check_value(lhs)
             rhs = Evaluator.check_value(rhs)
-
             return a < b or Evaluator.is_almost_equal(lhs, rhs)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_equal(a, b):
-        """"""
-
         try:
             if not isinstance(a, (str)):
                 a = Evaluator.check_value(a)
@@ -548,15 +558,11 @@ class Evaluator():
                 b = Evaluator.check_value(b)
 
             return Evaluator.is_almost_equal(a, b, precision=0.00001)
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_not_equal(a, b):
-        """"""
-
         try:
             if not isinstance(a, (str)):
                 a = Evaluator.check_value(a)
@@ -565,20 +571,16 @@ class Evaluator():
                 b = Evaluator.check_value(b)
 
             return a != b
-
-        except Exception as e:
-            return ExcelError('#N/A', e)
-
+        except Exception as err:
+            return xl.NaExcelError(err)
 
     @staticmethod
     def is_number(s): # http://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-is-a-number-float-in-python
         try:
             float(s)
             return True
-
         except:
             return False
-
 
     @staticmethod
     def is_almost_equal(a, b, precision = 0.0001):
@@ -591,13 +593,11 @@ class Evaluator():
         else: # booleans or strings
             return str(a) == str(b)
 
-
     def set_cell_value(self, address, value, clear_cache=True):
         """Sets the value of a cell in the model."""
         self.model.set_cell_value(address, value)
         if clear_cache:
             Evaluator.evaluate.cache_clear()
-
 
     def get_cell_value(self, address):
         """Gets the value of a cell in the model."""

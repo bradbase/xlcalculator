@@ -1,19 +1,12 @@
-
-import os.path
 import logging
-import re
 from copy import deepcopy
 
-from xlfunctions import ExcelError
-
 from ..read_excel import Reader
-from ..xlcalculator_types import XLCell
-from ..xlcalculator_types import XLRange
-from ..xlcalculator_types import XLFormula
+from ..xlcalculator_types import XLCell, XLFormula, XLRange
 from .model import Model
 
 
-class ModelCompiler():
+class ModelCompiler:
     """Excel Workbook Data Model Compiler
 
     Factory class responsible for taking Microsoft Excel cells and named_range
