@@ -16,9 +16,10 @@ class CellTest(unittest.TestCase):
             self.assertTrue('This is a Range' in context.exception)
 
     def test_address_with_bad_sheet(self):
-        with self.assertRaises(ValueError):
-            # Must quote sheets with spaces.
-            XLCell('Bad Sheet!A1')
+        # While the sheet name should be quoted, internally, the code often
+        # just puts the sheet name in to produce unique keys, so the utility
+        # supports unquoted sheets as well.
+        self.assertEqual(XLCell('Bad Sheet!A1').address, 'Bad Sheet!A1')
 
     def test_value(self):
         cell = XLCell('Sheet1!A1', 5)
@@ -31,3 +32,7 @@ class CellTest(unittest.TestCase):
     def test_float(self):
         cell = XLCell('Sheet1!A1', 5, 'SUM(A1:B1)')
         self.assertEqual(float(cell), 5.0)
+
+    def test_hash(self):
+        cell = XLCell('Sheet1!A1', 5, 'SUM(A1:B1)')
+        self.assertEqual(hash(cell), hash(('Sheet1', 1, 1)))
