@@ -415,28 +415,27 @@ class Model():
         return stack.pop()
 
 
-    def create_node(self, t, sheet_name=None, ref=None):
+    def create_node(self, token, sheet_name=None, ref=None):
         """Simple factory function"""
 
-        if t.ttype == "operand":
-            if t.tsubtype in ["range"]:
-                return RangeNode(t, ref)
+        if token.ttype == "operand":
+            if token.tsubtype in ["range"]:
+                return RangeNode(token)
 
-            if t.tsubtype in ["pointer"]:
-                print("FOUND A POINTER!!!", t.tvalue)
-                return RangeNode(t, ref)
+            if token.tsubtype in ["pointer"]:
+                return RangeNode(token)
 
-            elif t.tsubtype in ["named_range"] :
+            elif token.tsubtype in ["named_range"] :
                 # we need to attempt resolving defined names here
                 # so we can persist formulas without defined names
-                if t.tvalue in self.defined_names:
+                if token.tvalue in self.defined_names:
                     name_definition = self.defined_names[t.tvalue]
 
                     if isinstance(name_definition, XLCell):
-                        t.tvalue = name_definition.address
+                        token.tvalue = name_definition.address
 
                     elif isinstance(name_definition, XLRange):
-                        t.tvalue = name_definition.name
+                        token.tvalue = name_definition.name
                         message = "{} is a range, which is not yet supported".format(name_definition)
                         logging.error(message)
                         raise Exception(message)
@@ -446,19 +445,19 @@ class Model():
                         logging.error(message)
                         raise Exception(message)
 
-                return RangeNode(t, ref)
+                return RangeNode(token)
 
             else:
-                return OperandNode(t)
+                return OperandNode(token)
 
-        elif t.ttype == "function":
-            return FunctionNode(t, ref)
+        elif token.ttype == "function":
+            return FunctionNode(token)
 
-        elif t.ttype.startswith("operator"):
-            return OperatorNode(t, ref)
+        elif token.ttype.startswith("operator"):
+            return OperatorNode(token)
 
         else:
-            return ASTNode(t)
+            return ASTNode(token)
 
     def __eq__(self, other):
 

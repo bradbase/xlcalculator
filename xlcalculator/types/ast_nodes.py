@@ -3,7 +3,15 @@ import logging
 from xlfunctions import xl, math, operator, text
 from . import utils
 
-OP_TO_FUNC = {
+PREFIX_OP_TO_FUNC = {
+    '-': operator.OP_NEG,
+}
+
+POSTFIX_OP_TO_FUNC = {
+    '%': operator.OP_PERCENT,
+}
+
+INFIX_OP_TO_FUNC = {
     "*": operator.OP_MUL,
     "/": operator.OP_DIV,
     "+": operator.OP_ADD,
@@ -25,14 +33,8 @@ class ASTNode(object):
     def __init__(self, token):
         self.token = token
 
-    def __str__(self):
-        return str(self.token.tvalue)
-
     def __getattr__(self, name):
         return getattr(self.token, name)
-
-    def __hash__(self):
-        return hash( self.token.tvalue )
 
     def __eq__(self, other):
         return self.token == other.token
@@ -43,45 +45,64 @@ class ASTNode(object):
     def __repr__(self):
         return (
             f"<{self.__class__.__name__} "
-            f"tvalue: {self.tvalue} "
-            f"ttype: {self.ttype} "
+            f"tvalue: {repr(self.tvalue)}, "
+            f"ttype: {self.ttype}, "
             f"tsubtype: {self.tsubtype}"
             f">"
         )
 
-    __str__ = __repr__
-
-
-class OperatorNode(ASTNode):
-
-    def __init__(self, args, ref):
-        super().__init__(args)
-        # ref is the address of the reference cell
-        self.ref = ref if ref != '' else 'None'
-        self.left = None
-        self.right = None
-
-    def eval(self, model, namespace, ref):
-        op = OP_TO_FUNC[self.tvalue]
-        return op(
-            self.left.eval(model, namespace, ref),
-            self.right.eval(model, namespace, ref),
-        )
+    def __str__(self):
+        return str(self.tvalue)
 
 
 class OperandNode(ASTNode):
 
-    def __init__(self, *args):
-        super().__init__(*args)
-
     def eval(self, model, namespace, ref):
-        typ = self.tsubtype
-        if typ == "logical":
+        if self.tsubtype == "logical":
             return self.tvalue.lower() == "true"
-        elif typ == "text" or typ == "error":
+        elif self.tsubtype in ('text', 'error'):
             return self.tvalue
         else:
             return xl.convert_number(self.tvalue)
+
+    def __str__(self):
+        if self.tsubtype == "logical":
+            return self.tvalue.title()
+        elif self.tsubtype == "text":
+            return '"' + self.tvalue.replace('"', '\\"') + '"'
+        return self.tvalue
+
+
+class OperatorNode(ASTNode):
+
+    def __init__(self, token):
+        super().__init__(token)
+        self.left = None
+        self.right = None
+
+    def eval(self, model, namespace, ref):
+        if self.ttype == 'operator-prefix':
+            assert self.left is None, 'Left operand for prefix operator'
+            op = PREFIX_OP_TO_FUNC[self.tvalue]
+            return op(self.right.eval(model, namespace, ref))
+
+        elif self.ttype == 'operator-infix':
+            op = INFIX_OP_TO_FUNC[self.tvalue]
+            return op(
+                self.left.eval(model, namespace, ref),
+                self.right.eval(model, namespace, ref),
+            )
+        elif self.ttype == 'operator-postfix':
+            assert self.right is None, 'Right operand for postfix operator'
+            op = POSTFIX_OP_TO_FUNC[self.tvalue]
+            return op(self.left.eval(model, namespace, ref))
+        else:
+            raise ValueError(f'Invalid operator type: {self.ttype}')
+
+    def __str__(self):
+        left = f'({self.left}) ' if self.left is not None else ''
+        right = f' ({self.right})' if self.right is not None else ''
+        return f'{left}{self.tvalue}{right}'
 
 
 class RangeNode(OperandNode):
@@ -89,11 +110,6 @@ class RangeNode(OperandNode):
 
        e.g., A5, B3:C20 or INPUT
     """
-
-    def __init__(self, args, ref):
-        super().__init__(args)
-        # ref is the address of the reference cell
-        self.ref = ref if ref != '' else 'None'
 
     def get_cells(self):
         cells = utils.resolve_ranges(self.tvalue, default_sheet='')[1]
@@ -113,14 +129,12 @@ class RangeNode(OperandNode):
             range_cells = []
             for range_column in model.ranges[addr].cells:
                 row = []
-
                 for cell_addr in range_column:
-                    row.append(model.cells[cell_addr].value )
-
+                    row.append(model.cells[cell_addr].value)
                 range_cells.append(row)
 
-            model.ranges[addr].value = xl.RangeData(range_cells)
-            return model.ranges[addr].value
+            model.ranges[addr].value = data = xl.RangeData(range_cells)
+            return data
 
         # Remove sheet part to look up the name. (The sheet was added by the
         # parser to make complete cell and rnage addresses.
@@ -134,10 +148,8 @@ class RangeNode(OperandNode):
 class FunctionNode(ASTNode):
     """AST node representing a function call"""
 
-    def __init__(self, args, ref):
-        super().__init__(args)
-        # ref is the address of the reference cell
-        self.ref = ref if ref != '' else 'None'
+    def __init__(self, token):
+        super().__init__(token)
         self.args = None
 
     def eval(self, model, namespace, ref):
@@ -149,3 +161,7 @@ class FunctionNode(ASTNode):
         return func(
             *[arg.eval(model, namespace, ref) for arg in self.args]
         )
+
+    def __str__(self):
+        args = ', '.join(str(arg) for arg in self.args)
+        return f'{self.tvalue}({args})'
