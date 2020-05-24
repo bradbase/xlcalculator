@@ -52,38 +52,6 @@ class TestModel(XlCalculatorTestCase):
         #         print( this_model.cells[cell].formula.python_code )
 
 
-    def test_shunting_yard(self):
-        this_model = deepcopy(self.model)
-
-        cell_address = this_model.shunting_yard(formula_cell_address, self.model.defined_names)
-        self.assertASTNodesEqual(formula_cell_address.reverse_polish_tokens, cell_address)
-
-        cell_address_with_sheet = this_model.shunting_yard(formula_cell_address_with_sheet, self.model.defined_names)
-        self.assertASTNodesEqual(formula_cell_address_with_sheet.reverse_polish_tokens, cell_address_with_sheet)
-
-        cells_union_with_same_sheet = this_model.shunting_yard(formula_cells_union_with_same_sheet, self.model.defined_names)
-        self.assertASTNodesEqual(formula_cells_union_with_same_sheet.reverse_polish_tokens, cells_union_with_same_sheet)
-
-
-    @unittest.skip("I don't know how to easily compare networks. is_isomorphic isn't doing what I though it did.")
-    def test_build_ast(self):
-        this_model = deepcopy(self.model)
-
-        range_address_function = this_model.shunting_yard(formula_range_address_function, self.model.defined_names)
-        ast_graph, stack = this_model.build_ast(range_address_function)
-        self.assertTrue( is_isomorphic(formula_range_address_function.ast_graph, ast_graph) )
-        self.assertEqual(formula_range_address_function.stack, stack)
-
-
-    def test_create_node(self):
-        this_model = deepcopy(self.model)
-
-        range_node = RangeNode(f_token(tvalue='A1', ttype='operand', tsubtype='range'), None)
-        created_range_node = this_model.create_node(f_token(tvalue='A1', ttype='operand', tsubtype='range'))
-        self.assertIsInstance(created_range_node, RangeNode)
-        self.assertEqual(range_node.__repr__(), created_range_node.__repr__())
-
-
     def test_set_value(self):
         this_model = deepcopy(self.model)
 
@@ -137,11 +105,3 @@ class TestModel(XlCalculatorTestCase):
         get_cell_value_04 = this_model.get_cell_value('Sheet1!A1')
         cell_value_04 = 0
         self.assertEqual(cell_value_04, get_cell_value_04)
-
-
-
-
-
-
-    # def teardown(self):
-    #     pass

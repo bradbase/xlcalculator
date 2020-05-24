@@ -320,7 +320,7 @@ class ExcelParser(ExcelParserTokens):
             self.OPERATORS = "+-*/^&=><"
 
 
-    def getTokens(self, formula, sheet_name=None, formula_transpose_direction=None, formula_transpose_offset=None):
+    def getTokens(self, formula):
         """"""
 
         def currentChar():
@@ -685,16 +685,7 @@ class ExcelParser(ExcelParserTokens):
                         token.tsubtype = self.TOK_SUBTYPE_LOGICAL
 
                     else:
-                        if sheet_name is not None:
-                            athing = token.tvalue
-                            if  ":" in token.tvalue and "!" not in token.tvalue:
-                                token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
-
-                            elif ":" not in token.tvalue and "!" not in token.tvalue:
-                                token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
-
                         token.tsubtype = self.TOK_SUBTYPE_RANGE
-
                 else:
                     token.tsubtype = self.TOK_SUBTYPE_NUMBER
 
@@ -717,36 +708,6 @@ class ExcelParser(ExcelParserTokens):
         tokens.reset()
         return tokens
 
-    def parse(self, formula, sheet_name=None):
-        self.tokens = self.getTokens(formula, sheet_name=sheet_name)
-
-    # def render(self):
-    #     output = ""
-    #     if self.tokens:
-    #         for t in self.tokens.items:
-    #             if   t.ttype == self.TOK_TYPE_FUNCTION and t.tsubtype == self.TOK_SUBTYPE_START:     output += t.tvalue + "("
-    #             elif t.ttype == self.TOK_TYPE_FUNCTION and t.tsubtype == self.TOK_SUBTYPE_STOP:      output += ")"
-    #             elif t.ttype == self.TOK_TYPE_SUBEXPR  and t.tsubtype == self.TOK_SUBTYPE_START:     output += "("
-    #             elif t.ttype == self.TOK_TYPE_SUBEXPR  and t.tsubtype == self.TOK_SUBTYPE_STOP:      output += ")"
-    #             # TODO: add in RE substitution of " with "" for strings
-    #             elif t.ttype == self.TOK_TYPE_OPERAND  and t.tsubtype == self.TOK_SUBTYPE_TEXT:      output += "\"" + t.tvalue + "\""
-    #             elif t.ttype == self.TOK_TYPE_OP_IN    and t.tsubtype == self.TOK_SUBTYPE_INTERSECT: output += " "
-    #
-    #             else: output += t.tvalue
-    #     return output
-    #
-    # def prettyprint(self):
-    #     indent = 0
-    #     output = ""
-    #     if self.tokens:
-    #         for t in self.tokens.items:
-    #             #print "'",t.ttype,t.tsubtype,t.tvalue,"'"
-    #             if (t.tsubtype == self.TOK_SUBTYPE_STOP):
-    #                 indent -= 1
-    #
-    #             output += "    "*indent + t.tvalue + " <" + t.ttype +"> <" + t.tsubtype + ">" + "\n"
-    #             #output += "    "*indent + t.tvalue + "\n"
-    #
-    #             if (t.tsubtype == self.TOK_SUBTYPE_START):
-    #                 indent += 1;
-    #     return output
+    def parse(self, formula):
+        self.tokens = self.getTokens(formula)
+        return self.tokens

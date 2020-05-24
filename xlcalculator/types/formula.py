@@ -22,22 +22,21 @@ class XLFormula(xltype.XLType):
     reference: str = field(default=None, repr=True)
     evaluate: bool = field(default=True, repr=True)
     tokens: List[f_token] = field(init=False, default_factory=list, repr=True)
-    terms: List[xltype.XLType] = field(
-        init=False, default_factory=list, repr=True)
+    terms: List[str] = field(init=False, default_factory=list, repr=True)
     associated_cells: set = field(init=False, default_factory=set, repr=True)
     ast: ast_nodes.ASTNode = field(init=False, default=None)
 
     def __post_init__(self):
         """Supplimentary initialisation."""
-        parser = ExcelParser()
-
-        self.tokens = parser.getTokens(
-            self.formula, sheet_name=self.sheet_name).items
-
+        self.tokens = ExcelParser().getTokens(self.formula).items
         for token in self.tokens:
             if (
                     token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND
                     and token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE
                     and token.tvalue not in self.terms
             ):
-                self.terms.append(token.tvalue)
+                # Make sure we have a full address.
+                term = token.tvalue
+                if '!' not in term:
+                    term = f'{self.sheet_name}!{term}'
+                self.terms.append(term)

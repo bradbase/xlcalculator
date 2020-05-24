@@ -1,26 +1,14 @@
-
 import logging
 from dataclasses import dataclass, field
 import json
 import gzip
 from copy import copy
 
-from networkx import DiGraph
-# import matplotlib.pyplot as plt
 from jsonpickle import encode, decode
 
-from ..types import XLCell, XLFormula, XLRange
-from ..types import RangeNode, OperandNode, OperatorNode, FunctionNode
-from ..read_excel import f_token, ExcelParser
-
-
-class Operator(object):
-    """Small wrapper class to manage operators during shunting yard"""
-
-    def __init__(self, value, precedence, associativity):
-        self.value = value
-        self.precedence = precedence
-        self.associativity = associativity
+from .. import types
+from ..read_excel import f_token
+from . import parser
 
 
 @dataclass
@@ -45,9 +33,9 @@ class Model():
             if address in self.cells:
                 self.cells[address].value = copy(value)
             else:
-                self.cells[address] = XLCell(address, copy(value))
+                self.cells[address] = types.XLCell(address, copy(value))
 
-        elif isinstance(address, XLCell):
+        elif isinstance(address, types.XLCell):
             if address.address in self.cells:
                 self.cells[address.address].value = value
             else:
@@ -73,7 +61,7 @@ class Model():
                     "doesn't exist.")
                 return 0
 
-        elif isinstance(address, XLCell):
+        elif isinstance(address, types.XLCell):
             if address.address in self.cells:
                 return self.cells[address.address].value
             else:
@@ -122,7 +110,7 @@ class Model():
         infile.close()
         data = decode(
             json_bytes, keys=True,
-            classes=(XLCell, XLFormula, f_token, XLRange))
+            classes=(types.XLCell, types.XLFormula, f_token, types.XLRange))
         self.cells = data['cells']
 
         self.defined_names = data['defined_names']
@@ -137,327 +125,11 @@ class Model():
 
         for cell in self.cells:
             if self.cells[cell].formula is not None:
-                sheet_name = self.cells[cell].sheet
-                tokens = self.shunting_yard(
-                    self.cells[cell].formula, self.defined_names.keys(),
-                    ref=None, tokenize_range=False
-                )
-                self.cells[cell].formula.ast = self.build_ast(tokens)
-
-    def shunting_yard(
-            self, formula, named_ranges, ref=None, tokenize_range=False):
-        """Tokenize an excel formula expression into reverse polish notation
-
-        Core algorithm taken from wikipedia with varargs extensions from
-
-        http://www.kallisti.net.nz/blog/2008/02/
-            extension-to-the-shunting-yard-algorithm-to-allow-
-            variable-numbers-of-arguments-to-functions/
-
-
-        The ref is the cell address which is passed down to the actual
-        compiled python code.  Range basic operations signature require this
-        reference, so it has to be written during OperatorNode.emit()
-
-          https://github.com/iOiurson/koala/blob/master/koala/ast/graph.py#L292.
-
-        This is needed because Excel range basic operations (+, -, * ...) are
-        applied on matching cells.
-
-        Example:
-
-        Cell C2 has the following formula 'A1:A3 + B1:B3'.  The output will
-        actually be A2 + B2, because the formula is relative to cell C2.
-        """
-        expression = formula.formula
-        sheet_name = formula.sheet_name
-
-        #remove leading =
-        if expression.startswith('='):
-            expression = expression[1:]
-
-        excel_parser = ExcelParser(tokenize_range = tokenize_range);
-        excel_parser.parse(expression, sheet_name=sheet_name)
-
-        # insert tokens for '(' and ')', to make things clearer below
-        tokens = []
-        for token in excel_parser.tokens.items:
-            if token.ttype == "function" and token.tsubtype == "start":
-                token.tsubtype = ""
-                tokens.append(token)
-                tokens.append(f_token('(','arglist','start'))
-
-            elif token.ttype == "function" and token.tsubtype == "stop":
-                tokens.append(f_token(')','arglist','stop'))
-
-            elif token.ttype == "subexpression" and token.tsubtype == "start":
-                token.tvalue = '('
-                tokens.append(token)
-
-            elif token.ttype == "subexpression" and token.tsubtype == "stop":
-                token.tvalue = ')'
-                tokens.append(token)
-
-            elif token.ttype == "operand" and token.tsubtype == "range" and token.tvalue in named_ranges:
-                token.tsubtype = "named_range"
-                tokens.append(token)
-
-            else:
-                tokens.append(token)
-
-        #http://office.microsoft.com/en-us/excel-help/calculation-operators-and-precedence-HP010078886.aspx
-        operators = {}
-        operators[':'] = Operator(':',8,'left')
-        operators[''] = Operator(' ',8,'left')
-        operators[','] = Operator(',',8,'left')
-        operators['u-'] = Operator('u-',7,'left') #unary negation
-        operators['%'] = Operator('%',6,'left')
-        operators['^'] = Operator('^',5,'left')
-        operators['*'] = Operator('*',4,'left')
-        operators['/'] = Operator('/',4,'left')
-        operators['+'] = Operator('+',3,'left')
-        operators['-'] = Operator('-',3,'left')
-        operators['&'] = Operator('&',2,'left')
-        operators['='] = Operator('=',1,'left')
-        operators['<'] = Operator('<',1,'left')
-        operators['>'] = Operator('>',1,'left')
-        operators['<='] = Operator('<=',1,'left')
-        operators['>='] = Operator('>=',1,'left')
-        operators['<>'] = Operator('<>',1,'left')
-
-        output = []
-        stack = []
-        were_values = []
-        arg_count = []
-
-        new_tokens = []
-
-        # reconstruct expressions with ':' and replace the corresponding tokens by the reconstructed expression
-        if not tokenize_range:
-            for index, token in enumerate(tokens):
-                new_tokens.append(token)
-
-                if type(token.tvalue) == str:
-
-                    if token.tvalue.startswith(':'): # example -> :OFFSET( or simply :A10
-                        depth = 0
-                        expr = ''
-                        rev = reversed(tokens[:index])
-
-                        for reversed_token in rev: # going backwards, 'stop' starts, 'start' stops
-                            if reversed_token.tsubtype == 'stop':
-                                depth += 1
-
-                            elif depth > 0 and reversed_token.tsubtype == 'start':
-                                depth -= 1
-
-                            expr = reversed_token.tvalue + expr
-
-                            new_tokens.pop()
-
-                            if depth == 0:
-                                new_tokens.pop() # these 2 lines are needed to remove INDEX()
-                                new_tokens.pop()
-                                expr = rev.next().tvalue + expr
-                                break
-
-                        expr += token.tvalue
-
-                        depth = 0
-
-                        if token.tvalue[1:] in ['OFFSET', 'INDEX']:
-                            for t in tokens[(index + 1):]:
-                                if t.tsubtype == 'start':
-                                    depth += 1
-
-                                elif depth > 0 and t.tsubtype == 'stop':
-                                    depth -= 1
-
-                                expr += t.tvalue
-                                tokens.remove(t)
-
-                                if depth == 0:
-                                    break
-
-                        new_tokens.append( f_token(expr, 'operand', 'pointer') )
-
-                    elif ':OFFSET' in token.tvalue or ':INDEX' in token.tvalue: # example -> A1:OFFSET(
-                        depth = 0
-                        expr = ''
-                        expr += token.tvalue
-
-                        for t in tokens[(index + 1):]:
-                            if t.tsubtype == 'start':
-                                depth += 1
-
-                            elif t.tsubtype == 'stop':
-                                depth -= 1
-
-                            expr += t.tvalue
-                            tokens.remove(t)
-
-                            if depth == 0:
-                                new_tokens.pop()
-                                break
-
-                        new_tokens.append(f_token(expr, 'operand', 'pointer'))
-
-        tokens = new_tokens if new_tokens else tokens
-
-        for token in tokens:
-            if token.ttype == "operand":
-                output.append(
-                    self.create_node(token, sheet_name=sheet_name, ref=ref))
-
-                if were_values:
-                    were_values.pop()
-                    were_values.append(True)
-
-            elif token.ttype == "function":
-                stack.append(token)
-                arg_count.append(0)
-
-                if were_values:
-                    were_values.pop()
-                    were_values.append(True)
-
-                were_values.append(False)
-
-            elif token.ttype == "argument":
-
-                while stack and (stack[-1].tsubtype != "start"):
-                    output.append(self.create_node(
-                        stack.pop(), sheet_name=sheet_name, ref=ref))
-
-                if were_values.pop(): arg_count[-1] += 1
-                were_values.append(False)
-
-                if not len(stack):
-                    message = "Mismatched or misplaced parentheses"
-                    logging.error(message)
-                    raise Exception(message)
-
-            elif token.ttype.startswith('operator'):
-
-                if token.ttype.endswith('-prefix') and token.tvalue =="-":
-                    o1 = operators['u-']
-
-                else:
-                    o1 = operators[token.tvalue]
-
-                while stack and stack[-1].ttype.startswith('operator'):
-                    if stack[-1].ttype.endswith('-prefix') and stack[-1].tvalue =="-":
-                        o2 = operators['u-']
-
-                    else:
-                        o2 = operators[stack[-1].tvalue]
-
-                    if ( (o1.associativity == "left" and o1.precedence <= o2.precedence) or (o1.associativity == "right" and o1.precedence < o2.precedence) ):
-                        output.append(self.create_node(stack.pop(), sheet_name=sheet_name, ref=ref))
-
-                    else:
-                        break
-
-                stack.append(token)
-
-            elif token.tsubtype == "start":
-                stack.append(token)
-
-            elif token.tsubtype == "stop":
-                while stack and stack[-1].tsubtype != "start":
-                    output.append(self.create_node(stack.pop(), sheet_name=sheet_name, ref=ref))
-
-                if not stack:
-                    raise Exception("Mismatched or misplaced parentheses")
-
-                stack.pop()
-
-                if stack and stack[-1].ttype == "function":
-                    f = self.create_node(stack.pop(), sheet_name=sheet_name, ref=ref)
-                    a = arg_count.pop()
-                    w = were_values.pop()
-                    if w: a += 1
-                    f.num_args = a
-                    output.append(f)
-
-        while stack:
-            if (stack[-1].tsubtype == "start" or stack[-1].tsubtype == "stop"):
-                raise Exception("Mismatched or misplaced parentheses")
-
-            output.append(self.create_node(stack.pop(), sheet_name=sheet_name, ref=ref))
-
-        # convert to list
-        return [x for x in output]
-
-
-    def build_ast(self, expression):
-        """Update AST nodes to build a proper parse tree."""
-        stack = []
-
-        for node in expression:
-            if isinstance(node, OperatorNode):
-                if node.ttype == "operator-infix":
-                    # Stack has arguments in reverse order.
-                    node.right = stack.pop()
-                    node.left = stack.pop()
-                else:
-                    node.right = stack.pop()
-
-            elif isinstance(node, FunctionNode):
-                args = []
-                for _ in range(node.num_args):
-                    args.append(stack.pop())
-                # Stack has arguments in reverse order.
-                node.args = reversed(args)
-
-            stack.append(node)
-
-        return stack.pop()
-
-
-    def create_node(self, token, sheet_name=None, ref=None):
-        """Simple factory function"""
-
-        if token.ttype == "operand":
-            if token.tsubtype in ["range"]:
-                return RangeNode(token)
-
-            if token.tsubtype in ["pointer"]:
-                return RangeNode(token)
-
-            elif token.tsubtype in ["named_range"] :
-                # we need to attempt resolving defined names here
-                # so we can persist formulas without defined names
-                if token.tvalue in self.defined_names:
-                    name_definition = self.defined_names[t.tvalue]
-
-                    if isinstance(name_definition, XLCell):
-                        token.tvalue = name_definition.address
-
-                    elif isinstance(name_definition, XLRange):
-                        token.tvalue = name_definition.name
-                        message = "{} is a range, which is not yet supported".format(name_definition)
-                        logging.error(message)
-                        raise Exception(message)
-
-                    else:
-                        message = "{} is of type {}, which is not yet supported".format(name_definition, type(name_definition))
-                        logging.error(message)
-                        raise Exception(message)
-
-                return RangeNode(token)
-
-            else:
-                return OperandNode(token)
-
-        elif token.ttype == "function":
-            return FunctionNode(token)
-
-        elif token.ttype.startswith("operator"):
-            return OperatorNode(token)
-
-        else:
-            return ASTNode(token)
+                defined_names = {
+                    name: defn.address
+                    for name, defn in self.defined_names.items()}
+                self.cells[cell].formula.ast = parser.FormulaParser().parse(
+                    self.cells[cell].formula.formula, defined_names)
 
     def __eq__(self, other):
 

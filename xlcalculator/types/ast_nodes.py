@@ -33,8 +33,17 @@ class ASTNode(object):
     def __init__(self, token):
         self.token = token
 
-    def __getattr__(self, name):
-        return getattr(self.token, name)
+    @property
+    def tvalue(self):
+        return self.token.tvalue
+
+    @property
+    def ttype(self):
+        return self.token.ttype
+
+    @property
+    def tsubtype(self):
+        return self.token.tsubtype
 
     def __eq__(self, other):
         return self.token == other.token
@@ -70,7 +79,7 @@ class OperandNode(ASTNode):
             return self.tvalue.title()
         elif self.tsubtype == "text":
             return '"' + self.tvalue.replace('"', '\\"') + '"'
-        return self.tvalue
+        return str(self.tvalue)
 
 
 class OperatorNode(ASTNode):
@@ -106,21 +115,25 @@ class OperatorNode(ASTNode):
 
 
 class RangeNode(OperandNode):
-    """Represents a spreadsheet cell, range, named_range.
-
-       e.g., A5, B3:C20 or INPUT
-    """
+    """Represents a spreadsheet cell, range, named_range."""
 
     def get_cells(self):
         cells = utils.resolve_ranges(self.tvalue, default_sheet='')[1]
         return cells[0] if len(cells) == 1 else cells
 
-    def eval(self, model, namespace, ref):
-        addr = self.token.tvalue
+    @property
+    def address(self):
+        return self.tvalue
 
+    def full_address(self, ref):
+        addr = self.address
         if '!' not in addr:
             sheet, _, _  = utils.resolve_address(ref)
             addr = f'{sheet}!{addr}'
+        return addr
+
+    def eval(self, model, namespace, ref):
+        addr = self.full_address(ref)
 
         if addr in model.cells:
             return model.cells[addr].value
@@ -135,14 +148,6 @@ class RangeNode(OperandNode):
 
             model.ranges[addr].value = data = xl.RangeData(range_cells)
             return data
-
-        # Remove sheet part to look up the name. (The sheet was added by the
-        # parser to make complete cell and rnage addresses.
-        sheet, _, _  = utils.resolve_address(ref)
-        addr = addr[len(sheet)+1:]
-        if addr in model.defined_names:
-            # TODO: support defined name to be cell, range and formula
-            return model.defined_names[addr].value
 
 
 class FunctionNode(ASTNode):

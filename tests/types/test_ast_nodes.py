@@ -169,16 +169,6 @@ class RangeNodeTest(unittest.TestCase):
         node = self.create_node('A1')
         self.assertEqual(node.eval(self.model, {}, 'Sh1!C1'), 0)
 
-    def test_eval_defined_name(self):
-        # Eval the range so it has a value.
-        node = self.create_node('A1:B2')
-        res = node.eval(self.model, {}, 'Sh1!C1')
-        # Sheet gets unfortunately assigned by the tokenizer.
-        node = self.create_node('Sh1!first')
-        res = node.eval(self.model, {}, 'Sh1!C1')
-        exp = xl.RangeData([[0, 2], [1, 3]])
-        self.assertTrue((res == exp).all().all())
-
     def test_str(self):
         node = self.create_node('A1:B2')
         self.assertEqual(str(node), 'A1:B2')

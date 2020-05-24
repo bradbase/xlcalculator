@@ -20,7 +20,9 @@ class TestModelCompiler(unittest.TestCase):
         infile = open(testing.get_resource("reader.json"), "rb")
         json_bytes = infile.read()
         infile.close()
-        data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))
+        data = decode(
+            json_bytes, keys=True,
+            classes=(XLCell, XLFormula, f_token, XLRange))
         self.cells = data['cells']
         self.defined_names = data['defined_names']
         self.ranges = data['ranges']
@@ -38,7 +40,6 @@ class TestModelCompiler(unittest.TestCase):
             testing.get_resource("reader.xlsm"), ignore_sheets=['Eleventh'])
         self.assertEqual(self.model, new_model)
 
-
     def test_build_defined_names(self):
         model_compiler = ModelCompiler()
         archive = model_compiler.read_excel_file(
@@ -48,7 +49,6 @@ class TestModelCompiler(unittest.TestCase):
         model_compiler.build_defined_names()
 
         self.assertEqual(self.model.defined_names, model_compiler.model.defined_names)
-
 
     def test_link_cells_to_defined_names(self):
         model_compiler = ModelCompiler()
@@ -61,7 +61,6 @@ class TestModelCompiler(unittest.TestCase):
 
         self.assertEqual(self.model.cells, model_compiler.model.cells)
 
-
     def test_build_ranges(self):
         model_compiler = ModelCompiler()
         archive = model_compiler.read_excel_file(
@@ -72,7 +71,6 @@ class TestModelCompiler(unittest.TestCase):
         model_compiler.build_ranges()
 
         self.assertEqual(self.model.ranges, model_compiler.model.ranges)
-
 
     def test_extract_cells(self):
         model_compiler = ModelCompiler()
@@ -86,7 +84,6 @@ class TestModelCompiler(unittest.TestCase):
         reference_model.set_cell_value('First!C2', 0.3)
 
         self.assertEqual(reference_model.cells, extracted_model.cells)
-
 
     def test_extract_defined_names(self):
         model_compiler = ModelCompiler()
@@ -112,7 +109,6 @@ class TestModelCompiler(unittest.TestCase):
         self.assertEqual(reference_model.cells, extracted_model.cells)
         self.assertEqual(reference_model.defined_names, extracted_model.defined_names)
         self.assertEqual(reference_model, extracted_model)
-
 
     def test_extract(self):
         model_compiler = ModelCompiler()
