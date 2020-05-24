@@ -3,6 +3,8 @@ import re
 from openpyxl.utils.cell import COORD_RE, SHEET_TITLE
 from openpyxl.utils.cell import range_boundaries, get_column_letter
 
+MAX_COL = 18278
+MAX_ROW = 1048576
 
 def resolve_sheet(sheet_str):
     sheet_str = sheet_str.strip()
@@ -38,6 +40,10 @@ def resolve_ranges(ranges, default_sheet='Sheet1'):
                 )
             sheet = rng_sheet
         min_col, min_row, max_col, max_row = range_boundaries(rng)
+
+        if (min_col is None or min_row is None or
+              max_col is None or max_row is None):
+            continue
 
         # Excel ranges are boundaries inclusive!
         for row_idx in range(min_row, max_row+1):
