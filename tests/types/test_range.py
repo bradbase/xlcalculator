@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator.xlcalculator_types import XLRange
+from xlcalculator.types import XLRange
 
 
 class XLRangeTest(unittest.TestCase):

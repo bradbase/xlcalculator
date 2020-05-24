@@ -5,7 +5,7 @@ import json
 from jsonpickle import encode, decode
 
 from xlcalculator.read_excel.reader import Reader
-from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
+from xlcalculator.types import XLCell, XLFormula, XLRange
 from xlcalculator.read_excel.tokenizer import f_token
 
 from ..function_library import testing

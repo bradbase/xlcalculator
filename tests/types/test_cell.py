@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator.xlcalculator_types import XLCell
+from xlcalculator.types import XLCell
 
 
 class CellTest(unittest.TestCase):

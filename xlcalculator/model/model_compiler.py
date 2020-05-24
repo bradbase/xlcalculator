@@ -2,7 +2,7 @@ import logging
 from copy import deepcopy
 
 from ..read_excel import Reader
-from ..xlcalculator_types import XLCell, XLFormula, XLRange
+from ..types import XLCell, XLFormula, XLRange
 from .model import Model
 
 
@@ -129,10 +129,9 @@ class ModelCompiler:
         for formula in self.model.formulae:
             associated_cells = set()
             for range in self.model.formulae[formula].terms:
-                if "!" not in range:
-                    range = "{}!{}".format(default_sheet, range)
-
                 if ":" in range:
+                    if "!" not in range:
+                        range = "{}!{}".format(default_sheet, range)
                     self.model.ranges[range] = XLRange(range, range)
                     associated_cells.update([
                         cell

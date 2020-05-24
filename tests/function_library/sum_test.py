@@ -3,7 +3,7 @@
 
 import unittest
 
-from xlcalculator.xlcalculator_types import XLRange
+from xlcalculator.types import XLRange
 from xlcalculator import ModelCompiler
 from xlcalculator import Evaluator
 

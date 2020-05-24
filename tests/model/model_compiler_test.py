@@ -6,7 +6,7 @@ from copy import deepcopy
 from jsonpickle import encode, decode
 
 from xlcalculator.model.model_compiler import ModelCompiler
-from xlcalculator.xlcalculator_types import XLCell, XLFormula, XLRange
+from xlcalculator.types import XLCell, XLFormula, XLRange
 from xlcalculator.read_excel.tokenizer import f_token
 from xlcalculator.model.model import Model
 

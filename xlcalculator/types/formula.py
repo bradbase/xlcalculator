@@ -4,16 +4,16 @@ Representation of a Microsoft Excel formula
 """
 from dataclasses import dataclass, field
 import re
-from typing import List
+from typing import Any, List
 
-from .xltype import XLType
+from . import xltype, ast_nodes
 from ..read_excel import f_token
 from ..read_excel import ExcelParser
 from ..read_excel import ExcelParserTokens
 
 
 @dataclass
-class XLFormula(XLType):
+class XLFormula(xltype.XLType):
     """Representing an Excel Formula"""
 
     formula: str = field(compare=True, hash=True, repr=True)
@@ -22,9 +22,10 @@ class XLFormula(XLType):
     reference: str = field(default=None, repr=True)
     evaluate: bool = field(default=True, repr=True)
     tokens: List[f_token] = field(init=False, default_factory=list, repr=True)
-    terms: List[XLType] = field(init=False, default_factory=list, repr=True)
-    python_code: str = field(init=False, default=None, repr=True)
+    terms: List[xltype.XLType] = field(
+        init=False, default_factory=list, repr=True)
     associated_cells: set = field(init=False, default_factory=set, repr=True)
+    ast: ast_nodes.ASTNode = field(init=False, default=None)
 
     def __post_init__(self):
         """Supplimentary initialisation."""

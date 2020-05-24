@@ -2,10 +2,7 @@ import unittest
 
 from networkx import info
 
-from xlcalculator.xlcalculator_types import OperatorNode
-# from xlcalculator.xlcalculator_types import OperandNode
-from xlcalculator.xlcalculator_types import RangeNode
-from xlcalculator.xlcalculator_types import FunctionNode
+from xlcalculator.types import FunctionNode, OperatorNode, RangeNode
 from xlcalculator.read_excel.tokenizer import f_token
 
 from ..formulas import *

@@ -129,7 +129,8 @@ class f_token():
     
 
     def __repr__(self):
-        return "tvalue: {} ttype: {} tsubtype: {}".format(self.tvalue, self.ttype, self.tsubtype)
+        return "<{} tvalue: {} ttype: {} tsubtype: {}>".format(
+            self.__class__.__name__, self.tvalue, self.ttype, self.tsubtype)
 
 
     def __str__(self):
@@ -690,37 +691,7 @@ class ExcelParser(ExcelParserTokens):
                                 token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
 
                             elif ":" not in token.tvalue and "!" not in token.tvalue:
-                                try:
-                                    column, row = [_f for _f in re.split('([A-Z\$]+)', token.tvalue) if _f]
-                                    row = int(row)
-
-                                    # shared formula support we need to transpose
-                                    # ranges in the formula.
-                                    # We can assume the shared formula doesn't
-                                    # need a sheet specification.
-                                    # Currently ignoring the fact we would probably
-                                    # want to re-write the formula iself as transposed
-                                    # rather than just change the python code
-                                    # for it.
-                                    # That said, when it comes to evaluation it
-                                    # won't have any impact. And to support formula
-                                    # re-write we would need a secondry ASTNode.emit()
-                                    # pathway
-                                    if "$" not in token.tvalue and formula_transpose_direction == 'rows':
-                                        row += formula_transpose_offset
-                                        token.tvalue = "{}!{}{}".format(sheet_name, column, row)
-
-                                    elif "$" not in token.tvalue and formula_transpose_direction == 'columns':
-                                        column_ordinal = col2num(column)
-                                        column = num2col(column_ordinal + formula_transpose_offset)
-                                        token.tvalue = "{}!{}{}".format(sheet_name, column, row)
-
-                                    else:
-                                        token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
-
-                                except ValueError:
-                                    # is likely to be a defined name
-                                    pass
+                                token.tvalue = "{}!{}".format(sheet_name, token.tvalue)
 
                         token.tsubtype = self.TOK_SUBTYPE_RANGE
 
@@ -746,11 +717,8 @@ class ExcelParser(ExcelParserTokens):
         tokens.reset()
         return tokens
 
-
-    def parse(self, formula, sheet_name=None, formula_transpose_direction=None, formula_transpose_offset=None):
-        """"""
-
-        self.tokens = self.getTokens(formula, sheet_name=sheet_name, formula_transpose_direction=formula_transpose_direction, formula_transpose_offset=formula_transpose_offset)
+    def parse(self, formula, sheet_name=None):
+        self.tokens = self.getTokens(formula, sheet_name=sheet_name)
 
     # def render(self):
     #     output = ""

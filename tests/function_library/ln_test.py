@@ -3,9 +3,8 @@
 
 import unittest
 
-from xlcalculator.xlcalculator_types import XLCell
-from xlcalculator import ModelCompiler
-from xlcalculator import Evaluator
+from xlcalculator.types import XLCell
+from xlcalculator import ModelCompiler, Evaluator
 
 from . import testing
 

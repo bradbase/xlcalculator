@@ -4,10 +4,7 @@ from collections import namedtuple
 import networkx as nx
 
 from xlcalculator.read_excel.tokenizer import f_token
-from xlcalculator.xlcalculator_types.ast_nodes import RangeNode
-from xlcalculator.xlcalculator_types.ast_nodes import OperatorNode
-# from xlcalculator.xlcalculator_types.ast_nodes import OperandNode
-from xlcalculator.xlcalculator_types.ast_nodes import FunctionNode
+from xlcalculator.types import FunctionNode, RangeNode, OperatorNode
 
 from xlcalculator.model.model import Model
 

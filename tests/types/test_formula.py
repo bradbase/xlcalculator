@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator.xlcalculator_types import XLFormula
+from xlcalculator.types import XLFormula
 from xlcalculator.read_excel.tokenizer import f_token
 
 from ..xlcalculator_test import XlCalculatorTestCase

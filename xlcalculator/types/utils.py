@@ -4,14 +4,20 @@ from openpyxl.utils.cell import COORD_RE, SHEET_TITLE
 from openpyxl.utils.cell import range_boundaries, get_column_letter
 
 
+def resolve_sheet(sheet_str):
+    sheet_str = sheet_str.strip()
+    sheet_match = re.match(SHEET_TITLE.strip(), sheet_str+'!')
+    if sheet_match is None:
+        # Internally, sheets are not properly quoted, so consider the entire
+        # string.
+        return  sheet_str
+
+    return sheet_match.group("quoted") or sheet_match.group("notquoted")
+
 def resolve_address(addr):
     # Addresses without sheet name are not supported.
     sheet_str, addr_str = addr.split('!')
-    sheet_str = sheet_str.strip() + '!'
-    sheet_match = re.match(SHEET_TITLE.strip(), sheet_str)
-    if sheet_match is None:
-        raise ValueError(f'Invalid sheet name: "{sheet_str}"')
-    sheet = sheet_match.group("quoted") or sheet_match.group("notquoted")
+    sheet = resolve_sheet(sheet_str)
     coord_match = COORD_RE.split(addr_str)
     col, row = coord_match[1:3]
     return sheet, col, row
@@ -24,11 +30,7 @@ def resolve_ranges(ranges, default_sheet='Sheet1'):
         # Handle sheets in range.
         if '!' in rng:
             sheet_str, rng = rng.split('!')
-            sheet_str = sheet_str.strip() + '!'
-            match = re.match(SHEET_TITLE.strip(), sheet_str)
-            if match is None:
-                raise ValueError(f'Invalid sheet name: "{sheet_str}"')
-            rng_sheet = match.group("quoted") or match.group("notquoted")
+            rng_sheet = resolve_sheet(sheet_str)
             if sheet is not None and sheet != rng_sheet:
                 raise ValueError(
                     f'Got multiple different sheets in ranges: '

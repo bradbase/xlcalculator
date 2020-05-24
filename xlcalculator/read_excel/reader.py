@@ -10,9 +10,7 @@ from copy import copy
 from datetime import datetime
 from math import e
 
-from ..xlcalculator_types import XLCell
-from ..xlcalculator_types import XLFormula
-from ..xlcalculator_types import XLRange
+from ..types import XLCell, XLFormula, XLRange
 
 
 class Reader():

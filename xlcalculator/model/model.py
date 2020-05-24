@@ -9,26 +9,9 @@ from networkx import DiGraph
 # import matplotlib.pyplot as plt
 from jsonpickle import encode, decode
 
-from ..xlcalculator_types import XLCell
-from ..xlcalculator_types import XLFormula
-from ..xlcalculator_types import XLRange
-from ..xlcalculator_types import RangeNode
-from ..xlcalculator_types import OperandNode
-from ..xlcalculator_types import OperatorNode
-from ..xlcalculator_types import FunctionNode
-from ..read_excel import f_token
-from ..read_excel import ExcelParser
-
-
-# def init_graph():
-#     """Default factory to initialise Formula.ranges."""
-#     return DiGraph()
-
-
-def init_dict():
-    """Default factory to initialise Formula.ranges."""
-
-    return {}
+from ..types import XLCell, XLFormula, XLRange
+from ..types import RangeNode, OperandNode, OperatorNode, FunctionNode
+from ..read_excel import f_token, ExcelParser
 
 
 class Operator(object):
@@ -43,17 +26,14 @@ class Operator(object):
 @dataclass
 class Model():
 
-    cells: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
-    formulae: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
-    ranges: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
-    defined_names: dict = field(init=False, default_factory=init_dict, compare=True, hash=True, repr=True)
-
-
-    # def draw_graph(self):
-    #     """Draw a graphical representation of the graph."""
-    #
-    #     drawing = nx.draw(self.graph)
-    #     plt.show()
+    cells: dict = field(
+        init=False, default_factory=dict, compare=True, hash=True, repr=True)
+    formulae: dict = field(
+        init=False, default_factory=dict, compare=True, hash=True, repr=True)
+    ranges: dict = field(
+        init=False, default_factory=dict, compare=True, hash=True, repr=True)
+    defined_names: dict = field(
+        init=False, default_factory=dict, compare=True, hash=True, repr=True)
 
     def set_cell_value(self, address, value):
         """Sets a new value for a specified cell."""
@@ -74,8 +54,10 @@ class Model():
                 self.cells[address.address] = XLCell(address.address, value)
 
         else:
-            raise Exception("I can't set the cell value for an address of type {}, I need XLCell or a string".format(type(address)))
-
+            raise TypeError(
+                f"Cannot set the cell value for an address of type "
+                f"{address}. XLCell or a string is needed."
+            )
 
     def get_cell_value(self, address):
         if address in self.defined_names:
@@ -86,23 +68,32 @@ class Model():
             if address in self.cells:
                 return self.cells[address].value
             else:
-                logging.debug("Trying to get value for cell {} but that cell doesn't exist".format(address))
+                logging.debug(
+                    "Trying to get value for cell {address} but that cell "
+                    "doesn't exist.")
                 return 0
 
         elif isinstance(address, XLCell):
             if address.address in self.cells:
                 return self.cells[address.address].value
             else:
-                logging.debug("Trying to get value for cell {} but that cell doesn't exist".format(address.address))
+                logging.debug(
+                    "Trying to get value for cell {address.address} but "
+                    "that cell doesn't exist")
                 return 0
 
         else:
-            raise Exception("I can't get the cell value for an address of type {}, I need XLCell or a string".format(type(address)))
-
+            raise TypeError(
+                f"Cannot set the cell value for an address of type "
+                f"{address}. XLCell or a string is needed."
+            )
 
     def persist_to_json_file(self, fname):
-        """Writes the state to disk. Doesn't write the graph directly, but persist all the things that provide the ability to re-create the graph."""
+        """Writes the state to disk.
 
+        Doesn't write the graph directly, but persist all the things that
+        provide the ability to re-create the graph.
+        """
         output = {
             'cells' : self.cells,
             'defined_names' : self.defined_names,
@@ -119,7 +110,6 @@ class Model():
 
         outfile.close()
 
-
     def construct_from_json_file(self, fname, build_code=False):
         """Constructs a graph from a state persisted to disk."""
 
@@ -130,8 +120,11 @@ class Model():
 
         json_bytes = infile.read()
         infile.close()
-        data = decode(json_bytes, keys=True, classes=(XLCell, XLFormula, f_token, XLRange))
+        data = decode(
+            json_bytes, keys=True,
+            classes=(XLCell, XLFormula, f_token, XLRange))
         self.cells = data['cells']
+
         self.defined_names = data['defined_names']
         self.ranges = data['ranges']
         self.formulae = data['formulae']
@@ -139,37 +132,43 @@ class Model():
         if build_code:
             self.build_code()
 
-
     def build_code(self):
         """Define the Python code for all cells in the dict of cells."""
 
         for cell in self.cells:
             if self.cells[cell].formula is not None:
                 sheet_name = self.cells[cell].sheet
-                tokenized_formula = self.shunting_yard(self.cells[cell].formula, self.defined_names.keys(), ref=None, tokenize_range=False)
-                ast, root = self.build_ast(tokenized_formula)
-                self.cells[cell].formula.python_code = root.emit(ast, sheet_name=sheet_name)
+                tokens = self.shunting_yard(
+                    self.cells[cell].formula, self.defined_names.keys(),
+                    ref=None, tokenize_range=False
+                )
+                self.cells[cell].formula.ast = self.build_ast(tokens)
 
-
-    def shunting_yard(self, formula, named_ranges, ref=None, tokenize_range=False):
-        """
-        Tokenize an excel formula expression into reverse polish notation
+    def shunting_yard(
+            self, formula, named_ranges, ref=None, tokenize_range=False):
+        """Tokenize an excel formula expression into reverse polish notation
 
         Core algorithm taken from wikipedia with varargs extensions from
-        http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/
+
+        http://www.kallisti.net.nz/blog/2008/02/
+            extension-to-the-shunting-yard-algorithm-to-allow-
+            variable-numbers-of-arguments-to-functions/
 
 
-        The ref is the cell address which is passed down to the actual compiled python code.
-        Range basic operations signature require this reference, so it has to be written during OperatorNode.emit()
-        https://github.com/iOiurson/koala/blob/master/koala/ast/graph.py#L292.
+        The ref is the cell address which is passed down to the actual
+        compiled python code.  Range basic operations signature require this
+        reference, so it has to be written during OperatorNode.emit()
 
-        This is needed because Excel range basic operations (+, -, * ...) are applied on matching cells.
+          https://github.com/iOiurson/koala/blob/master/koala/ast/graph.py#L292.
+
+        This is needed because Excel range basic operations (+, -, * ...) are
+        applied on matching cells.
 
         Example:
-        Cell C2 has the following formula 'A1:A3 + B1:B3'.
-        The output will actually be A2 + B2, because the formula is relative to cell C2.
-        """
 
+        Cell C2 has the following formula 'A1:A3 + B1:B3'.  The output will
+        actually be A2 + B2, because the formula is relative to cell C2.
+        """
         expression = formula.formula
         sheet_name = formula.sheet_name
 
@@ -307,7 +306,8 @@ class Model():
 
         for token in tokens:
             if token.ttype == "operand":
-                output.append(self.create_node(token, sheet_name=sheet_name, ref=ref))
+                output.append(
+                    self.create_node(token, sheet_name=sheet_name, ref=ref))
 
                 if were_values:
                     were_values.pop()
@@ -326,7 +326,8 @@ class Model():
             elif token.ttype == "argument":
 
                 while stack and (stack[-1].tsubtype != "start"):
-                    output.append(self.create_node(stack.pop(), sheet_name=sheet_name, ref=ref))
+                    output.append(self.create_node(
+                        stack.pop(), sheet_name=sheet_name, ref=ref))
 
                 if were_values.pop(): arg_count[-1] += 1
                 were_values.append(False)
@@ -390,53 +391,28 @@ class Model():
 
 
     def build_ast(self, expression):
-        """Build an AST from an Excel formula expression in reverse polish notation."""
-
-        #use a directed graph to store the tree
-        ast_graph = DiGraph()
+        """Update AST nodes to build a proper parse tree."""
         stack = []
 
-        for n in expression:
-            # Since the graph does not maintain the order of adding nodes/edges
-            # add an extra attribute 'pos' so we can always sort to the correct order
-            if isinstance(n, OperatorNode):
-                if n.ttype == "operator-infix":
-                    arg2 = stack.pop()
-                    arg1 = stack.pop()
-                    # Hack to write the name of sheet in 2argument address
-                    if(n.tvalue == ':'):
-                        if '!' in arg1.tvalue and arg2.ttype == 'operand' and '!' not in arg2.tvalue:
-                            arg2.tvalue = arg1.tvalue.split('!')[0] + '!' + arg2.tvalue
-
-                    ast_graph.add_node(arg1, pos = 0)
-                    ast_graph.add_node(arg2, pos = 1)
-                    ast_graph.add_edge(arg1, n)
-                    ast_graph.add_edge(arg2, n)
-
+        for node in expression:
+            if isinstance(node, OperatorNode):
+                if node.ttype == "operator-infix":
+                    # Stack has arguments in reverse order.
+                    node.right = stack.pop()
+                    node.left = stack.pop()
                 else:
-                    arg1 = stack.pop()
-                    ast_graph.add_node(arg1, pos = 1)
-                    ast_graph.add_edge(arg1, n)
+                    node.right = stack.pop()
 
-            elif isinstance(n, FunctionNode):
+            elif isinstance(node, FunctionNode):
                 args = []
-                for _ in range(n.num_args):
-                    try:
-                        args.append(stack.pop())
+                for _ in range(node.num_args):
+                    args.append(stack.pop())
+                # Stack has arguments in reverse order.
+                node.args = reversed(args)
 
-                    except:
-                        raise Exception()
+            stack.append(node)
 
-                args.reverse()
-                for i, a in enumerate(args):
-                    ast_graph.add_node(a, pos = i)
-                    ast_graph.add_edge(a, n)
-            else:
-                ast_graph.add_node(n, pos=0)
-
-            stack.append(n)
-
-        return ast_graph, stack.pop()
+        return stack.pop()
 
 
     def create_node(self, t, sheet_name=None, ref=None):
@@ -484,15 +460,21 @@ class Model():
         else:
             return ASTNode(t)
 
-
     def __eq__(self, other):
 
         cells_comparison = []
         for self_cell in self.cells:
-            cells_comparison.append( self.cells[self_cell] == other.cells[self_cell] )
+            cells_comparison.append(
+                self.cells[self_cell] == other.cells[self_cell])
 
         defined_names_comparison = []
         for self_defined_names in self.defined_names:
-            defined_names_comparison.append( self.defined_names[self_defined_names] == other.defined_names[self_defined_names] )
+            defined_names_comparison.append(
+                self.defined_names[self_defined_names]
+                    == other.defined_names[self_defined_names])
 
-        return self.__class__ == other.__class__ and all(cells_comparison) and all(defined_names_comparison)
+        return (
+            self.__class__ == other.__class__ and
+            all(cells_comparison) and
+            all(defined_names_comparison)
+        )
