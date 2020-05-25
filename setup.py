@@ -16,7 +16,7 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version='0.1.0',
+    version='0.1.1.dev0',
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
