@@ -2,11 +2,12 @@
 Excel Calculator
 ================
 
-.. image:: https://img.shields.io/pypi/v/xlcalculator.svg
-    :target: https://pypi.python.org/pypi/xlcalculator
 
-.. image:: https://img.shields.io/pypi/pyversions/xlcalculator.svg
-    :target: https://pypi.python.org/pypi/xlcalculator/
+.. image:: https://travis-ci.org/bradbase/xlcalculator.png?branch=master
+   :target: https://travis-ci.org/bradbase/xlcalculator
+
+.. image:: https://coveralls.io/repos/github/bradbase/xlcalculator/badge.svg?branch=master
+   :target: https://coveralls.io/github/bradbase/xlcalculator?branch=master
 
 .. image:: https://img.shields.io/pypi/v/xlcalculator.svg
     :target: https://pypi.python.org/pypi/xlcalculator
@@ -16,7 +17,6 @@ Excel Calculator
 
 .. image:: https://img.shields.io/pypi/status/xlcalculator.svg
     :target: https://pypi.org/project/xlcalculator/
-    :alt: Package stability
 
 
 In short xlcalculator is an attempted re-write of the
