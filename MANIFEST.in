@@ -1,0 +1,14 @@
+include *.rst
+include *.txt
+include *.py
+include *.yml
+include .coveragerc
+include tox.ini
+
+recursive-include tests *
+recursive-include xlcalcualtor *
+
+recursive-exclude docs/_build *
+
+global-exclude *.pyc
+
