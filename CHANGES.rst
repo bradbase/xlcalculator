@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.1.0 (unreleased)
+0.1.0 (2020-05-25)
 ------------------
 
 - Refactored ``xlcalculator`` types to be more compact.
