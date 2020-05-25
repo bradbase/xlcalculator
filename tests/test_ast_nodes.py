@@ -1,8 +1,6 @@
 import mock
 import unittest
 
-from networkx import info
-
 from xlfunctions import xl
 from xlcalculator import ast_nodes, xltypes
 from xlcalculator.tokenizer import f_token

@@ -16,7 +16,7 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version="0.1.0dev",
+    version="0.1.0.dev0",
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
@@ -27,7 +27,10 @@ setuptools.setup(
         ),
     url="https://github.com/bradbase/xlcalculator",
     packages=setuptools.find_packages(),
+    license="GPL 3.0",
+    keywords="Excel model calculation evaluation",
     classifiers=[
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
@@ -38,18 +41,17 @@ setuptools.setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     install_requires=[
-        'jsonpickle >= 1.3',
-        'networkx >= 2.4',
-        'numpy >= 1.18.1',
-        'pandas >= 1.0.1',
-        'openpyxl >= 3.0.3',
-        'numpy_financial >= 1.0.0',
-        'xlfunctions >= 0.0.3b'
+        'jsonpickle',
+        'numpy',
+        'pandas',
+        'openpyxl',
+        'numpy_financial',
+        'xlfunctions'
     ],
     extras_require=dict(
         test=TESTS_REQUIRE,
     ),
-    python_requires='>=3.7.6',
+    python_requires='>=3.7',
     tests_require=TESTS_REQUIRE,
     include_package_data=True,
     zip_safe=False,

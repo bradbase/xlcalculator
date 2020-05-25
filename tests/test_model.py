@@ -4,7 +4,6 @@ import json
 from copy import deepcopy
 
 from jsonpickle import encode, decode
-from networkx import info, nodes, edges, is_isomorphic
 
 from xlcalculator.model import Model, ModelCompiler
 from xlcalculator.xltypes import XLCell, XLFormula, XLRange

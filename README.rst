@@ -143,7 +143,7 @@ Not currently supported:
 
 
 Run tests
-=========
+---------
 
 Setup your environment::
 
@@ -160,7 +160,7 @@ Or simply use ``tox``::
 
 
 Run Example
-===========
+-----------
 
 From the examples/common_use_case directory::
 
@@ -168,7 +168,7 @@ From the examples/common_use_case directory::
 
 
 How to add Excel functions
-==========================
+--------------------------
 
 Excel function support can be easily added.
 
@@ -184,14 +184,14 @@ implementation are aligning with what we see in Excel.
 
 
 Excel number precision
-======================
+----------------------
 
 Excel number precision is a complex discussion. There is further detail on the
 README at [xlfunctions](https://github.com/bradbase/xlfunctions).
 
 
 Unit testing Excel formulas directly from the workbook.
-=======================================================
+-------------------------------------------------------
 
 If you are interested in unit testing formulas in your workbook, you can use
 [FlyingKoala](https://github.com/bradbase/flyingkoala). An example on how can
@@ -200,7 +200,7 @@ be found
 
 
 TODO
-====
+----
 
 - Do not treat ranges as a granular AST node ut instead as an operation ":" of
   two cell references to create the range. That will make implementing
@@ -228,6 +228,5 @@ TODO
 
 - Handle multi-file addresses
 
-- Improve integration with pyopenxl for reading and writing files Example of
-  problem space
-  `here <https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python>`_
+- Improve integration with pyopenxl for reading and writing files `xample of
+  problem space <https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python>`_

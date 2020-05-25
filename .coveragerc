@@ -1,12 +1,7 @@
 [run]
 source =
-    xlcalculator
+    ../xlcalculator
     */site-packages/xlcalculator
-
-[paths]
-source =
-    xlcalculator
-    .
 
 [report]
 show_missing = true
