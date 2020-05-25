@@ -56,6 +56,7 @@ evolving and has some way to go before it can claim to be feature compatible
 with koala2.
 
 xlcalculator currently supports:
+
 * Loading an Excel file into a Python compatible state
 * Saving Python compatible state
 * Loading Python compatible state
@@ -175,12 +176,32 @@ be found
 [here](https://github.com/bradbase/flyingkoala/tree/master/flyingkoala/unit_testing_formulas).
 
 
-# TODO
-- Set up a travis continuous integration service
-- Improve testing
-- Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
-- Handle multi-file addresses
-- Improve integration with pyopenxl for reading and writing files (Maybe integrating xlcalculator with pyopenxl is actually Koala3?) Example of problem space [here](https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python)
+TODO
+====
 
-# BUGS
-- Formatted text in a cell (eg; a subscript) breaks the reader.
+- Do not treat ranges as a granular AST node ut instead as an operation ":" of
+  two cell references to create the range. That will make implementing
+  features like ``A1:OFFSET(...)`` easy to implement.
+
+- Support for alternative range evaluation: by ref (pointer), by expr (lazy
+  eval) and current eval mode.
+
+  * Pointers would allow easy implementations of functions like OFFSET().
+
+  * Lazy evals will allow efficient implementation of IF() since execution of
+    true and false expressions can be delayed until it is decided which
+    expression is needed.
+
+- Implement array functions. It is really not that hard once a proper
+  RangeData class has been implemented on which one can easily act with scalar
+  functions.
+
+- Set up a travis continuous integration service
+
+- Improve testing
+
+- Refactor model and evaluator to use pass-by-object-reference for values of cells which then get "used"/referenced by ranges, defined names and formulas
+
+- Handle multi-file addresses
+
+- Improve integration with pyopenxl for reading and writing files Example of problem space [here](https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python)

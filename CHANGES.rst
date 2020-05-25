@@ -20,6 +20,9 @@ CHANGES
 
 - Use of new `xlfunctions` implementation.
 
+- Use Openpyxl to load the Excel files. This provides shared formula support
+  for free.
+
 
 0.0.1b (2020-05-03)
 -------------------

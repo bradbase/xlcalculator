@@ -6,7 +6,7 @@ from pandas import DataFrame
 from numpy import ndarray
 from xlfunctions import xl
 
-from ..types import XLCell, XLRange
+from . import xltypes
 
 
 class Evaluator:
@@ -101,10 +101,10 @@ class Evaluator:
             # given one in argument cell_address.
             if cell_address in defined_names:
                 name_definition = defined_names[cell_address]
-                if isinstance(name_definition, XLCell):
+                if isinstance(name_definition, xltypes.XLCell):
                     cell_address = name_definition.address
 
-                elif isinstance(name_definition, XLRange):
+                elif isinstance(name_definition, xltypes.XLRange):
                     message = (
                         f"I can't resolve {cell} to a cell. It's a range and "
                         f"they aren't supported yet."
@@ -112,7 +112,7 @@ class Evaluator:
                     logging.error(message)
                     raise ValueError(message)
 
-                elif isinstance(name_definition, XLFormula):
+                elif isinstance(name_definition, xltypes.XLFormula):
                     message = (
                         f"I can't resolve {cell} to a cell. It's a formula "
                         f"and they aren't supported as a cell reference."
