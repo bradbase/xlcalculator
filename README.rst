@@ -2,6 +2,13 @@
 Excel Calculator
 ================
 
+.. image:: https://img.shields.io/pypi/v/xlcalculator.svg
+    :target: https://pypi.python.org/pypi/xlcalculator
+
+.. image:: https://img.shields.io/pypi/pyversions/xlcalculator.svg
+    :target: https://pypi.python.org/pypi/xlcalculator/
+
+
 In short xlcalculator is an attempted re-write of the
 `koala2 <https://github.com/vallettea/koala>`_ library with intent to modernize
 the code, increase maintainability and keep compatibility with external
