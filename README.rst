@@ -138,18 +138,27 @@ Not currently supported:
 Run tests
 =========
 
+Setup your environment::
+
+  virtualenv -p 3.7 ve
+  ve/bin/pip install -e .[test]
+
 From the root xlcalculator directory::
 
-  python -m unittest discover -p "*_test.py"
+  ve/bin/py.test -rw -s --tb=native
+
+Or simply use ``tox``::
+
+  tox
 
 
 Run Example
 ===========
 
-From the examples/common_use_case directory
-```python
-python use_case_01.py
-```
+From the examples/common_use_case directory::
+
+  python use_case_01.py
+
 
 How to add Excel functions
 ==========================
