@@ -50,6 +50,9 @@ setuptools.setup(
     ],
     extras_require=dict(
         test=TESTS_REQUIRE,
+        build=[
+            'pip-tools',
+        ],
     ),
     python_requires='>=3.7',
     tests_require=TESTS_REQUIRE,
