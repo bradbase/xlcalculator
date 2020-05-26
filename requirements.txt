@@ -7,7 +7,7 @@
 -e file:.                 # via -r requirements.in
 attrs==19.3.0             # via pytest
 click==7.1.2              # via pip-tools
-coverage==5.1             # via xlcalculator
+coverage==5.1             # via pytest-cov, xlcalculator
 et-xmlfile==1.0.1         # via openpyxl
 flake8==3.8.2             # via xlcalculator
 importlib-metadata==1.6.0  # via flake8, jsonpickle, pluggy, pytest
@@ -27,7 +27,8 @@ py==1.8.1                 # via pytest
 pycodestyle==2.6.0        # via flake8
 pyflakes==2.2.0           # via flake8
 pyparsing==2.4.7          # via packaging
-pytest==5.4.2             # via xlcalculator
+pytest-cov==2.9.0         # via xlcalculator
+pytest==5.4.2             # via pytest-cov, xlcalculator
 python-dateutil==2.8.1    # via pandas, xlfunctions
 pytz==2020.1              # via pandas
 six==1.15.0               # via packaging, pip-tools, python-dateutil, yearfrac
