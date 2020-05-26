@@ -1,3 +1,4 @@
+import inspect
 import logging
 
 from xlfunctions import xl, math, operator, text
@@ -159,13 +160,39 @@ class FunctionNode(ASTNode):
 
     def eval(self, model, namespace, ref):
         func_name = self.tvalue.upper()
-        # Remove the BBB namespace, since we are just supporting
-        # everything in one large one.
+        # 1. Remove the BBB namespace, since we are just supporting
+        #    everything in one large one.
         func_name = func_name.replace('_XLFN.', '')
+        # 2. Look up the function to use.
         func = namespace[func_name]
-        return func(
-            *[arg.eval(model, namespace, ref) for arg in self.args]
-        )
+        # 3. Prepare arguments.
+        sig = inspect.signature(func)
+        bound = sig.bind(*self.args)
+        args = []
+        for pname, pvalue in list(bound.arguments.items()):
+            param = sig.parameters[pname]
+            ptype = param.annotation
+            if ptype == xl.Expr:
+                args.append(xl.Expr(
+                    pvalue.eval, (model, namespace, ref), ref=ref, ast=pvalue
+                ))
+            elif (param.kind == param.VAR_POSITIONAL and
+                      xl.Expr in getattr(ptype, '__args__', [])):
+                args.extend([
+                    xl.Expr(
+                        pitem.eval, (model, namespace, ref),
+                        ref=ref, ast=pitem
+                    )
+                    for pitem in pvalue
+                ])
+            elif (param.kind == param.VAR_POSITIONAL):
+                args.extend([
+                    pitem.eval(model, namespace, ref) for pitem in pvalue
+                ])
+            else:
+                args.append(pvalue.eval(model, namespace, ref))
+        # 4. Run function and return result.
+        return func(*args)
 
     def __str__(self):
         args = ', '.join(str(arg) for arg in self.args)

@@ -189,6 +189,48 @@ class FunctionNodeTest(unittest.TestCase):
         node = self.create_node()
         self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 1)
 
+    def test_eval_var_positional(self):
+        node = ast_nodes.FunctionNode(
+            f_token(tvalue='SUM', ttype='function', tsubtype='start'))
+        node.args = [
+            ast_nodes.OperandNode(
+                f_token(tvalue='3', ttype='operand', tsubtype='number')),
+            ast_nodes.OperandNode(
+                f_token(tvalue='2', ttype='operand', tsubtype='number')),
+        ]
+        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 5)
+
+    def test_eval_expr(self):
+        cond_node = ast_nodes.OperatorNode(
+            f_token(tvalue='>', ttype='operator-infix', tsubtype='math')
+        )
+        cond_node.left = ast_nodes.OperandNode(
+                f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        cond_node.right = ast_nodes.OperandNode(
+                f_token(tvalue='0', ttype='operand', tsubtype='number'))
+
+        node = ast_nodes.FunctionNode(
+            f_token(tvalue='IF', ttype='function', tsubtype='start'))
+        node.args = [
+            cond_node,
+            ast_nodes.OperandNode(
+                f_token(tvalue='3', ttype='operand', tsubtype='number')),
+            ast_nodes.OperandNode(
+                f_token(tvalue='2', ttype='operand', tsubtype='number')),
+        ]
+        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 3)
+
+    def test_eval_expr_var_positional(self):
+        node = ast_nodes.FunctionNode(
+            f_token(tvalue='AND', ttype='function', tsubtype='start'))
+        node.args = [
+            ast_nodes.OperandNode(
+                f_token(tvalue='3', ttype='operand', tsubtype='number')),
+            ast_nodes.OperandNode(
+                f_token(tvalue='2', ttype='operand', tsubtype='number')),
+        ]
+        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), True)
+
     def test_str(self):
         node = self.create_node()
         self.assertEqual(str(node), 'MOD(3, 2)')
