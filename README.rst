@@ -229,8 +229,6 @@ TODO
   RangeData class has been implemented on which one can easily act with scalar
   functions.
 
-- Set up a travis continuous integration service
-
 - Improve testing
 
 - Refactor model and evaluator to use pass-by-object-reference for values of
