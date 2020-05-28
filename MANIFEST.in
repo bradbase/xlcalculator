@@ -2,6 +2,7 @@ include *.rst
 include *.txt
 include *.py
 include *.yml
+include *.in
 include .coveragerc
 include tox.ini
 include LICENSE
