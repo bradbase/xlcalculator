@@ -1,10 +1,6 @@
-import copy
-import json
 import unittest
-from jsonpickle import encode, decode
 
 from xlcalculator import evaluator, model
-from .formulas import *
 from . import testing
 
 
@@ -50,14 +46,16 @@ class TestEvaluator(unittest.TestCase):
         evaluated_result_00 = self.evaluator.model.cells['First!A2'].value
         result_00 = 88
         self.assertEqual(result_00, evaluated_result_00)
-        self.evaluator.set_cell_value('First!A2', 0.1) # Put it back the way we found it.
+        # Put it back the way we found it.
+        self.evaluator.set_cell_value('First!A2', 0.1)
 
     def test_set_value_evaluate(self):
         self.evaluator.set_cell_value('First!A2', 88)
         evaluated_result_00 = self.evaluator.evaluate('First!A2')
         result_00 = 88
         self.assertEqual(result_00, evaluated_result_00)
-        self.evaluator.set_cell_value('First!A2', 0.1) # Put it back the way we found it.
+        # Put it back the way we found it.
+        self.evaluator.set_cell_value('First!A2', 0.1)
 
     def test_divide_eval(self):
         div_compiler = model.ModelCompiler()
@@ -67,11 +65,11 @@ class TestEvaluator(unittest.TestCase):
 
         excel_value_00 = div_evaluator.get_cell_value('Sheet1!A1')
         value_00 = div_evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value_00, value_00 )
+        self.assertEqual(excel_value_00, value_00)
 
         excel_value_01 = div_evaluator.get_cell_value('Sheet1!B1')
         value_01 = div_evaluator.evaluate('Sheet1!B1')
-        self.assertEqual( excel_value_01, value_01 )
+        self.assertEqual(excel_value_01, value_01)
 
     def test_subtract_eval(self):
         sub_compiler = model.ModelCompiler()
@@ -81,15 +79,15 @@ class TestEvaluator(unittest.TestCase):
 
         excel_value_00 = sub_evaluator.get_cell_value('Sheet1!A1')
         value_00 = sub_evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value_00, value_00 )
+        self.assertEqual(excel_value_00, value_00)
 
         excel_value_01 = sub_evaluator.get_cell_value('Sheet1!B1')
         value_01 = sub_evaluator.evaluate('Sheet1!B1')
-        self.assertEqual( excel_value_01, value_01 )
+        self.assertEqual(excel_value_01, value_01)
 
         excel_value_02 = sub_evaluator.get_cell_value('Sheet1!C1')
         value_02 = sub_evaluator.evaluate('Sheet1!C1')
-        self.assertEqual( excel_value_02, value_02 )
+        self.assertEqual(excel_value_02, value_02)
 
     def test_addition_eval(self):
         add_compiler = model.ModelCompiler()
@@ -99,15 +97,15 @@ class TestEvaluator(unittest.TestCase):
 
         excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')
         value_00 = add_evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value_00, value_00 )
+        self.assertEqual(excel_value_00, value_00)
 
         excel_value_01 = add_evaluator.get_cell_value('Sheet1!B1')
         value_01 = add_evaluator.evaluate('Sheet1!B1')
-        self.assertEqual( excel_value_01, value_01 )
+        self.assertEqual(excel_value_01, value_01)
 
         excel_value_02 = add_evaluator.get_cell_value('Sheet1!C1')
         value_02 = add_evaluator.evaluate('Sheet1!C1')
-        self.assertEqual( excel_value_02, value_02 )
+        self.assertEqual(excel_value_02, value_02)
 
     def test_multiplication_eval(self):
         add_compiler = model.ModelCompiler()
@@ -117,16 +115,16 @@ class TestEvaluator(unittest.TestCase):
 
         excel_value_00 = add_evaluator.get_cell_value('Sheet1!A1')
         value_00 = add_evaluator.evaluate('Sheet1!A1')
-        self.assertEqual( excel_value_00, value_00 )
+        self.assertEqual(excel_value_00, value_00)
 
         excel_value_01 = add_evaluator.get_cell_value('Sheet1!B1')
         value_01 = add_evaluator.evaluate('Sheet1!B1')
-        self.assertEqual( excel_value_01, value_01 )
+        self.assertEqual(excel_value_01, value_01)
 
         excel_value_02 = add_evaluator.get_cell_value('Sheet1!C1')
         value_02 = add_evaluator.evaluate('Sheet1!C1')
-        self.assertEqual( excel_value_02, value_02 )
+        self.assertEqual(excel_value_02, value_02)
 
         excel_value_03 = add_evaluator.get_cell_value('Sheet1!D1')
         value_03 = add_evaluator.evaluate('Sheet1!D1')
-        self.assertEqual( excel_value_03, value_03 )
+        self.assertEqual(excel_value_03, value_03)

@@ -39,7 +39,8 @@ class XLCellTest(unittest.TestCase):
         # While the sheet name should be quoted, internally, the code often
         # just puts the sheet name in to produce unique keys, so the utility
         # supports unquoted sheets as well.
-        self.assertEqual(xltypes.XLCell('Bad Sheet!A1').address, 'Bad Sheet!A1')
+        self.assertEqual(
+            xltypes.XLCell('Bad Sheet!A1').address, 'Bad Sheet!A1')
 
     def test_value(self):
         cell = xltypes.XLCell('Sheet1!A1', 5)
@@ -96,7 +97,7 @@ class XLRangeTest(unittest.TestCase):
             xltypes.XLRange('Sheet1!A1:A3, Sheet1!C1:C3').address,
             [['Sheet1!A1', 'Sheet1!C1'],
              ['Sheet1!A2', 'Sheet1!C2'],
-            ['Sheet1!A3', 'Sheet1!C3']]
+             ['Sheet1!A3', 'Sheet1!C3']]
         )
 
     def test_init_with_one_sheet_spec(self):

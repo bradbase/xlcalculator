@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-from xlfunctions import xl
+from xlfunctions import xl, xltypes as func_xltypes
 from xlcalculator import ast_nodes, xltypes
 from xlcalculator.tokenizer import f_token
 
@@ -137,7 +137,7 @@ class RangeNodeTest(unittest.TestCase):
     def setUp(self):
         self.model = mock.Mock(
             cells={
-                'Sh1!'+addr: xltypes.XLCell('Sh1!'+addr, value=idx)
+                'Sh1!' + addr: xltypes.XLCell('Sh1!' + addr, value=idx)
                 for idx, addr in enumerate(('A1', 'A2', 'B1', 'B2'))
             },
             ranges={'Sh1!A1:B2': xltypes.XLRange('Sh1!A1:B2')},
@@ -160,7 +160,7 @@ class RangeNodeTest(unittest.TestCase):
     def test_eval(self):
         node = self.create_node('A1:B2')
         res = node.eval(self.model, {}, 'Sh1!C1')
-        exp = xl.RangeData([[0, 2], [1, 3]])
+        exp = func_xltypes.Array([[0, 2], [1, 3]])
         self.assertTrue((res == exp).all().all())
 
     def test_eval_cell(self):
@@ -205,9 +205,9 @@ class FunctionNodeTest(unittest.TestCase):
             f_token(tvalue='>', ttype='operator-infix', tsubtype='math')
         )
         cond_node.left = ast_nodes.OperandNode(
-                f_token(tvalue='1', ttype='operand', tsubtype='number'))
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
         cond_node.right = ast_nodes.OperandNode(
-                f_token(tvalue='0', ttype='operand', tsubtype='number'))
+            f_token(tvalue='0', ttype='operand', tsubtype='number'))
 
         node = ast_nodes.FunctionNode(
             f_token(tvalue='IF', ttype='function', tsubtype='start'))

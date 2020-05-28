@@ -14,7 +14,7 @@ def get_resource(filename):
 
 class XlCalculatorTestCase(unittest.TestCase):
 
-    def assertEqualRounded(self, lhs, rhs, rounding_precision = None):
+    def assertEqualRounded(self, lhs, rhs, rounding_precision=None):
 
         if rounding_precision is None:
             lhs_split = str(lhs).split('.')
@@ -31,7 +31,7 @@ class XlCalculatorTestCase(unittest.TestCase):
                 len_rhs_after_decimal = None
 
             if len_lhs_after_decimal is None or len_rhs_after_decimal is None:
-                return self.assertEqual( round(lhs), round(rhs) )
+                return self.assertEqual(round(lhs), round(rhs))
 
             rounding_precision = min(
                 len_lhs_after_decimal, len_rhs_after_decimal)
@@ -50,11 +50,9 @@ class XlCalculatorTestCase(unittest.TestCase):
             rhs_value = Decimal(lhs).quantize(
                 Decimal(precision), rounding=ROUND_DOWN)
 
-        return self.assertEqual( lhs_value, rhs_value )
+        return self.assertEqual(lhs_value, rhs_value)
 
-
-    def assertEqualTruncated(self, lhs, rhs, truncating_places = None):
-
+    def assertEqualTruncated(self, lhs, rhs, truncating_places=None):
         lhs_before_dec, lhs_after_dec = str(lhs).split('.')
         rhs_before_dec, rhs_after_dec = str(rhs).split('.')
 
@@ -74,16 +72,13 @@ class XlCalculatorTestCase(unittest.TestCase):
             rhs_value = float('.'.join((
                 rhs_before_dec, rhs_after_dec[0:truncating_places])))
 
-        return self.assertAlmostEqual( lhs_value, rhs_value, truncating_places )
-
+        return self.assertAlmostEqual(lhs_value, rhs_value, truncating_places)
 
     def assertASTNodesEqual(self, lhs, rhs):
-
         self.assertEqual(len(lhs), len(rhs))
-
         item_equals = []
         for item_index in range(0, len(lhs)):
-            item_equals.append( lhs[item_index] == rhs[item_index] )
+            item_equals.append(lhs[item_index] == rhs[item_index])
 
         return all(item_equals)
 

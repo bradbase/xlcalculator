@@ -5,7 +5,6 @@ from xlcalculator.model import parser
 
 class FormulaParserTest(unittest.TestCase):
 
-
     def parse(self, formula, named_ranges=None):
         if named_ranges is None:
             named_ranges = {
