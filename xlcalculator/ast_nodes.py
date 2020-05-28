@@ -95,6 +95,10 @@ class OperatorNode(ASTNode):
         self.right = None
 
     def eval(self, model, namespace, ref):
+        print('----', ref)
+        if 'E24' in ref:
+            import pdb; pdb.set_trace()
+            
         if self.ttype == 'operator-prefix':
             assert self.left is None, 'Left operand for prefix operator'
             op = PREFIX_OP_TO_FUNC[self.tvalue]
@@ -177,12 +181,12 @@ class FunctionNode(ASTNode):
         for pname, pvalue in list(bound.arguments.items()):
             param = sig.parameters[pname]
             ptype = param.annotation
-            if ptype == xltypes.Expr:
+            if ptype == xltypes.XlExpr:
                 args.append(xltypes.Expr(
                     pvalue.eval, (model, namespace, ref), ref=ref, ast=pvalue
                 ))
             elif (param.kind == param.VAR_POSITIONAL
-                  and xltypes.Expr in getattr(ptype, '__args__', [])):
+                  and xltypes.XlExpr in getattr(ptype, '__args__', [])):
                 args.extend([
                     xltypes.Expr(
                         pitem.eval, (model, namespace, ref),
