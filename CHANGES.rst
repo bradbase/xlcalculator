@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.1.1 (unreleased)
+0.2.0 (2020-05-28)
 ------------------
 
 - Support for delayed node evaluation by wrapping them into expressions. The
