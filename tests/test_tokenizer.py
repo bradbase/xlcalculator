@@ -1,6 +1,3 @@
-
-import unittest
-
 from xlcalculator.tokenizer import f_token, ExcelParser
 
 from . import testing
@@ -216,7 +213,6 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
         )
 
     def test_range_address_union(self):
-        parser = ExcelParser()
         self.assertASTNodesEqual(
             self.parse('A1:B1,A2:B2'),
             [

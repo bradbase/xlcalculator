@@ -1,11 +1,10 @@
 """Representation of a Microsoft Excel formula
 """
-import re
 from dataclasses import dataclass, field
 from openpyxl.utils.cell import column_index_from_string
-from typing import Any, List
+from typing import List
 
-from . import ast_nodes, parser, reader, tokenizer, utils
+from . import ast_nodes, tokenizer, utils
 from .tokenizer import ExcelParserTokens
 
 
@@ -33,9 +32,9 @@ class XLFormula(XLType):
         self.tokens = tokenizer.ExcelParser().getTokens(self.formula).items
         for token in self.tokens:
             if (
-                    token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND
-                    and token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE
-                    and token.tvalue not in self.terms
+                    (token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND)
+                    and (token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE)
+                    and (token.tvalue not in self.terms)
             ):
                 # Make sure we have a full address.
                 term = token.tvalue

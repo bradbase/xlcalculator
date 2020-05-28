@@ -1,7 +1,6 @@
 import inspect
-import logging
 
-from xlfunctions import xl, math, operator, text
+from xlfunctions import xlerrors, xltypes, math, operator, text
 from . import utils
 
 PREFIX_OP_TO_FUNC = {
@@ -69,11 +68,16 @@ class OperandNode(ASTNode):
 
     def eval(self, model, namespace, ref):
         if self.tsubtype == "logical":
-            return self.tvalue.lower() == "true"
-        elif self.tsubtype in ('text', 'error'):
-            return self.tvalue
+            return xltypes.Boolean.cast(self.tvalue)
+        elif self.tsubtype == 'text':
+            return xltypes.Text(self.tvalue)
+        elif self.tsubtype == 'error':
+            if self.tvalue in xlerrors.ERRORS_BY_CODE:
+                return xlerrors.ERRORS_BY_CODE[self.tvalue](
+                    f'Error in cell ${ref}')
+            return xlerrors.ExcelError(self.tvalue, f'Error in cell ${ref}')
         else:
-            return xl.convert_number(self.tvalue)
+            return xltypes.Number.cast(self.tvalue)
 
     def __str__(self):
         if self.tsubtype == "logical":
@@ -129,7 +133,7 @@ class RangeNode(OperandNode):
     def full_address(self, ref):
         addr = self.address
         if '!' not in addr:
-            sheet, _, _  = utils.resolve_address(ref)
+            sheet, _, _ = utils.resolve_address(ref)
             addr = f'{sheet}!{addr}'
         return addr
 
@@ -144,10 +148,11 @@ class RangeNode(OperandNode):
             for range_column in model.ranges[addr].cells:
                 row = []
                 for cell_addr in range_column:
-                    row.append(model.cells[cell_addr].value)
+                    raw_value = model.cells[cell_addr].value
+                    row.append(xltypes.ExcelType.cast_from_native(raw_value))
                 range_cells.append(row)
 
-            model.ranges[addr].value = data = xl.RangeData(range_cells)
+            model.ranges[addr].value = data = xltypes.Array(range_cells)
             return data
 
 
@@ -172,14 +177,14 @@ class FunctionNode(ASTNode):
         for pname, pvalue in list(bound.arguments.items()):
             param = sig.parameters[pname]
             ptype = param.annotation
-            if ptype == xl.Expr:
-                args.append(xl.Expr(
+            if ptype == xltypes.Expr:
+                args.append(xltypes.Expr(
                     pvalue.eval, (model, namespace, ref), ref=ref, ast=pvalue
                 ))
-            elif (param.kind == param.VAR_POSITIONAL and
-                      xl.Expr in getattr(ptype, '__args__', [])):
+            elif (param.kind == param.VAR_POSITIONAL
+                  and xltypes.Expr in getattr(ptype, '__args__', [])):
                 args.extend([
-                    xl.Expr(
+                    xltypes.Expr(
                         pitem.eval, (model, namespace, ref),
                         ref=ref, ast=pitem
                     )

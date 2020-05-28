@@ -68,4 +68,3 @@ def patch_WorksheetReader_bind_cells():
     """Allow extraction of cached formula value."""
     openpyxl.worksheet._reader.WorksheetReader = WorksheetReader
     openpyxl.reader.excel.WorksheetReader = WorksheetReader
-

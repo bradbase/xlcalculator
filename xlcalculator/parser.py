@@ -13,24 +13,25 @@ class Operator(object):
 # http://office.microsoft.com/en-us/excel-help/
 #    calculation-operators-and-precedence-HP010078886.aspx
 OPERATORS = {
-    ':': Operator(':',8,'left'),
-    '': Operator(' ',8,'left'),
-    ',': Operator(',',8,'left'),
-    'u-': Operator('u-',7,'left'), #unary negation
-    '%': Operator('%',6,'left'),
-    '^': Operator('^',5,'left'),
-    '*': Operator('*',4,'left'),
-    '/': Operator('/',4,'left'),
-    '+': Operator('+',3,'left'),
-    '-': Operator('-',3,'left'),
-    '&': Operator('&',2,'left'),
-    '=': Operator('=',1,'left'),
-    '<': Operator('<',1,'left'),
-    '>': Operator('>',1,'left'),
-    '<=': Operator('<=',1,'left'),
-    '>=': Operator('>=',1,'left'),
-    '<>': Operator('<>',1,'left'),
+    ':': Operator(':', 8, 'left'),
+    '': Operator(' ', 8, 'left'),
+    ',': Operator(',', 8, 'left'),
+    'u-': Operator('u-', 7, 'left'),  # unary negation
+    '%': Operator('%', 6, 'left'),
+    '^': Operator('^', 5, 'left'),
+    '*': Operator('*', 4, 'left'),
+    '/': Operator('/', 4, 'left'),
+    '+': Operator('+', 3, 'left'),
+    '-': Operator('-', 3, 'left'),
+    '&': Operator('&', 2, 'left'),
+    '=': Operator('=', 1, 'left'),
+    '<': Operator('<', 1, 'left'),
+    '>': Operator('>', 1, 'left'),
+    '<=': Operator('<=', 1, 'left'),
+    '>=': Operator('>=', 1, 'left'),
+    '<>': Operator('<>', 1, 'left'),
 }
+
 
 class FormulaParser:
     """Excel Formula Parser"""
@@ -84,10 +85,10 @@ class FormulaParser:
             if token.ttype == "function" and token.tsubtype == "start":
                 token.tsubtype = ""
                 tokens.append(token)
-                tokens.append(tokenizer.f_token('(','arglist','start'))
+                tokens.append(tokenizer.f_token('(', 'arglist', 'start'))
 
             elif token.ttype == "function" and token.tsubtype == "stop":
-                tokens.append(tokenizer.f_token(')','arglist','stop'))
+                tokens.append(tokenizer.f_token(')', 'arglist', 'stop'))
 
             elif token.ttype == "subexpression" and token.tsubtype == "start":
                 token.tvalue = '('
@@ -133,8 +134,8 @@ class FormulaParser:
                                 depth += 1
 
                             elif (
-                                    depth > 0 and
-                                    reversed_token.tsubtype == 'start'
+                                depth > 0
+                                and reversed_token.tsubtype == 'start'
                             ):
                                 depth -= 1
 
@@ -218,25 +219,26 @@ class FormulaParser:
                 while stack and (stack[-1].tsubtype != "start"):
                     output.append(self.create_node(stack.pop()))
 
-                if were_values.pop(): arg_count[-1] += 1
+                if were_values.pop():
+                    arg_count[-1] += 1
                 were_values.append(False)
 
                 if not len(stack):
-                    message = "Mismatched or misplaced parentheses"
-                    logging.error(message)
-                    raise ValueError(message)
+                    raise ValueError("Mismatched or misplaced parentheses")
 
             elif token.ttype.startswith('operator'):
 
-                if token.ttype.endswith('-prefix') and token.tvalue =="-":
+                if token.ttype.endswith('-prefix') and token.tvalue == "-":
                     o1 = OPERATORS['u-']
 
                 else:
                     o1 = OPERATORS[token.tvalue]
 
                 while stack and stack[-1].ttype.startswith('operator'):
-                    if (stack[-1].ttype.endswith('-prefix') and
-                            stack[-1].tvalue =="-"):
+                    if (
+                            stack[-1].ttype.endswith('-prefix')
+                            and stack[-1].tvalue == "-"
+                    ):
                         o2 = OPERATORS['u-']
 
                     else:
@@ -272,7 +274,8 @@ class FormulaParser:
                     f = self.create_node(stack.pop())
                     a = arg_count.pop()
                     w = were_values.pop()
-                    if w: a += 1
+                    if w:
+                        a += 1
                     f.num_args = a
                     output.append(f)
 
@@ -299,7 +302,7 @@ class FormulaParser:
             return ast_nodes.OperatorNode(token)
 
         else:
-            raise ValueError('Unknown token type: ' + toekn.ttype)
+            raise ValueError('Unknown token type: ' + token.ttype)
 
     def build_ast(self, nodes):
         """Update AST nodes to build a proper parse tree.

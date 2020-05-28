@@ -1,15 +1,13 @@
 
 import unittest
-import json
 from copy import deepcopy
 
-from jsonpickle import encode, decode
+from jsonpickle import decode
 
 from xlcalculator.model import Model, ModelCompiler
 from xlcalculator.xltypes import XLCell, XLFormula, XLRange
 from xlcalculator.tokenizer import f_token
 
-from .formulas import *
 from . import testing
 
 
@@ -32,7 +30,6 @@ class ModelTest(testing.XlCalculatorTestCase):
         self.model.defined_names = deepcopy(self.defined_names)
         self.model.ranges = deepcopy(self.ranges)
         self.model.formulae = deepcopy(self.formulae)
-
 
     def test_build_code(self):
 

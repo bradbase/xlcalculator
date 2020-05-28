@@ -1,10 +1,9 @@
 import logging
 from functools import lru_cache
-from datetime import datetime
 
 from pandas import DataFrame
 from numpy import ndarray
-from xlfunctions import xl
+from xlfunctions import xl, xlerrors
 
 from . import xltypes
 
@@ -34,7 +33,7 @@ class Evaluator:
         if len(data) == 1 and isinstance(data[0], str):
             if data[0] in cells and cells[data[0]].formula is None:
                 if recurse_depth in cells_to_evaluate:
-                    cells_to_evaluate[recurse_depth].add( data[0] )
+                    cells_to_evaluate[recurse_depth].add(data[0])
                 else:
                     for level in cells_to_evaluate:
                         if data[0] in cells_to_evaluate[level]:
@@ -43,18 +42,19 @@ class Evaluator:
                     recursed_cells.add(data[0])
 
         # Recursive cases
-        elif (len(data) == 1 and isinstance(data[0], str)
-                  and cells[data[0]].formula is not None
+        elif (
+                len(data) == 1 and isinstance(data[0], str)
+                and cells[data[0]].formula is not None
         ):
             self.recurse_evaluate(
                 cells,
                 list(cells[data[0]].formula.associated_cells),
                 cells_to_evaluate, recursed_cells,
-                recurse_depth=recurse_depth+1
+                recurse_depth=recurse_depth + 1
             )
 
             if recurse_depth in cells_to_evaluate:
-                cells_to_evaluate[recurse_depth].add( data[0] )
+                cells_to_evaluate[recurse_depth].add(data[0])
                 recursed_cells.add(data[0])
             else:
                 for level in cells_to_evaluate:
@@ -66,7 +66,7 @@ class Evaluator:
         elif len(data) == 1 and isinstance(data[0], list):
             self.recurse_evaluate(
                 cells, data, cells_to_evaluate, recursed_cells,
-                recurse_depth=recurse_depth+1)
+                recurse_depth=recurse_depth + 1)
 
         else:
             mid = len(data) // 2
@@ -106,16 +106,17 @@ class Evaluator:
 
                 elif isinstance(name_definition, xltypes.XLRange):
                     message = (
-                        f"I can't resolve {cell} to a cell. It's a range and "
-                        f"they aren't supported yet."
+                        f"I can't resolve {cell_address} to a cell. It's a "
+                        f"range and they aren't supported yet."
                     )
                     logging.error(message)
                     raise ValueError(message)
 
                 elif isinstance(name_definition, xltypes.XLFormula):
                     message = (
-                        f"I can't resolve {cell} to a cell. It's a formula "
-                        f"and they aren't supported as a cell reference."
+                        f"I can't resolve {cell_address} to a cell. It's a "
+                        f"formula and they aren't supported as a cell "
+                        f"reference."
                     )
                     logging.error(message)
                     raise ValueError(message)
@@ -124,16 +125,17 @@ class Evaluator:
                 cell = ranges[cell_address]
 
             else:
-                cell = cells[cell_address]
+                cell = cells[cell_address]  # noqa
 
-        except:
+        except (KeyError, ValueError):
             logging.error('Empty cell at {}'.format(cell_address))
-            return xl.NullExcelError('Cell {cell_address} is empty')
+            return xlerrors.NullExcelError(f'Cell {cell_address} is empty')
 
         # No formula, or no evaluation means fixed value but could be a defined
         # name.
-        if (cells[cell_address].formula is None
-                or cells[cell_address].formula.evaluate == False
+        if (
+                cells[cell_address].formula is None
+                or cells[cell_address].formula.evaluate is False
         ):
             logging.debug(
                 f"Cell {cells[cell_address].address} has no formula "
@@ -148,12 +150,13 @@ class Evaluator:
                         skip = True
 
                 if not skip:
-                    recursed_cells = self.recurse_evaluate(
+                    self.recurse_evaluate(
                         cells,
                         list(cells[cell_address].formula.associated_cells),
                         self.cells_to_evaluate, self.recursed_cells
                     )
-                    cells_to_evaluate_keys = list(self.cells_to_evaluate.keys())
+                    cells_to_evaluate_keys = list(
+                        self.cells_to_evaluate.keys())
                     sorted(cells_to_evaluate_keys)
                     cells_to_evaluate_keys.reverse()
                     for item in cells_to_evaluate_keys:
@@ -206,8 +209,9 @@ class Evaluator:
 
     def find_associated_cell(self, ref, range):
         """This function retrieves the cell associated to ref in a Range
-        For instance, in the range [A1, B1, C1], the cell associated to B2 is B1
-        This is useful to mimic the way Excel works.
+
+        For instance, in the range [A1, B1, C1], the cell associated to B2 is
+        B1 This is useful to mimic the way Excel works.
         """
         if ref is None:
             return None
@@ -290,10 +294,10 @@ class Evaluator:
                             if (item.origin[0], col) in item else None
 
                 else:
-                    return xl.ValueExcelError(
+                    return xlerrors.ValueExcelError(
                         f'cannot use find_associated_value on {item.type}')
 
-            except xl.ExcelError as err:
+            except xlerrors.ExcelError as err:
                 raise RuntimeError(
                     f'First argument of Range operation is not '
                     f'valid: {err.value}'

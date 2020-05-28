@@ -1,6 +1,5 @@
 import copy
 import gzip
-import json
 import jsonpickle
 import logging
 import os
@@ -83,10 +82,10 @@ class Model():
         provide the ability to re-create the graph.
         """
         output = {
-            'cells' : self.cells,
-            'defined_names' : self.defined_names,
-            'formulae' : self.formulae,
-            'ranges' : self.ranges,
+            'cells': self.cells,
+            'defined_names': self.defined_names,
+            'formulae': self.formulae,
+            'ranges': self.ranges,
         }
 
         file_open = gzip.GzipFile \
@@ -147,9 +146,9 @@ class Model():
                     == other.defined_names[self_defined_names])
 
         return (
-            self.__class__ == other.__class__ and
-            all(cells_comparison) and
-            all(defined_names_comparison)
+            self.__class__ == other.__class__
+            and all(cells_comparison)
+            and all(defined_names_comparison)
         )
 
 
@@ -169,7 +168,7 @@ class ModelCompiler:
         archive.read()
         return archive
 
-    def parse_archive(self, archive, ignore_sheets = [], ignore_hidden = False):
+    def parse_archive(self, archive, ignore_sheets=[], ignore_hidden=False):
         self.model.cells, self.model.formulae, self.model.ranges = \
             archive.read_cells(ignore_sheets, ignore_hidden)
         self.defined_names = archive.read_defined_names(
@@ -179,7 +178,7 @@ class ModelCompiler:
         self.build_ranges()
 
     def read_and_parse_archive(
-            self, file_name=None, ignore_sheets = [], ignore_hidden = False,
+            self, file_name=None, ignore_sheets=[], ignore_hidden=False,
             build_code=True
     ):
         archive = self.read_excel_file(file_name)
@@ -198,10 +197,13 @@ class ModelCompiler:
             else:
                 cell_address = "{}!{}".format(default_sheet, item)
 
-            if (not xl.is_float(input_dict[item]) and
-                     input_dict[item][0] == '='):
+            if (
+                    not xl.is_float(input_dict[item])
+                    and input_dict[item][0] == '='
+            ):
                 cell = xltypes.XLCell(
-                    cell_address, None, formula=XLFormula(input_dict[item]))
+                    cell_address, None,
+                    formula=xltypes.XLFormula(input_dict[item]))
                 self.model.cells[cell_address] = cell
                 self.model.formulae[cell_address] = cell.formula
 
@@ -238,10 +240,12 @@ class ModelCompiler:
             else:
                 self.model.defined_names[name] = xltypes.XLRange(
                     cell_address, name=name)
-                self.model.ranges[cell_address] = self.model.defined_names[name]
+                self.model.ranges[cell_address] = \
+                    self.model.defined_names[name]
 
-            if (cell_address in self.model.formulae and
-                    name not in self.model.formulae
+            if (
+                    cell_address in self.model.formulae
+                    and name not in self.model.formulae
             ):
                 self.model.formulae[name] = \
                     self.model.cells[cell_address].formula
@@ -283,17 +287,17 @@ class ModelCompiler:
                     associated_cells.update([
                         cell
                         for row in self.model.ranges[range].cells
-                            for cell in row
+                            for cell in row  # noqa: E131
                     ])
                 else:
-                    associated_cells.add( range )
+                    associated_cells.add(range)
 
                 if range in self.model.ranges:
                     for row in self.model.ranges[range].cells:
                         for cell_address in row:
                             if cell_address not in self.model.cells.keys():
-                                self.model.cells[cell_address] = xltypes.XLCell(
-                                    cell_address, '')
+                                self.model.cells[cell_address] = \
+                                    xltypes.XLCell(cell_address, '')
 
             if formula in self.model.cells:
                 self.model.cells[formula].formula.associated_cells = \
@@ -332,8 +336,8 @@ class ModelCompiler:
         for addr, cell in extracted_model.cells.items():
             if cell.formula is not None:
                 for term in cell.formula.terms:
-                    if (term in extracted_model.cells and
-                            cell.formula != model.cells[addr].formula):
+                    if (term in extracted_model.cells
+                            and cell.formula != model.cells[addr].formula):
                         cell.formula = copy.deepcopy(model.cells[addr].formula)
 
                     elif term not in extracted_model.cells:

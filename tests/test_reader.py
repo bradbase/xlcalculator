@@ -26,7 +26,8 @@ class ReaderTest(unittest.TestCase):
     def test_read_cells(self):
         archive = reader.Reader(testing.get_resource("reader.xlsm"))
         archive.read()
-        cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
+        cells, formulae, ranges = \
+            archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.cells.keys()), sorted(cells.keys()))
 
@@ -36,7 +37,8 @@ class ReaderTest(unittest.TestCase):
     def test_read_formulae(self):
         archive = reader.Reader(testing.get_resource("reader.xlsm"))
         archive.read()
-        cells, formulae, ranges = archive.read_cells(ignore_sheets=['Eleventh'])
+        cells, formulae, ranges = \
+            archive.read_cells(ignore_sheets=['Eleventh'])
 
         self.assertEqual(sorted(self.formulae.keys()), sorted(formulae.keys()))
 
@@ -46,7 +48,7 @@ class ReaderTest(unittest.TestCase):
         defined_names = archive.read_defined_names()
 
         its_a_blank = (
-            set(sorted(defined_names.keys())) -
-            set(sorted(self.defined_names.keys()))
+            set(sorted(defined_names.keys()))
+            - set(sorted(self.defined_names.keys()))
         )
         self.assertEqual(list(its_a_blank), ['Its_a_blank'])

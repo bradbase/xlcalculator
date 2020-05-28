@@ -12,7 +12,7 @@ class Reader():
     def read(self):
         self.book = openpyxl.load_workbook(self.excel_file_name)
 
-    def read_defined_names(self, ignore_sheets = [], ignore_hidden = False):
+    def read_defined_names(self, ignore_sheets=[], ignore_hidden=False):
         return {
             defn.name: defn.value
             for defn in self.book.defined_names.definedName
@@ -41,6 +41,7 @@ class Reader():
                 if isinstance(value, (datetime)):
                     value = openpyxl.utils.datetime.to_excel(value)
 
-                cells[addr] = xltypes.XLCell(addr, value=value, formula=formula)
+                cells[addr] = xltypes.XLCell(
+                    addr, value=value, formula=formula)
 
         return [cells, formulae, ranges]

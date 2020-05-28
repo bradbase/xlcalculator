@@ -9,6 +9,13 @@ CHANGES
 - Support for delayed node evaluation by wrapping them into expressions. The
   fucntion will eval the expression when needed.
 
+- Support for native Excel data types.
+
+- Enable and update Excel file based function tests that are now working
+  properly.
+
+- Flake8 source code.
+
 
 0.1.0 (2020-05-25)
 ------------------
