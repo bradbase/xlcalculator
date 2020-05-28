@@ -1,22 +1,6 @@
+import contextlib
 import mock
 import openpyxl
-
-_PATCHES = []
-
-
-def patch(func):
-    def run_once():
-        if getattr(func, '__applied__', False):
-            return
-        func()
-        func.__applied__ = True
-    _PATCHES.append(run_once)
-    return run_once
-
-
-def apply_all():
-    for p in _PATCHES:
-        p()
 
 
 class Cell(openpyxl.cell.cell.Cell):
@@ -63,8 +47,11 @@ class WorksheetReader(openpyxl.worksheet._reader.WorksheetReader):
             self.ws._current_row = self.ws.max_row
 
 
-@patch
-def patch_WorksheetReader_bind_cells():
+@contextlib.contextmanager
+def openpyxl_WorksheetReader_patch():
     """Allow extraction of cached formula value."""
-    openpyxl.worksheet._reader.WorksheetReader = WorksheetReader
-    openpyxl.reader.excel.WorksheetReader = WorksheetReader
+    with mock.patch.object(
+            openpyxl.worksheet._reader, 'WorksheetReader', WorksheetReader):
+        with mock.patch.object(
+                openpyxl.reader.excel, 'WorksheetReader', WorksheetReader):
+            yield

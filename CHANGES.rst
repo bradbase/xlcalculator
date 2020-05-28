@@ -6,7 +6,12 @@ CHANGES
 0.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use a less intrusive way to patch ``openpyxl``. Instead of permanently
+  patching the reader to support cahced formula values, ``mock`` is used to
+  only patch the reader while reading the workbook.
+
+  This way the patches do not interfere with other packages not expecting
+  these new classes.
 
 
 0.2.0 (2020-05-28)

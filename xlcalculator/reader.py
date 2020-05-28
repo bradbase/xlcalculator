@@ -1,6 +1,6 @@
 import openpyxl
 
-from . import xltypes
+from . import patch, xltypes
 
 
 class Reader():
@@ -9,7 +9,8 @@ class Reader():
         self.excel_file_name = file_name
 
     def read(self):
-        self.book = openpyxl.load_workbook(self.excel_file_name)
+        with patch.openpyxl_WorksheetReader_patch():
+            self.book = openpyxl.load_workbook(self.excel_file_name)
 
     def read_defined_names(self, ignore_sheets=[], ignore_hidden=False):
         return {
