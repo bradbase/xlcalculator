@@ -1,5 +1,4 @@
 import openpyxl
-from datetime import datetime
 
 from . import xltypes
 
@@ -36,10 +35,6 @@ class Reader():
                 else:
                     formula = None
                     value = cell.value
-
-                # Convert date/time back to number.
-                if isinstance(value, (datetime)):
-                    value = openpyxl.utils.datetime.to_excel(value)
 
                 cells[addr] = xltypes.XLCell(
                     addr, value=value, formula=formula)
