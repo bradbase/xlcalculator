@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.2.1 (unreleased)
+0.2.1 (2020-05-28)
 ------------------
 
 - Use a less intrusive way to patch ``openpyxl``. Instead of permanently
