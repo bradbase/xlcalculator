@@ -104,7 +104,7 @@ def init_uuid():
 #      Methods: f_token  - __init__()
 # ========================================================================
 @dataclass
-class f_token():
+class f_token:
 
     tvalue: str
     ttype: str

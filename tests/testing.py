@@ -1,5 +1,6 @@
 import os
 import unittest
+from dataclasses import dataclass
 from decimal import Decimal, ROUND_UP, ROUND_DOWN
 
 from xlcalculator import model, evaluator
@@ -10,6 +11,25 @@ RESOURCE_DIR = os.path.join(os.path.dirname(__file__), 'resources')
 
 def get_resource(filename):
     return os.path.join(RESOURCE_DIR, filename)
+
+
+@dataclass
+class f_token:
+
+    tvalue: str
+    ttype: str
+    tsubtype: str
+
+    @classmethod
+    def from_token(cls, token):
+        return cls(token.tvalue, token.ttype, token.tsubtype)
+
+    def __repr__(self):
+        return "<{} tvalue: {} ttype: {} tsubtype: {}>".format(
+            self.__class__.__name__, self.tvalue, self.ttype, self.tsubtype)
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class XlCalculatorTestCase(unittest.TestCase):
@@ -75,12 +95,9 @@ class XlCalculatorTestCase(unittest.TestCase):
         return self.assertAlmostEqual(lhs_value, rhs_value, truncating_places)
 
     def assertASTNodesEqual(self, lhs, rhs):
-        self.assertEqual(len(lhs), len(rhs))
-        item_equals = []
-        for item_index in range(0, len(lhs)):
-            item_equals.append(lhs[item_index] == rhs[item_index])
-
-        return all(item_equals)
+        lhs = [f_token.from_token(t) for t in lhs]
+        rhs = [f_token.from_token(t) for t in rhs]
+        return self.assertEqual(lhs, rhs)
 
 
 class FunctionalTestCase(XlCalculatorTestCase):

@@ -51,6 +51,14 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
             ]
         )
 
+    def test_cell_address_by_number(self):
+        self.assertASTNodesEqual(
+            self.parse('R[1]C[1]'),
+            [
+                f_token(tvalue='R[1]C[1]', ttype='operand', tsubtype='range')
+            ]
+        )
+
     def test_cell_address_with_sheet(self):
         self.assertASTNodesEqual(
             self.parse('Sheet1!A1'),
@@ -124,7 +132,8 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
             self.parse('A1=B1'),
             [
                 f_token(tvalue='A1', ttype='operand', tsubtype='range'),
-                f_token(tvalue='=', ttype='operator-infix', tsubtype='math'),
+                f_token(
+                    tvalue='=', ttype='operator-infix', tsubtype='logical'),
                 f_token(tvalue='B1', ttype='operand', tsubtype='range')
             ]
         )
@@ -134,7 +143,8 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
             self.parse('Sheet1!A1=Sheet1!B1'),
             [
                 f_token(tvalue='Sheet1!A1', ttype='operand', tsubtype='range'),
-                f_token(tvalue='=', ttype='operator-infix', tsubtype='math'),
+                f_token(
+                    tvalue='=', ttype='operator-infix', tsubtype='logical'),
                 f_token(tvalue='Sheet1!B1', ttype='operand', tsubtype='range')
             ]
         )
@@ -147,6 +157,17 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
                 f_token(tvalue='A1', ttype='operand', tsubtype='range'),
                 f_token(tvalue=',', ttype='argument', tsubtype=''),
                 f_token(tvalue='B1', ttype='operand', tsubtype='range'),
+                f_token(tvalue='', ttype='function', tsubtype='stop')
+            ]
+        )
+
+    def test_cells_function_with_trailing_comma(self):
+        self.assertASTNodesEqual(
+            self.parse('SUM(A1,)'),
+            [
+                f_token(tvalue='SUM', ttype='function', tsubtype='start'),
+                f_token(tvalue='A1', ttype='operand', tsubtype='range'),
+                f_token(tvalue=',', ttype='argument', tsubtype=''),
                 f_token(tvalue='', ttype='function', tsubtype='stop')
             ]
         )
@@ -228,6 +249,106 @@ class ExcelParserTest(testing.XlCalculatorTestCase):
             [
                 f_token(tvalue='SUM', ttype='function', tsubtype='start'),
                 f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+            ]
+        )
+
+    def test_array(self):
+        self.assertASTNodesEqual(
+            self.parse('{{1, 2}, {3, 4}}'),
+            [
+                f_token(tvalue='ARRAY', ttype='function', tsubtype='start'),
+                f_token(tvalue='ARRAYROW', ttype='function', tsubtype='start'),
+                f_token(tvalue='ARRAY', ttype='function', tsubtype='start'),
+                f_token(tvalue='ARRAYROW', ttype='function', tsubtype='start'),
+                f_token(tvalue='1', ttype='operand', tsubtype='number'),
+                f_token(tvalue=',', ttype='argument', tsubtype=''),
+                f_token(tvalue='2', ttype='operand', tsubtype='number'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+                f_token(tvalue=',', ttype='argument', tsubtype=''),
+                f_token(tvalue='ARRAY', ttype='function', tsubtype='start'),
+                f_token(tvalue='ARRAYROW', ttype='function', tsubtype='start'),
+                f_token(tvalue='3', ttype='operand', tsubtype='number'),
+                f_token(tvalue=',', ttype='argument', tsubtype=''),
+                f_token(tvalue='4', ttype='operand', tsubtype='number'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
+            ]
+        )
+
+    def test_int(self):
+        self.assertASTNodesEqual(
+            self.parse('1'),
+            [
+                f_token(tvalue='1', ttype='operand', tsubtype='number'),
+            ]
+        )
+
+    def test_float(self):
+        self.assertASTNodesEqual(
+            self.parse('1.0'),
+            [
+                f_token(tvalue='1.0', ttype='operand', tsubtype='number'),
+            ]
+        )
+
+    def test_text(self):
+        self.assertASTNodesEqual(
+            self.parse('"data"'),
+            [
+                f_token(tvalue='data', ttype='operand', tsubtype='text'),
+            ]
+        )
+
+    def test_bool(self):
+        self.assertASTNodesEqual(
+            self.parse('TRUE'),
+            [
+                f_token(tvalue='TRUE', ttype='operand', tsubtype='logical'),
+            ]
+        )
+
+    def test_null(self):
+        self.assertASTNodesEqual(
+            self.parse('NULL'),
+            [
+                f_token(tvalue='NULL', ttype='operand', tsubtype='range'),
+            ]
+        )
+
+    def test_error(self):
+        self.assertASTNodesEqual(
+            self.parse('#NUM!'),
+            [
+                f_token(tvalue='#NUM!', ttype='operand', tsubtype='error'),
+            ]
+        )
+
+    def test_concat(self):
+        self.assertASTNodesEqual(
+            self.parse('"hi" & "de"'),
+            [
+                f_token(tvalue='hi', ttype='operand', tsubtype='text'),
+                f_token(
+                    tvalue='&', ttype='operator-infix',
+                    tsubtype='concatenate'),
+                f_token(tvalue='de', ttype='operand', tsubtype='text'),
+            ]
+        )
+
+    def test_array_formula(self):
+        self.assertASTNodesEqual(
+            self.parse('{=1}'),
+            [
+                f_token(tvalue='ARRAY', ttype='function', tsubtype='start'),
+                f_token(tvalue='ARRAYROW', ttype='function', tsubtype='start'),
+                f_token(
+                    tvalue='=', ttype='operator-infix', tsubtype='logical'),
+                f_token(tvalue='1', ttype='operand', tsubtype='number'),
+                f_token(tvalue='', ttype='function', tsubtype='stop'),
                 f_token(tvalue='', ttype='function', tsubtype='stop'),
             ]
         )
