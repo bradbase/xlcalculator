@@ -6,7 +6,16 @@ CHANGES
 0.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Make dependency resolution part of the execution.
+
+  * AST eval'ing takes care of depedency resolution.
+
+  * Provide cycle detection with reporting.
+
+  * Implemented a specific evaluation context. That makes cache control,
+    namespace customization and data encapsulation much easier.
+
+- Add more tokenizer tests to increase coverage.
 
 
 0.2.1 (2020-05-28)

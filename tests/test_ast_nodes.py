@@ -1,9 +1,32 @@
 import mock
 import unittest
 
-from xlfunctions import xl, xltypes as func_xltypes
+from xlfunctions import xlerrors, xltypes as func_xltypes
 from xlcalculator import ast_nodes, xltypes
 from xlcalculator.tokenizer import f_token
+
+
+def context(ref, model=None):
+    ctx = ast_nodes.EvalContext(ref=ref)
+    if model is not None:
+        ctx.eval_cell = lambda addr: model.cells[addr].value
+        ctx.cells = model.cells
+        ctx.ranges = model.ranges
+    return ctx
+
+
+class EvalContextTest(unittest.TestCase):
+
+    def test__init__(self):
+        ctx = ast_nodes.EvalContext(ref='A1')
+        self.assertEqual(ctx.seen, [])
+        self.assertIsInstance(ctx.namespace, dict)
+        self.assertEqual(ctx.ref, 'A1')
+
+    def test_eval_cell(self):
+        ctx = ast_nodes.EvalContext(ref='A1')
+        with self.assertRaises(NotImplementedError):
+            ctx.eval_cell('A2')
 
 
 class ASTNodeTest(unittest.TestCase):
@@ -33,7 +56,7 @@ class ASTNodeTest(unittest.TestCase):
     def test_eval(self):
         node = self.create_node()
         with self.assertRaises(NotImplementedError):
-            node.eval(mock.Mock(), {}, 'A1')
+            node.eval(context('A1'))
 
     def test_repr(self):
         node = self.create_node()
@@ -44,6 +67,10 @@ class ASTNodeTest(unittest.TestCase):
         node = self.create_node()
         self.assertEqual(str(node), 'tv')
 
+    def test_iter(self):
+        node = self.create_node()
+        self.assertEqual(tuple(node), (node,))
+
 
 class OperandNodeTest(unittest.TestCase):
 
@@ -53,15 +80,25 @@ class OperandNodeTest(unittest.TestCase):
 
     def test_eval(self):
         node = self.create_node()
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), 1)
+        self.assertEqual(node.eval(context('A1')), 1)
 
     def test_eval_bool(self):
         node = self.create_node('TRUE', 'logical')
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), True)
+        self.assertEqual(node.eval(context('A1')), True)
 
     def test_eval_text(self):
         node = self.create_node('data', 'text')
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), 'data')
+        self.assertEqual(node.eval(context('A1')), 'data')
+
+    def test_eval_error(self):
+        node = self.create_node('#VALUE!', 'error')
+        self.assertIsInstance(
+            node.eval(context('A1')), xlerrors.ValueExcelError)
+
+    def test_eval_error_with_nonstandard_error_value(self):
+        node = self.create_node('ERR:504', 'error')
+        self.assertIsInstance(
+            node.eval(context('A1')), xlerrors.ExcelError)
 
     def test_str(self):
         node = self.create_node()
@@ -76,60 +113,6 @@ class OperandNodeTest(unittest.TestCase):
         self.assertEqual(str(node), '"data"')
         node = self.create_node('This is "data"', 'text')
         self.assertEqual(str(node), '"This is \\"data\\""')
-
-
-class OperatorNodeTest(unittest.TestCase):
-
-    def create_node(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='+', ttype='operator-infix', tsubtype='math'))
-        node.left = ast_nodes.OperandNode(
-            f_token(tvalue='1', ttype='operand', tsubtype='number'))
-        node.right = ast_nodes.OperandNode(
-            f_token(tvalue='2', ttype='operand', tsubtype='number'))
-        return node
-
-    def test_eval(self):
-        node = self.create_node()
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), 3)
-
-    def test_eval_prefix(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='-', ttype='operator-prefix', tsubtype='math'))
-        node.right = ast_nodes.OperandNode(
-            f_token(tvalue='1', ttype='operand', tsubtype='number'))
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), -1)
-
-    def test_eval_postfix(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='%', ttype='operator-postfix', tsubtype='math'))
-        node.left = ast_nodes.OperandNode(
-            f_token(tvalue='1', ttype='operand', tsubtype='number'))
-        self.assertEqual(node.eval(mock.Mock(), {}, 'A1'), 0.01)
-
-    def test_eval_unknown_type(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='-', ttype='operator', tsubtype='math'))
-        with self.assertRaises(ValueError):
-            node.eval(mock.Mock(), {}, 'A1')
-
-    def test_str(self):
-        node = self.create_node()
-        self.assertEqual(str(node), '(1) + (2)')
-
-    def test_str_prefix(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='-', ttype='operator-prefix', tsubtype='math'))
-        node.right = ast_nodes.OperandNode(
-            f_token(tvalue='1', ttype='operand', tsubtype='number'))
-        self.assertEqual(str(node), '- (1)')
-
-    def test_str_postfix(self):
-        node = ast_nodes.OperatorNode(
-            f_token(tvalue='%', ttype='operator-postfix', tsubtype='math'))
-        node.left = ast_nodes.OperandNode(
-            f_token(tvalue='1', ttype='operand', tsubtype='number'))
-        self.assertEqual(str(node), '(1) %')
 
 
 class RangeNodeTest(unittest.TestCase):
@@ -159,17 +142,75 @@ class RangeNodeTest(unittest.TestCase):
 
     def test_eval(self):
         node = self.create_node('A1:B2')
-        res = node.eval(self.model, {}, 'Sh1!C1')
+        res = node.eval(context('Sh1!C1', self.model))
         exp = func_xltypes.Array([[0, 2], [1, 3]])
         self.assertTrue((res == exp).all().all())
 
     def test_eval_cell(self):
         node = self.create_node('A1')
-        self.assertEqual(node.eval(self.model, {}, 'Sh1!C1'), 0)
+        self.assertEqual(node.eval(context('Sh1!C1', self.model)), 0)
 
     def test_str(self):
         node = self.create_node('A1:B2')
         self.assertEqual(str(node), 'A1:B2')
+
+
+class OperatorNodeTest(unittest.TestCase):
+
+    def create_node(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='+', ttype='operator-infix', tsubtype='math'))
+        node.left = ast_nodes.OperandNode(
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        node.right = ast_nodes.OperandNode(
+            f_token(tvalue='2', ttype='operand', tsubtype='number'))
+        return node
+
+    def test_eval(self):
+        node = self.create_node()
+        self.assertEqual(node.eval(context('A1')), 3)
+
+    def test_eval_prefix(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='-', ttype='operator-prefix', tsubtype='math'))
+        node.right = ast_nodes.OperandNode(
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        self.assertEqual(node.eval(context('A1')), -1)
+
+    def test_eval_postfix(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='%', ttype='operator-postfix', tsubtype='math'))
+        node.left = ast_nodes.OperandNode(
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        self.assertEqual(node.eval(context('A1')), 0.01)
+
+    def test_eval_unknown_type(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='-', ttype='operator', tsubtype='math'))
+        with self.assertRaises(ValueError):
+            node.eval(context('A1'))
+
+    def test_str(self):
+        node = self.create_node()
+        self.assertEqual(str(node), '(1) + (2)')
+
+    def test_str_prefix(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='-', ttype='operator-prefix', tsubtype='math'))
+        node.right = ast_nodes.OperandNode(
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        self.assertEqual(str(node), '- (1)')
+
+    def test_str_postfix(self):
+        node = ast_nodes.OperatorNode(
+            f_token(tvalue='%', ttype='operator-postfix', tsubtype='math'))
+        node.left = ast_nodes.OperandNode(
+            f_token(tvalue='1', ttype='operand', tsubtype='number'))
+        self.assertEqual(str(node), '(1) %')
+
+    def test_iter(self):
+        node = self.create_node()
+        self.assertEqual(tuple(node), (node.left, node.right, node))
 
 
 class FunctionNodeTest(unittest.TestCase):
@@ -187,7 +228,7 @@ class FunctionNodeTest(unittest.TestCase):
 
     def test_eval(self):
         node = self.create_node()
-        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 1)
+        self.assertEqual(node.eval(context('A1')), 1)
 
     def test_eval_var_positional(self):
         node = ast_nodes.FunctionNode(
@@ -198,7 +239,7 @@ class FunctionNodeTest(unittest.TestCase):
             ast_nodes.OperandNode(
                 f_token(tvalue='2', ttype='operand', tsubtype='number')),
         ]
-        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 5)
+        self.assertEqual(node.eval(context('A1')), 5)
 
     def test_eval_expr(self):
         cond_node = ast_nodes.OperatorNode(
@@ -218,7 +259,7 @@ class FunctionNodeTest(unittest.TestCase):
             ast_nodes.OperandNode(
                 f_token(tvalue='2', ttype='operand', tsubtype='number')),
         ]
-        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), 3)
+        self.assertEqual(node.eval(context('A1')), 3)
 
     def test_eval_expr_var_positional(self):
         node = ast_nodes.FunctionNode(
@@ -229,8 +270,12 @@ class FunctionNodeTest(unittest.TestCase):
             ast_nodes.OperandNode(
                 f_token(tvalue='2', ttype='operand', tsubtype='number')),
         ]
-        self.assertEqual(node.eval(mock.Mock(), xl.FUNCTIONS, 'A1'), True)
+        self.assertEqual(node.eval(context('A1')), True)
 
     def test_str(self):
         node = self.create_node()
         self.assertEqual(str(node), 'MOD(3, 2)')
+
+    def test_iter(self):
+        node = self.create_node()
+        self.assertEqual(tuple(node), (node.args[0], node.args[1], node))

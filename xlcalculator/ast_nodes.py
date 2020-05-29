@@ -1,6 +1,6 @@
 import inspect
 
-from xlfunctions import xlerrors, xltypes, math, operator, text
+from xlfunctions import xl, xlerrors, xltypes, math, operator, text
 from . import utils
 
 PREFIX_OP_TO_FUNC = {
@@ -27,6 +27,23 @@ INFIX_OP_TO_FUNC = {
 }
 
 
+class EvalContext:
+
+    cells = None
+    ranges = None
+    namespace = None
+    seen = None
+    ref = None
+
+    def __init__(self, namespace=None, ref=None, seen=None):
+        self.seen = seen if seen is not None else []
+        self.namespace = namespace if namespace is not None else xl.FUNCTIONS
+        self.ref = ref
+
+    def eval_cell(self, addr):
+        raise NotImplementedError()
+
+
 class ASTNode(object):
     """A generic node in the AST"""
 
@@ -48,7 +65,7 @@ class ASTNode(object):
     def __eq__(self, other):
         return self.token == other.token
 
-    def eval(self, model, namespace, ref):
+    def eval(self, context):
         raise NotImplementedError(f'`eval()` of {self}')
 
     def __repr__(self):
@@ -63,10 +80,13 @@ class ASTNode(object):
     def __str__(self):
         return str(self.tvalue)
 
+    def __iter__(self):
+        yield self
+
 
 class OperandNode(ASTNode):
 
-    def eval(self, model, namespace, ref):
+    def eval(self, context):
         if self.tsubtype == "logical":
             return xltypes.Boolean.cast(self.tvalue)
         elif self.tsubtype == 'text':
@@ -74,8 +94,9 @@ class OperandNode(ASTNode):
         elif self.tsubtype == 'error':
             if self.tvalue in xlerrors.ERRORS_BY_CODE:
                 return xlerrors.ERRORS_BY_CODE[self.tvalue](
-                    f'Error in cell ${ref}')
-            return xlerrors.ExcelError(self.tvalue, f'Error in cell ${ref}')
+                    f'Error in cell ${context.ref}')
+            return xlerrors.ExcelError(
+                self.tvalue, f'Error in cell ${context.ref}')
         else:
             return xltypes.Number.cast(self.tvalue)
 
@@ -85,42 +106,6 @@ class OperandNode(ASTNode):
         elif self.tsubtype == "text":
             return '"' + self.tvalue.replace('"', '\\"') + '"'
         return str(self.tvalue)
-
-
-class OperatorNode(ASTNode):
-
-    def __init__(self, token):
-        super().__init__(token)
-        self.left = None
-        self.right = None
-
-    def eval(self, model, namespace, ref):
-        print('----', ref)
-        if 'E24' in ref:
-            import pdb; pdb.set_trace()
-            
-        if self.ttype == 'operator-prefix':
-            assert self.left is None, 'Left operand for prefix operator'
-            op = PREFIX_OP_TO_FUNC[self.tvalue]
-            return op(self.right.eval(model, namespace, ref))
-
-        elif self.ttype == 'operator-infix':
-            op = INFIX_OP_TO_FUNC[self.tvalue]
-            return op(
-                self.left.eval(model, namespace, ref),
-                self.right.eval(model, namespace, ref),
-            )
-        elif self.ttype == 'operator-postfix':
-            assert self.right is None, 'Right operand for postfix operator'
-            op = POSTFIX_OP_TO_FUNC[self.tvalue]
-            return op(self.left.eval(model, namespace, ref))
-        else:
-            raise ValueError(f'Invalid operator type: {self.ttype}')
-
-    def __str__(self):
-        left = f'({self.left}) ' if self.left is not None else ''
-        right = f' ({self.right})' if self.right is not None else ''
-        return f'{left}{self.tvalue}{right}'
 
 
 class RangeNode(OperandNode):
@@ -141,23 +126,59 @@ class RangeNode(OperandNode):
             addr = f'{sheet}!{addr}'
         return addr
 
-    def eval(self, model, namespace, ref):
-        addr = self.full_address(ref)
+    def eval(self, context):
+        addr = self.full_address(context.ref)
 
-        if addr in model.cells:
-            return model.cells[addr].value
-
-        if addr in model.ranges:
-            range_cells = []
-            for range_column in model.ranges[addr].cells:
-                row = []
-                for cell_addr in range_column:
-                    raw_value = model.cells[cell_addr].value
-                    row.append(xltypes.ExcelType.cast_from_native(raw_value))
-                range_cells.append(row)
-
-            model.ranges[addr].value = data = xltypes.Array(range_cells)
+        if addr in context.ranges:
+            range_cells = [
+                [
+                    context.eval_cell(addr)
+                    for addr in range_row
+                ]
+                for range_row in context.ranges[addr].cells
+            ]
+            context.ranges[addr].value = data = xltypes.Array(range_cells)
             return data
+
+        return context.eval_cell(addr)
+
+
+class OperatorNode(ASTNode):
+
+    def __init__(self, token):
+        super().__init__(token)
+        self.left = None
+        self.right = None
+
+    def eval(self, context):
+        if self.ttype == 'operator-prefix':
+            assert self.left is None, 'Left operand for prefix operator'
+            op = PREFIX_OP_TO_FUNC[self.tvalue]
+            return op(self.right.eval(context))
+
+        elif self.ttype == 'operator-infix':
+            op = INFIX_OP_TO_FUNC[self.tvalue]
+            return op(
+                self.left.eval(context),
+                self.right.eval(context),
+            )
+        elif self.ttype == 'operator-postfix':
+            assert self.right is None, 'Right operand for postfix operator'
+            op = POSTFIX_OP_TO_FUNC[self.tvalue]
+            return op(self.left.eval(context))
+        else:
+            raise ValueError(f'Invalid operator type: {self.ttype}')
+
+    def __str__(self):
+        left = f'({self.left}) ' if self.left is not None else ''
+        right = f' ({self.right})' if self.right is not None else ''
+        return f'{left}{self.tvalue}{right}'
+
+    def __iter__(self):
+        # Return node in resolution order.
+        yield self.left
+        yield self.right
+        yield self
 
 
 class FunctionNode(ASTNode):
@@ -167,13 +188,13 @@ class FunctionNode(ASTNode):
         super().__init__(token)
         self.args = None
 
-    def eval(self, model, namespace, ref):
+    def eval(self, context):
         func_name = self.tvalue.upper()
         # 1. Remove the BBB namespace, since we are just supporting
         #    everything in one large one.
         func_name = func_name.replace('_XLFN.', '')
         # 2. Look up the function to use.
-        func = namespace[func_name]
+        func = context.namespace[func_name]
         # 3. Prepare arguments.
         sig = inspect.signature(func)
         bound = sig.bind(*self.args)
@@ -183,26 +204,31 @@ class FunctionNode(ASTNode):
             ptype = param.annotation
             if ptype == xltypes.XlExpr:
                 args.append(xltypes.Expr(
-                    pvalue.eval, (model, namespace, ref), ref=ref, ast=pvalue
+                    pvalue.eval, (context,), ref=context.ref, ast=pvalue
                 ))
             elif (param.kind == param.VAR_POSITIONAL
                   and xltypes.XlExpr in getattr(ptype, '__args__', [])):
                 args.extend([
                     xltypes.Expr(
-                        pitem.eval, (model, namespace, ref),
-                        ref=ref, ast=pitem
+                        pitem.eval, (context,), ref=context.ref, ast=pitem
                     )
                     for pitem in pvalue
                 ])
             elif (param.kind == param.VAR_POSITIONAL):
                 args.extend([
-                    pitem.eval(model, namespace, ref) for pitem in pvalue
+                    pitem.eval(context) for pitem in pvalue
                 ])
             else:
-                args.append(pvalue.eval(model, namespace, ref))
+                args.append(pvalue.eval(context))
         # 4. Run function and return result.
         return func(*args)
 
     def __str__(self):
         args = ', '.join(str(arg) for arg in self.args)
         return f'{self.tvalue}({args})'
+
+    def __iter__(self):
+        # Return node in resolution order.
+        for arg in self.args:
+            yield arg
+        yield self
