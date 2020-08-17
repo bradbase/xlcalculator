@@ -55,9 +55,9 @@ def COUNTA(*values):
     if not len(values) or values[0] is None:
         raise xlerrors.NullExcelError('value1 is required')
 
-    if len(values) > 255:
+    if len(values) > 256:
         raise xlerrors.ValueExcelError(
-            f"Can only have up to 255 supplimentary arguments. "
+            f"Can only have up to 256 arguments. "
             f"Provided: {len(values)}")
 
     cells = list(filter(lambda x: not func_xltypes.Blank.is_blank(x), values))
