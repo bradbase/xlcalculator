@@ -16,11 +16,11 @@ jsonpickle==1.4.1         # via xlcalculator
 mccabe==0.6.1             # via flake8
 mock==4.0.2               # via xlcalculator
 more-itertools==8.3.0     # via pytest
-numpy-financial==1.0.0    # via xlcalculator, xlfunctions
-numpy==1.18.4             # via numpy-financial, pandas, xlcalculator, xlfunctions, yearfrac
+numpy-financial==1.0.0    # via xlcalculator
+numpy==1.18.4             # via numpy-financial, pandas, xlcalculator, yearfrac
 openpyxl==3.0.3           # via xlcalculator
 packaging==20.4           # via pytest
-pandas==1.0.3             # via xlcalculator, xlfunctions
+pandas==1.0.3             # via xlcalculator
 pip-tools==5.1.2          # via xlcalculator
 pluggy==0.13.1            # via pytest
 py==1.8.1                 # via pytest
@@ -29,13 +29,13 @@ pyflakes==2.2.0           # via flake8
 pyparsing==2.4.7          # via packaging
 pytest-cov==2.9.0         # via xlcalculator
 pytest==5.4.2             # via pytest-cov, xlcalculator
-python-dateutil==2.8.1    # via pandas, xlfunctions
+python-dateutil==2.8.1    # via pandas
 pytz==2020.1              # via pandas
 six==1.15.0               # via packaging, pip-tools, python-dateutil, yearfrac
 wcwidth==0.1.9            # via pytest
-xlfunctions==0.1.0        # via xlcalculator
-yearfrac==0.4.3           # via xlfunctions
+yearfrac==0.4.3           # via via xlcalculator
 zipp==3.1.0               # via importlib-metadata
+
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

@@ -1,6 +1,14 @@
 import inspect
 
-from xlfunctions import xl, xlerrors, xltypes, math, operator, text
+from xlcalculator.xlfunctions import (
+    xl,
+    xlerrors,
+    math,
+    operator,
+    text,
+    func_xltypes
+)
+
 from . import utils
 
 PREFIX_OP_TO_FUNC = {
@@ -88,9 +96,9 @@ class OperandNode(ASTNode):
 
     def eval(self, context):
         if self.tsubtype == "logical":
-            return xltypes.Boolean.cast(self.tvalue)
+            return func_xltypes.Boolean.cast(self.tvalue)
         elif self.tsubtype == 'text':
-            return xltypes.Text(self.tvalue)
+            return func_xltypes.Text(self.tvalue)
         elif self.tsubtype == 'error':
             if self.tvalue in xlerrors.ERRORS_BY_CODE:
                 return xlerrors.ERRORS_BY_CODE[self.tvalue](
@@ -98,7 +106,7 @@ class OperandNode(ASTNode):
             return xlerrors.ExcelError(
                 self.tvalue, f'Error in cell ${context.ref}')
         else:
-            return xltypes.Number.cast(self.tvalue)
+            return func_xltypes.Number.cast(self.tvalue)
 
     def __str__(self):
         if self.tsubtype == "logical":
@@ -137,7 +145,7 @@ class RangeNode(OperandNode):
                 ]
                 for range_row in context.ranges[addr].cells
             ]
-            context.ranges[addr].value = data = xltypes.Array(range_cells)
+            context.ranges[addr].value = data = func_xltypes.Array(range_cells)
             return data
 
         return context.eval_cell(addr)
@@ -202,14 +210,14 @@ class FunctionNode(ASTNode):
         for pname, pvalue in list(bound.arguments.items()):
             param = sig.parameters[pname]
             ptype = param.annotation
-            if ptype == xltypes.XlExpr:
-                args.append(xltypes.Expr(
+            if ptype == func_xltypes.XlExpr:
+                args.append(func_xltypes.Expr(
                     pvalue.eval, (context,), ref=context.ref, ast=pvalue
                 ))
             elif (param.kind == param.VAR_POSITIONAL
-                  and xltypes.XlExpr in getattr(ptype, '__args__', [])):
+                  and func_xltypes.XlExpr in getattr(ptype, '__args__', [])):
                 args.extend([
-                    xltypes.Expr(
+                    func_xltypes.Expr(
                         pitem.eval, (context,), ref=context.ref, ast=pitem
                     )
                     for pitem in pvalue

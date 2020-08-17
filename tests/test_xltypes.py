@@ -22,6 +22,16 @@ class XLFormulaTest(testing.XlCalculatorTestCase):
             ]
         )
 
+    def test_defined_name_formula(self):
+        self.assertASTNodesEqual(
+            xltypes.XLFormula('=SUM(A1:B1)').tokens,
+            [
+                f_token(tvalue='SUM', ttype='function', tsubtype='start'),
+                f_token(tvalue='A1:B1', ttype='operand', tsubtype='range'),
+                f_token(tvalue='', ttype='function', tsubtype='stop')
+            ]
+        )
+
 
 class XLCellTest(unittest.TestCase):
 

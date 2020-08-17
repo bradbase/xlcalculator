@@ -46,8 +46,7 @@ setuptools.setup(
         'numpy',
         'pandas',
         'openpyxl',
-        'numpy_financial',
-        'xlfunctions'
+        'numpy_financial'
     ],
     extras_require=dict(
         test=TESTS_REQUIRE,

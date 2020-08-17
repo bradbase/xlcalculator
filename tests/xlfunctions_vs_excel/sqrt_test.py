@@ -1,6 +1,6 @@
 from .. import testing
 
-from xlfunctions import xlerrors
+from xlcalculator.xlfunctions import xlerrors
 
 
 class SqrtTest(testing.FunctionalTestCase):

@@ -1,7 +1,7 @@
 import sys
 from functools import lru_cache
 
-from xlfunctions import xl, xltypes as fxltypes
+from xlcalculator.xlfunctions import xl, func_xltypes
 
 from . import ast_nodes, xltypes
 
@@ -71,12 +71,12 @@ class Evaluator:
         addr = self.resolve_names(addr)
         if addr not in self.model.cells:
             # Blank cell that has no stored value in the model.
-            return fxltypes.BLANK
+            return func_xltypes.BLANK
         cell = self.model.cells[addr]
 
         # 2. If there is no formula, we simply return the cell value.
         if (cell.formula is None or cell.formula.evaluate is False):
-            return fxltypes.ExcelType.cast_from_native(
+            return func_xltypes.ExcelType.cast_from_native(
                 self.model.cells[addr].value)
 
         # 3. Prepare the execution environment and evaluate the formula.
