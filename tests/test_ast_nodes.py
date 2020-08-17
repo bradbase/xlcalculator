@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-from xlfunctions import xlerrors, xltypes as func_xltypes
+from xlcalculator.xlfunctions import xlerrors, func_xltypes
 from xlcalculator import ast_nodes, xltypes
 from xlcalculator.tokenizer import f_token
 

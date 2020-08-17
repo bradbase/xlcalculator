@@ -5,7 +5,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 
-from xlfunctions import xl
+from xlcalculator.xlfunctions import xl
 from . import xltypes, reader, parser, tokenizer
 
 

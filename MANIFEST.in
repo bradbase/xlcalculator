@@ -9,9 +9,8 @@ include LICENSE
 
 recursive-include examples *
 recursive-include tests *
-recursive-include xlcalcualtor *
+recursive-include xlcalculator *
 
 recursive-exclude docs/_build *
 
 global-exclude *.pyc
-
