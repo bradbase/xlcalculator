@@ -6,7 +6,9 @@ CHANGES
 0.2.3 (unreleased)
 ------------------
 
-- In-boarded xlfunctions
+- In-boarded xlfunctions.
+- Bugfix COUNTA.
+- Updated README. Includes words on xlfunction.
 
 
 0.2.2 (2020-05-28)
