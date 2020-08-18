@@ -48,12 +48,14 @@ xlcalculator is a modernization of the
         * Code is in examples\\third_party_datastructure
     * Functions;
         * ABS
+        * AND
         * AVERAGE
         * CHOOSE
         * CONCAT
         * COUNT
         * COUNTA
         * DATE
+        * IF
         * IRR
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
@@ -63,6 +65,8 @@ xlcalculator is a modernization of the
         * MIN
         * MOD
         * NPV
+        * OR
+        * PI
         * PMT
         * POWER
         * RIGHT
@@ -72,8 +76,11 @@ xlcalculator is a modernization of the
         * SLN
         * SQRT
         * SUM
+        * SUMIF
         * SUMPRODUCT
         * TODAY
+        * TRUNC
+        * VDB
         * VLOOKUP
           - Exact match only
         * XNPV
@@ -86,7 +93,6 @@ Not currently supported:
 
       * Functions required to complete testing as per Microsoft Office Help
         website for SQRT and LN
-      * ABS
       * EXP
       * DB
 
@@ -103,10 +109,6 @@ Not currently supported:
       * LOOKUP
       * MATCH
       * OFFSET
-      * VDB
-
-  * Requested Functions
-      * TRUNC
 
 Run tests
 ---------
