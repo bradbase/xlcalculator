@@ -3,12 +3,19 @@ CHANGES
 =======
 
 
-0.2.3 (unreleased)
+
+0.2.3 (2020-08-18)
 ------------------
 
 - In-boarded xlfunctions.
+
 - Bugfix COUNTA.
+
+  * Now supports 256 arguments.
+
 - Updated README. Includes words on xlfunction.
+
+- Changed licence from GPL-3 style to MIT Style.
 
 
 0.2.2 (2020-05-28)
@@ -30,7 +37,7 @@ CHANGES
 ------------------
 
 - Use a less intrusive way to patch ``openpyxl``. Instead of permanently
-  patching the reader to support cahced formula values, ``mock`` is used to
+  patching the reader to support cached formula values, ``mock`` is used to
   only patch the reader while reading the workbook.
 
   This way the patches do not interfere with other packages not expecting
@@ -41,7 +48,7 @@ CHANGES
 ------------------
 
 - Support for delayed node evaluation by wrapping them into expressions. The
-  fucntion will eval the expression when needed.
+  function will eval the expression when needed.
 
 - Support for native Excel data types.
 

@@ -17,7 +17,7 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version='0.2.3.dev0',
+    version='0.2.3',
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
@@ -47,7 +47,8 @@ setuptools.setup(
         'pandas',
         'openpyxl',
         'numpy_financial',
-        'yearfrac'
+        'yearfrac',
+        'mock'
     ],
     extras_require=dict(
         test=TESTS_REQUIRE,
