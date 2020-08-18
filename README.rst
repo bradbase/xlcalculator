@@ -20,7 +20,8 @@ Excel Calculator
 
 xlcalculator is a Python library that reads MS Excel files and, to the extent
 of supported functions, can translate the Excel functions into Python code and
-subsequently evaluate the generated Python code.
+subsequently evaluate the generated Python code. Essentially doing the Excel
+calculations without the need for Excel.
 
 xlcalculator is a modernization of the
 `koala2 <https://github.com/vallettea/koala>`_ library.
