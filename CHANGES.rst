@@ -6,7 +6,7 @@ CHANGES
 0.2.4 (un-released)
 ------------------
 
-- No changes yet
+- Updated README with supported functions.
 
 
 0.2.3 (2020-08-18)
