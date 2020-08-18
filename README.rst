@@ -144,7 +144,7 @@ Excel function support can be easily added.
 Fundamental function support is found in the xlfunctions directory. The
 functions are thematically organised in modules.
 
-Excel functions can be added by any code using the the
+Excel functions can be added by any code using the
 ``xlfunctions.xl.register()`` decorator. Here is a simple example:
 
 .. code-block:: Python
@@ -156,7 +156,7 @@ Excel functions can be added by any code using the the
   def ADDONE(num: xl.Number):
       return num + 1
 
-The `v@xl.alidate_args` decorator will ensure that the annotated arguments are
+The `@xl.validate_args` decorator will ensure that the annotated arguments are
 converted and validated. For example, even if you pass in a string, it is
 converted to a number (in typical Excel fashion):
 
