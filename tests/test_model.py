@@ -7,6 +7,7 @@ from jsonpickle import decode
 from xlcalculator.model import Model, ModelCompiler
 from xlcalculator.xltypes import XLCell, XLFormula, XLRange
 from xlcalculator.tokenizer import f_token
+from xlcalculator import Evaluator
 
 from . import testing
 
@@ -254,3 +255,19 @@ class ModelCompilerTest(unittest.TestCase):
         self.assertEqual(
             reference_model.defined_names,
             extracted_model.defined_names)
+
+    def test_extract_and_evaluate(self):
+        model_compiler = ModelCompiler()
+        reader_model = model_compiler.read_and_parse_archive(
+            testing.get_resource("model_compiler_and_evaluate.xlsx"))
+        extracted_model = ModelCompiler.extract(
+            reader_model,
+            focus=['add_one']
+        )
+
+        self.assertEqual(1, extracted_model.get_cell_value('Sheet1!A1'))
+        self.assertEqual(2, extracted_model.get_cell_value('Sheet1!B1'))
+        extracted_model.set_cell_value('Sheet1!A1', 2)
+        evaluator = Evaluator(extracted_model)
+        evaluator.evaluate('add_one')
+        self.assertEqual(3, extracted_model.get_cell_value('Sheet1!B1'))

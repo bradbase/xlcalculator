@@ -8,6 +8,10 @@ CHANGES
 
 - Updated README with supported functions.
 
+- Fix bug in ModelCompiler extract method where a defined name cell was being
+  overwritten with the cell from one of the terms contained within the formula.
+  Added a test for this.
+
 
 0.2.3 (2020-08-18)
 ------------------

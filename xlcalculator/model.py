@@ -333,6 +333,7 @@ class ModelCompiler:
                             extracted_model.cells[column] = copy.deepcopy(
                                 model.cells[column])
 
+        terms_to_copy = []
         for addr, cell in extracted_model.cells.items():
             if cell.formula is not None:
                 for term in cell.formula.terms:
@@ -341,8 +342,10 @@ class ModelCompiler:
                         cell.formula = copy.deepcopy(model.cells[addr].formula)
 
                     elif term not in extracted_model.cells:
-                        extracted_model.cells[addr] = copy.deepcopy(
-                            model.cells[cell])
+                        terms_to_copy.append(term)
+
+        for term in terms_to_copy:
+            extracted_model.cells[term] = copy.deepcopy(model.cells[term])
 
         extracted_model.build_code()
 
