@@ -149,7 +149,7 @@ Excel functions can be added by any code using the
 
 .. code-block:: Python
 
-  from xlfunctions import xl
+  from xlcalculator.xlfunctions import xl
 
   @xl.register()
   @xl.validate_args
