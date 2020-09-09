@@ -204,7 +204,7 @@ Unit testing Excel formulas directly from the workbook.
 -------------------------------------------------------
 
 If you are interested in unit testing formulas in your workbook, you can use
-[FlyingKoala](https://github.com/bradbase/flyingkoala). An example on how can
+`FlyingKoala <https://github.com/bradbase/flyingkoala>`_. An example on how can
 be found
 `here <https://github.com/bradbase/flyingkoala/tree/master/flyingkoala/unit_testing_formulas>`_.
 

@@ -3,7 +3,12 @@ CHANGES
 =======
 
 
-0.2.4 (un-released)
+0.2.5 (un-released)
+------------------
+
+- No current changes
+
+0.2.4 2020-09-09
 ------------------
 
 - Updated README with supported functions.
