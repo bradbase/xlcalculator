@@ -33,7 +33,7 @@ python-dateutil==2.8.1    # via pandas
 pytz==2020.1              # via pandas
 six==1.15.0               # via packaging, pip-tools, python-dateutil, yearfrac
 wcwidth==0.1.9            # via pytest
-yearfrac==0.4.3           # via via xlcalculator
+yearfrac==0.4.*           # via via xlcalculator
 zipp==3.1.0               # via importlib-metadata
 
 
