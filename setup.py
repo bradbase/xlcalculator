@@ -47,7 +47,7 @@ setuptools.setup(
         'pandas',
         'openpyxl',
         'numpy_financial',
-        'yearfrac',
+        'yearfrac==0.4.*',
         'mock'
     ],
     extras_require=dict(
