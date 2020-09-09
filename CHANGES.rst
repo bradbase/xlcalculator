@@ -12,6 +12,9 @@ CHANGES
   overwritten with the cell from one of the terms contained within the formula.
   Added a test for this.
 
+- Move version of yearfrac to 0.4.4. That project has removed a dependency
+  on the package six.
+
 
 0.2.3 (2020-08-18)
 ------------------
