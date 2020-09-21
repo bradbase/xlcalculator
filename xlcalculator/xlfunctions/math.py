@@ -2,7 +2,7 @@ import decimal
 import math
 import numpy
 import pandas
-from typing import Tuple
+from typing import Tuple, Union
 
 from . import xl, xlerrors, xlcriteria, func_xltypes
 
@@ -182,6 +182,48 @@ def SUMIF(
         sval
         for cval, sval in zip(range, sum_range)
         if check(cval)
+    ])
+
+
+@xl.register()
+@xl.validate_args
+def SUMIFS(
+        sum_range: func_xltypes.XlArray,
+        criteria_range: func_xltypes.XlArray,
+        criteria: func_xltypes.XlAnything,
+        *criteriaAndRanges: Tuple[Union[
+            func_xltypes.XlAnything, func_xltypes.XlArray
+        ]]
+) -> func_xltypes.XlNumber:
+    """Adds the cells specified by given criteria in multiple arrays.
+    Requires equal length arrays, since the arrays get decomposed.
+
+    https://support.microsoft.com/en-us/office
+        /sumifs-function-c9e748f5-7ea7-455d-9406-611cebce642b
+    """
+    # WARNING:
+    # - wildcards not supported
+    ranges = [criteria_range.flat]
+    checks = [xlcriteria.parse_criteria(criteria)]
+    rangeLen = len(criteria_range.flat)
+    newRange = []
+    idx = 0
+    for item in criteriaAndRanges:
+        if idx == rangeLen:
+            checks.append(xlcriteria.parse_criteria(item))
+            ranges.append(newRange)
+            newRange = []
+            idx = 0
+        else:
+            newRange.append(item)
+            idx += 1
+    sum_range = sum_range.cast_to_numbers().flat
+    # zip() will automatically drop any range values that have indexes larger
+    # than sum_range's length.
+    return sum([
+        sval
+        for cvals, sval in zip(zip(*ranges), sum_range)
+        if all(checkfn(cvals[i]) for i, checkfn in enumerate(checks))
     ])
 
 
