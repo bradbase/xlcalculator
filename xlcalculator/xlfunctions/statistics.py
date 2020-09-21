@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import Tuple, Union
 
-from . import xl, xlerrors, func_xltypes
+from . import xl, xlerrors, func_xltypes, xlcriteria
 
 
 @xl.register()
@@ -62,6 +62,58 @@ def COUNTA(*values):
 
     cells = list(filter(lambda x: not func_xltypes.Blank.is_blank(x), values))
     return len(cells)
+
+
+@xl.register()
+@xl.validate_args
+def COUNTIF(
+    countRange: func_xltypes.XlArray,
+    criteria: func_xltypes.XlAnything,
+) -> func_xltypes.XlNumber:
+    """Counts the number of cells that match a condition.
+
+    https://support.microsoft.com/en-us/office/
+        countif-function-e0de10c6-f885-4e71-abb4-1f464816df34
+    """
+    check = xlcriteria.parse_criteria(criteria)
+    countRange = countRange.flat
+    return sum([check(val) for val in countRange])
+
+
+@xl.register()
+@xl.validate_args
+def COUNTIFS(
+    countRange1: func_xltypes.XlArray,
+    criteria1: func_xltypes.XlAnything,
+    *rangesAndCriteria: Tuple[Union[
+        func_xltypes.XlArray, func_xltypes.XlAnything
+    ]]
+) -> func_xltypes.XlNumber:
+    """Counts the number of cells that match multiple conditions.
+
+    https://support.microsoft.com/en-us/office/
+        countifs-function-dda3dc6e-f74e-4aee-88bc-aa8c2a866842
+    """
+    ranges = [countRange1.flat]
+    checks = [xlcriteria.parse_criteria(criteria1)]
+    rangeLen = len(ranges[0])
+    newRange = []
+    idx = 0
+    for item in rangesAndCriteria:
+        if idx == rangeLen:
+            checks.append(xlcriteria.parse_criteria(item))
+            ranges.append(newRange)
+            newRange = []
+            idx = 0
+        else:
+            newRange.append(item)
+            idx += 1
+    return sum(
+        [
+            all([cfn(cvals[i]) for i, cfn in enumerate(checks)])
+            for cvals in zip(*ranges)
+        ]
+    )
 
 
 @xl.register()
