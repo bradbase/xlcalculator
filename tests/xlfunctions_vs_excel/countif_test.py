@@ -1,8 +1,8 @@
 from .. import testing
 
 
-class SumIfsTest(testing.FunctionalTestCase):
-    filename = "SUMIFS.xlsx"
+class CountIfTest(testing.FunctionalTestCase):
+    filename = "COUNTIF.xlsx"
 
     def test_evaluation_A10(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!A10')

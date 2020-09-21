@@ -54,6 +54,8 @@ xlcalculator is a modernization of the
         * CONCAT
         * COUNT
         * COUNTA
+        * COUNTIF
+        * COUNTIFS
         * DATE
         * IF
         * IRR
@@ -99,8 +101,6 @@ Not currently supported:
 
   * Functions (to be feature complete against Koala2 0.0.31)
       * CONCATENATE
-      * COUNTIF
-      * COUNTIFS
       * IFERROR
       * INDEX
       * ISBLANK

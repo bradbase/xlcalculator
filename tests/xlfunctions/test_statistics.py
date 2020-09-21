@@ -56,6 +56,20 @@ class StatisticsModuleTest(unittest.TestCase):
         self.assertIsInstance(
             statistics.COUNTA([0] * 300), xlerrors.ValueExcelError)
 
+    def test_COUNTIF(self):
+        countRange = func_xltypes.Array([1, 2, 3, 4])
+        condition = ">2"
+        self.assertEqual(statistics.COUNTIF(countRange, condition), 2)
+
+    def test_COUNTIFS(self):
+        countRange = func_xltypes.Array([1, 2, 3, 4])
+        countRange2 = func_xltypes.Array(["A", "B", "A", "A"])
+        condition = "<3"
+        condition2 = "A"
+        self.assertEqual(statistics.COUNTIFS(
+            countRange, condition, countRange2, condition2
+        ), 1)
+
     def test_MAX(self):
         self.assertEqual(
             statistics.MAX(func_xltypes.Array([[1, 2], [3, 4]])),
