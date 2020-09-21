@@ -6,13 +6,13 @@ CHANGES
 0.2.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add ``COUNTIIF()`` and ``COUNTIFS()`` function support.
 
 
 0.2.5 (2020-09-21)
 ------------------
 
-- Add ``SUMIFS`` support.
+- Add ``SUMIFS()`` support.
 
 
 0.2.4 (2020-09-09)
