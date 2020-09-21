@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.2.6 (unreleased)
+0.2.6 (2020-09-21)
 ------------------
 
 - Add ``COUNTIIF()`` and ``COUNTIFS()`` function support.
