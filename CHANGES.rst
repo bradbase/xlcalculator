@@ -6,9 +6,10 @@ CHANGES
 0.2.5 (un-released)
 ------------------
 
-- No current changes
+- Add ``SUMIFS`` support.
 
-0.2.4 2020-09-09
+
+0.2.4 (2020-09-09)
 ------------------
 
 - Updated README with supported functions.

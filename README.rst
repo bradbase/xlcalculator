@@ -77,6 +77,7 @@ xlcalculator is a modernization of the
         * SQRT
         * SUM
         * SUMIF
+        * SUMIFS
         * SUMPRODUCT
         * TODAY
         * TRUNC
