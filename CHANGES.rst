@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.2.5 (un-released)
+0.2.5 (2020-09-21)
 ------------------
 
 - Add ``SUMIFS`` support.
