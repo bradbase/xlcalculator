@@ -121,6 +121,26 @@ class DateModuleTest(unittest.TestCase):
         # 0.
         self.assertEqual(math.SUMIF([0, 1, 2, 3], ">=2", 'bad'), 0)
 
+    def test_SUMIFS(self):
+        self.assertEqual(
+            math.SUMIFS([10, 20, 30], [0, 1, 2], ">=1", ["a", "b", "a"], "a"),
+            30
+        )
+
+    def test_SUMIFS_invalid_criteria(self):
+        self.assertIsInstance(
+            math.SUMIFS([10, 20, 30], [0, 1, 2], [0, 1], ["a", "b", "a"], "a"),
+            xlerrors.ValueExcelError
+        )
+
+    def test_SUMIFS_unequal_array_lengths(self):
+        self.assertEqual(
+            math.SUMIFS(
+                [10, 20, 30], [0, 1, 2], ">=1", ["a", "b", "a", 1], "a"
+            ),
+            0
+        )
+
     def test_SUMPRODUCT(self):
         range1 = func_xltypes.Array([[1], [10], [3]])
         range2 = func_xltypes.Array([[3], [1], [2]])
