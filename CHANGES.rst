@@ -6,7 +6,9 @@ CHANGES
 0.2.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix implementation of ``ISNA()`` and ``NA()``.
+
+- Impement ``MATCH()``.
 
 
 0.2.7 (2020-09-22)

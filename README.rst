@@ -65,6 +65,7 @@ xlcalculator is a modernization of the
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
               Math.log()
+        * MATCH
         * MAX
         * MID
         * MIN
@@ -109,7 +110,6 @@ Not currently supported:
       * INDEX
       * LINEST
       * LOOKUP
-      * MATCH
       * OFFSET
 
 Run tests
