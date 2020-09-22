@@ -55,3 +55,39 @@ def VLOOKUP(
             '`lookup_value` not in first column of `table_array`.')
 
     return table_array.loc[lookup_value].values[0]
+
+
+@xl.register()
+@xl.validate_args
+def MATCH(
+        lookup_value: func_xltypes.XlAnything,
+        lookup_array: func_xltypes.XlArray,
+        match_type: func_xltypes.XlAnything = 1,
+) -> func_xltypes.XlAnything:
+    assert len(lookup_array.values[0]) == 1
+
+    lookup_array = lookup_array.flat
+
+    if match_type == 1:
+        if lookup_array != sorted(lookup_array):
+            return xlerrors.NaExcelError(
+                "Values must be sorted in ascending order"
+            )
+    if match_type == -1:
+        if lookup_array != sorted(lookup_array, reverse=True):
+            return xlerrors.NaExcelError(
+                "Values must be sorted in descending order"
+            )
+
+    for i, val in enumerate(lookup_array):
+        if val == lookup_value:
+            return i + 1
+        if match_type == 1 and val > lookup_value:
+            return i or xlerrors.NaExcelError(
+                "No lesser value found."
+            )
+        if match_type == -1 and val < lookup_value:
+            return i or xlerrors.NaExcelError(
+                "No greater value found."
+            )
+    return xlerrors.NaExcelError("No match found.")

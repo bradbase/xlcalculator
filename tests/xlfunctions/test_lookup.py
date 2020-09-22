@@ -46,3 +46,24 @@ class LookupModuleTest(unittest.TestCase):
         ])
         self.assertIsInstance(
             lookup.VLOOKUP(102, range1, 2, False), xlerrors.NaExcelError)
+
+    def test_MATCH(self):
+        range1 = [25, 28, 40, 41]
+        self.assertEqual(lookup.MATCH(39, range1), 2)
+        self.assertEqual(lookup.MATCH(39, range1, 1), 2)
+        self.assertEqual(lookup.MATCH(40, range1, 1), 3)
+        self.assertEqual(lookup.MATCH(40, range1, 0), 3)
+        self.assertIsInstance(
+            lookup.MATCH(40, range1, -1), xlerrors.NaExcelError
+        )
+        range2 = list(reversed(range1))
+        self.assertEqual(lookup.MATCH(40, range2, -1), 2)
+        self.assertIsInstance(
+            lookup.MATCH(100, range2, -1), xlerrors.NaExcelError
+        )
+        self.assertIsInstance(
+            lookup.MATCH(40, range2, 1), xlerrors.NaExcelError
+        )
+        self.assertIsInstance(
+            lookup.MATCH(0, range1, 0), xlerrors.NaExcelError
+        )
