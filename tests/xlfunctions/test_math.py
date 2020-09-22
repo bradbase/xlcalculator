@@ -3,7 +3,7 @@ import unittest
 from xlcalculator.xlfunctions import math, xlerrors, func_xltypes
 
 
-class DateModuleTest(unittest.TestCase):
+class MathModuleTest(unittest.TestCase):
 
     def test_ABS(self):
         self.assertEqual(math.ABS(3), 3)

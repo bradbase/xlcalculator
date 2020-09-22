@@ -10,6 +10,7 @@ from .xlfunctions.func_xltypes import *  # noqa: F401, F403
 from .xlfunctions import (  # noqa: F401
     date,
     financial,
+    information,
     logical,
     lookup,
     math,

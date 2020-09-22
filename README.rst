@@ -59,6 +59,9 @@ xlcalculator is a modernization of the
         * DATE
         * IF
         * IRR
+        * ISBLANK
+        * ISNA
+        * ISTEXT
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
               Math.log()
@@ -66,6 +69,7 @@ xlcalculator is a modernization of the
         * MID
         * MIN
         * MOD
+        * NA
         * NPV
         * OR
         * PI
@@ -103,9 +107,6 @@ Not currently supported:
       * CONCATENATE
       * IFERROR
       * INDEX
-      * ISBLANK
-      * ISNA
-      * ISTEXT
       * LINEST
       * LOOKUP
       * MATCH
