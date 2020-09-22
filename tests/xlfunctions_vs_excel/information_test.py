@@ -35,6 +35,11 @@ class InformationTest(testing.FunctionalTestCase):
         value = self.evaluator.evaluate('Sheet1!F10')
         self.assertEqual(excel_value, value)
 
+    def test_na_evaluation_G1(self):
+        excel_value = self.evaluator.get_cell_value('Sheet1!G1')
+        value = self.evaluator.evaluate('Sheet1!G1')
+        self.assertEqual(excel_value, value)
+
     def test_isna_evaluation_G10(self):
         excel_value = self.evaluator.get_cell_value('Sheet1!G10')
         value = self.evaluator.evaluate('Sheet1!G10')

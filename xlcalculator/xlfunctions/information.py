@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from . import xl, xlerrors, func_xltypes
 
 
@@ -22,14 +20,15 @@ def ISTEXT(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
 @xl.register()
 @xl.validate_args
 def NA() -> xlerrors.ExcelError:
-    return xlerrors.ERROR_CODE_NA
+    return xlerrors.NaExcelError()
 
 
 @xl.register()
-@xl.validate_args
-def ISNA(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
+def ISNA(cell) -> func_xltypes.Boolean:
     """Returns True if the cell is #N/A.
 
-    This can be fooled by text of the type #N/A
+    Don't call validate_args here because we allow errors to be
+    passed in.
+
     """
-    return cell.value == xlerrors.ERROR_CODE_NA
+    return isinstance(cell, xlerrors.NaExcelError)

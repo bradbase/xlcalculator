@@ -22,5 +22,4 @@ class InformationModuleTest(unittest.TestCase):
 
     def test_ISNA(self):
         self.assertTrue(information.ISNA(information.NA()))
-        self.assertTrue(information.ISNA("#N/A"))
-        self.assertFalse(information.ISNA(xlerrors.ERROR_CODE_VALUE))
+        self.assertFalse(information.ISNA(xlerrors.ValueExcelError))
