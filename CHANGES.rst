@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.2.8 (unreleased)
+0.2.8 (2020-09-22)
 ------------------
 
 - Fix implementation of ``ISNA()`` and ``NA()``.
