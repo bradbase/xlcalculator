@@ -6,7 +6,7 @@ CHANGES
 0.2.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add functions: ``ISBLANK()``, ``ISNA()``, ``ISTEXT()``, ``NA()``
 
 
 0.2.6 (2020-09-21)
