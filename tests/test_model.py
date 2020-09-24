@@ -271,3 +271,30 @@ class ModelCompilerTest(unittest.TestCase):
         evaluator = Evaluator(extracted_model)
         evaluator.evaluate('add_one')
         self.assertEqual(3, extracted_model.get_cell_value('Sheet1!B1'))
+
+    def test_dict_read_and_parse(self):
+
+        input_dict = {
+            "B4": 0.95,
+            "B2": 1000,
+            "B19": 0.001,
+            "B20": 4,
+            # B21
+            "B22": 1,
+            "B23": 2,
+            "B24": 3,
+            "B25": "=B2*B4",
+            "B26": 5,
+            "B27": 6,
+            "B28": "=B19*B20*B22",
+            "C22": "=SUM(B22:B28)",
+        }
+
+        model_compiler = ModelCompiler()
+        my_model = model_compiler.read_and_parse_dict(input_dict)
+        evaluator = Evaluator(my_model)
+
+        # cells need a sheet and Sheet1 is default.
+        evaluator.set_cell_value("Sheet1!B22", 100)
+        self.assertEqual(0.4, evaluator.evaluate("Sheet1!B28"))
+        self.assertEqual(1066.4, evaluator.evaluate("Sheet1!C22"))

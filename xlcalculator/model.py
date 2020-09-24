@@ -5,7 +5,6 @@ import logging
 import os
 from dataclasses import dataclass, field
 
-from xlcalculator.xlfunctions import xl
 from . import xltypes, reader, parser, tokenizer
 
 
@@ -198,12 +197,16 @@ class ModelCompiler:
                 cell_address = "{}!{}".format(default_sheet, item)
 
             if (
-                    not xl.is_float(input_dict[item])
+                    not isinstance(input_dict[item], (float, int))
                     and input_dict[item][0] == '='
             ):
+                formula = xltypes.XLFormula(
+                    input_dict[item],
+                    sheet_name=default_sheet
+                )
                 cell = xltypes.XLCell(
                     cell_address, None,
-                    formula=xltypes.XLFormula(input_dict[item]))
+                    formula=formula)
                 self.model.cells[cell_address] = cell
                 self.model.formulae[cell_address] = cell.formula
 

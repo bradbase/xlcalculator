@@ -6,7 +6,9 @@ CHANGES
 0.2.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Bugfix ModelCompiler.read_and_parse_dict() where a dict being parsed into a
+  Model through ModelCompiler. It's a leftover from moving xlfunctions into
+  xlcalculator. There has been a test included.
 
 
 0.2.8 (2020-09-22)
