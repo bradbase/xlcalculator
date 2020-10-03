@@ -3,10 +3,10 @@ CHANGES
 =======
 
 
-0.2.10 (unreleased)
+0.2.10 (2020-10-03)
 ------------------
 
-- No changes yet
+- Support CONCATENATE
 
 
 0.2.9 (2020-09-26)

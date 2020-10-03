@@ -24,6 +24,32 @@ class TextModuleTest(unittest.TestCase):
             xlerrors.ValueExcelError
         )
 
+    def test_CONCAT_MS_cases(self):
+
+        self.assertEqual(
+            text.CONCAT(
+                "The",
+                " ",
+                "sun",
+                " ",
+                "will",
+                " ",
+                "come",
+                " ",
+                "up",
+                " ",
+                "tomorrow."
+            ),
+            "The sun will come up tomorrow.")
+
+        range0 = func_xltypes.Array(
+            ["A's", 'a1', 'a2', 'a4', 'a5', 'a6', 'a7'])
+        range1 = func_xltypes.Array(
+            ["B's", 'b1', 'b2', 'b4', 'b5', 'b6', 'b7'])
+
+        self.assertEqual(text.CONCAT(range0, range1),
+                         "A'sa1a2a4a5a6a7B'sb1b2b4b5b6b7")
+
     def test_MID(self):
         self.assertEqual(text.MID('Romain', 3, 4), 'main')
         self.assertEqual(text.MID('Romain', 1, 2), 'Ro')

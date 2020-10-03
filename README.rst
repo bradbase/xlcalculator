@@ -52,6 +52,7 @@ xlcalculator is a modernization of the
         * AVERAGE
         * CHOOSE
         * CONCAT
+        * CONCATENATE
         * COUNT
         * COUNTA
         * COUNTIF
@@ -105,7 +106,6 @@ Not currently supported:
       * DB
 
   * Functions (to be feature complete against Koala2 0.0.31)
-      * CONCATENATE
       * IFERROR
       * INDEX
       * LINEST

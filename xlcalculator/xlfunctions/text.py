@@ -26,6 +26,29 @@ def CONCAT(
 
 @xl.register()
 @xl.validate_args
+def CONCATENATE(
+        *parameters: Tuple[func_xltypes.XlAnything]
+) -> func_xltypes.XlText:
+    """Use CONCATENATE, one of the text functions, to join two or more
+    text strings into one string.
+
+    https://support.microsoft.com/en-us/office/
+        concatenate-function-8f8ae884-2ca8-4f7a-b093-75d702bea31d
+
+    IMPORTANT: In Excel 2016, Excel Mobile, and Excel for the web, this
+    function has been replaced with the CONCAT function. Although the
+    CONCATENATE function is still available for backward compatibility,
+    you should consider using CONCAT from now on. This is because CONCATENATE
+    may not be available in future versions of Excel.
+    """
+
+    return CONCAT(
+        [func_xltypes.Text.cast(parameter) for parameter in parameters]
+    )
+
+
+@xl.register()
+@xl.validate_args
 def MID(
         text: func_xltypes.XlText,
         start_num: func_xltypes.Number,
