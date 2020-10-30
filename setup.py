@@ -21,7 +21,7 @@ setuptools.setup(
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
-    long_description=(
+    long_description_content_type =(
         read('README.rst')
         + '\n\n' +
         read('CHANGES.rst')
