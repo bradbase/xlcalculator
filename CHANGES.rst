@@ -3,10 +3,11 @@ CHANGES
 =======
 
 
-0.2.10 (2020-10-03)
+0.2.10 (2020-10-30)
 ------------------
 
 - Support CONCATENATE
+- Update setup.py classifiers, licence and keywords
 
 
 0.2.9 (2020-09-26)
