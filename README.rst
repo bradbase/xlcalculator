@@ -59,6 +59,7 @@ xlcalculator is a modernization of the
         * COUNTIF
         * COUNTIFS
         * DATE
+        * DAY
         * IF
         * IRR
         * ISBLANK
@@ -94,6 +95,7 @@ xlcalculator is a modernization of the
         * VLOOKUP
           - Exact match only
         * XNPV
+        * YEAR
         * YEARFRAC
           - Basis 1, Actual/actual, is only within 3 decimal places
 

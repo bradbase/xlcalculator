@@ -2,7 +2,7 @@ import datetime
 import mock
 import unittest
 
-from xlcalculator.xlfunctions import date, xlerrors
+from xlcalculator.xlfunctions import date, xlerrors, func_xltypes
 
 dt = datetime.datetime
 
@@ -63,6 +63,31 @@ class DateModuleTest(unittest.TestCase):
     def test_TODAY(self):
         with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1)):
             self.assertEqual(date.TODAY(), dt(2000, 1, 1))
+
+    def test_YEAR(self):
+        sample_date_2008 = date.DATE(2008, 5, 7)
+        serial_number_2008 = int(sample_date_2008)
+        self.assertEqual(date.YEAR(serial_number_2008), 2008)
+
+        sample_date_2010 = date.DATE(2010, 5, 7)
+        serial_number_2010 = int(sample_date_2010)
+        self.assertEqual(date.YEAR(serial_number_2010), 2010)
+
+    def test_YEAR_before_epoch(self):
+        # is text as a "date" entry into Excel of a date pre-epoch
+        # is stored as datatype General
+        sample_date = func_xltypes.XlText('12/31/1899')
+
+        self.assertIsInstance(
+            date.YEAR(sample_date), xlerrors.ValueExcelError)
+
+    def test_YEAR_after_9999(self):
+        # is text as a "date" entry into Excel of a date pre-epoch
+        # is stored as datatype General
+        sample_date = func_xltypes.XlText('1/1/10000')
+
+        self.assertIsInstance(
+            date.YEAR(sample_date), xlerrors.ValueExcelError)
 
     def test_YEARFRAC_start_date_must_be_datetime(self):
         self.assertIsInstance(

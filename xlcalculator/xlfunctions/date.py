@@ -51,10 +51,8 @@ def DAY(
         day-function-8a7d1cbb-6c7d-4ba1-8aea-25c134d03101
     """
 
-    # Excel starts counting at 1 and today is inclusive, thus -2
-    day = utils.EXCEL_EPOCH + datetime.timedelta(days=int(serial_number) - 2)
-
-    return int(day.strftime("%d"))
+    date = utils.number_to_datetime(int(serial_number))
+    return int(date.strftime("%d"))
 
 
 @xl.register()
@@ -65,6 +63,29 @@ def TODAY() -> func_xltypes.XlDateTime:
         today-function-5eb3078d-a82c-4736-8930-2f51a028fdd9
     """
     return now()
+
+
+@xl.register()
+@xl.validate_args
+def YEAR(
+        serial_number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the year corresponding to a date. The year is returned as an
+        integer in the range 1900-9999.
+
+    https://support.microsoft.com/en-us/office/
+        year-function-c64f017a-1354-490d-981f-578e8ec8d3b9
+    """
+
+    date = utils.number_to_datetime(int(serial_number))
+
+    if (int(date.strftime("%Y")) < int(utils.EXCEL_EPOCH.strftime("%Y"))) \
+            or (int(date.strftime("%Y")) > 9999):
+        raise xlerrors.ValueExcelError(
+            f'year {date.strftime("%Y")} must be after \
+            {utils.EXCEL_EPOCH.strftime("%Y")} and before 9999')
+
+    return int(date.strftime("%Y"))
 
 
 @xl.register()
