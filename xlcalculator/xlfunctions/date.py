@@ -56,6 +56,22 @@ def DAY(
 
 
 @xl.register()
+@xl.validate_args
+def MONTH(
+        serial_number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the month of a date represented by a serial number. The month
+    is given as an integer, ranging from 1 (January) to 12 (December).
+
+    https://support.microsoft.com/en-us/office/
+        month-function-579a2881-199b-48b2-ab90-ddba0eba86e8
+    """
+
+    date = utils.number_to_datetime(int(serial_number))
+    return int(date.strftime("%m"))
+
+
+@xl.register()
 def TODAY() -> func_xltypes.XlDateTime:
     """Returns the serial number of the current date.
 

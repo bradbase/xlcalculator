@@ -60,6 +60,12 @@ class DateModuleTest(unittest.TestCase):
 
         self.assertEqual(date.DAY(serial_number), 15)
 
+    def test_MONTH(self):
+        sample_date = date.DATE(1911, 4, 15)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.MONTH(serial_number), 4)
+
     def test_TODAY(self):
         with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1)):
             self.assertEqual(date.TODAY(), dt(2000, 1, 1))

@@ -73,6 +73,7 @@ xlcalculator is a modernization of the
         * MID
         * MIN
         * MOD
+        * MONTH
         * NA
         * NPV
         * OR
