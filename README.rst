@@ -75,6 +75,7 @@ xlcalculator is a modernization of the
         * MOD
         * MONTH
         * NA
+        * NOW
         * NPV
         * OR
         * PI

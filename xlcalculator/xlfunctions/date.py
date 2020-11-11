@@ -72,13 +72,26 @@ def MONTH(
 
 
 @xl.register()
-def TODAY() -> func_xltypes.XlDateTime:
+def NOW() -> func_xltypes.XlNumber:
+    """Returns the serial number of the current date and time.
+
+    https://support.office.com/en-us/article/
+        today-function-5eb3078d-a82c-4736-8930-2f51a028fdd9
+    """
+    return utils.datetime_to_number(now())
+
+
+@xl.register()
+def TODAY() -> func_xltypes.XlNumber:
     """Returns the serial number of the current date.
 
     https://support.office.com/en-us/article/
         today-function-5eb3078d-a82c-4736-8930-2f51a028fdd9
     """
-    return now()
+    date_and_time = now()
+    date = date_and_time.replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    return utils.datetime_to_number(date)
 
 
 @xl.register()

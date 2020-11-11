@@ -2,7 +2,7 @@ import datetime
 import mock
 import unittest
 
-from xlcalculator.xlfunctions import date, xlerrors, func_xltypes
+from xlcalculator.xlfunctions import date, xlerrors, func_xltypes, utils
 
 dt = datetime.datetime
 
@@ -66,9 +66,17 @@ class DateModuleTest(unittest.TestCase):
 
         self.assertEqual(date.MONTH(serial_number), 4)
 
+    def test_NOW(self):
+        with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1, 12, 30)):
+            self.assertEqual(
+                date.NOW(), utils.datetime_to_number(dt(2000, 1, 1, 12, 30))
+            )
+
     def test_TODAY(self):
-        with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1)):
-            self.assertEqual(date.TODAY(), dt(2000, 1, 1))
+        with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1, 12, 30)):
+            self.assertEqual(
+                date.TODAY(), utils.datetime_to_number(dt(2000, 1, 1))
+            )
 
     def test_YEAR(self):
         sample_date_2008 = date.DATE(2008, 5, 7)

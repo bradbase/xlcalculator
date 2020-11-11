@@ -6,7 +6,7 @@ CHANGES
 0.2.11 (2020-11-11)
 ------------------
 
-- Add functions: ``DAY()``, ``YEAR()``, ``MONTH()``
+- Add functions: ``DAY()``, ``YEAR()``, ``MONTH()``, ``NOW()``
 
 
 0.2.10 (2020-10-30)
