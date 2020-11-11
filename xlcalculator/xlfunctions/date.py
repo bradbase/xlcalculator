@@ -27,7 +27,7 @@ def DATE(
     if year < 1900:
         year = 1900 + year
 
-    # Excel starts counting at 1 and today is inclusive, thus +2
+    # Excel starts counting at 1 and today is inclusive, thus -2
     delta = relativedelta(
         years=year - 1900, months=int(month) - 1, days=int(day) - 1)
     result = utils.EXCEL_EPOCH + delta
@@ -37,6 +37,24 @@ def DATE(
             f"Date result before {utils.EXCEL_EPOCH}")
 
     return result
+
+
+@xl.register()
+@xl.validate_args
+def DAY(
+        serial_number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the day of a date, represented by a serial number. The day is
+    given as an integer ranging from 1 to 31.
+
+    https://support.microsoft.com/en-us/office/
+        day-function-8a7d1cbb-6c7d-4ba1-8aea-25c134d03101
+    """
+
+    # Excel starts counting at 1 and today is inclusive, thus -2
+    day = utils.EXCEL_EPOCH + datetime.timedelta(days=int(serial_number) - 2)
+
+    return int(day.strftime("%d"))
 
 
 @xl.register()

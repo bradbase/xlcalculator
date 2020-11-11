@@ -54,6 +54,12 @@ class DateModuleTest(unittest.TestCase):
     def test_DATE_day_superior_to_365_change_year(self):
         self.assertEqual(date.DATE(2009, 1, 400), dt(2010, 2, 4))
 
+    def test_DAY(self):
+        sample_date = date.DATE(1911, 4, 15)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.DAY(serial_number), 15)
+
     def test_TODAY(self):
         with mock.patch.object(date, 'now', lambda: dt(2000, 1, 1)):
             self.assertEqual(date.TODAY(), dt(2000, 1, 1))
