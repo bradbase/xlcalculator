@@ -78,6 +78,95 @@ class DateModuleTest(unittest.TestCase):
                 date.TODAY(), utils.datetime_to_number(dt(2000, 1, 1))
             )
 
+    def test_WEEKDAY_return_type_omitted(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number), 5)
+
+    def test_WEEKDAY_return_type_1(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 1), 5)
+
+    def test_WEEKDAY_return_type_2(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 2), 4)
+
+    def test_WEEKDAY_return_type_3(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 3), 3)
+
+    def test_WEEKDAY_return_type_11(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 11), 4)
+
+    def test_WEEKDAY_return_type_12(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 12), 3)
+
+    def test_WEEKDAY_return_type_13(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 13), 2)
+
+    def test_WEEKDAY_return_type_14(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 14), 1)
+
+    def test_WEEKDAY_return_type_15(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 15), 7)
+
+    def test_WEEKDAY_return_type_16(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 16), 6)
+
+    def test_WEEKDAY_return_type_17(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertEqual(date.WEEKDAY(serial_number, 17), 5)
+
+    def test_WEEKDAY_error(self):
+        sample_date = date.DATE(2008, 2, 14)
+        serial_number = int(sample_date)
+
+        self.assertIsInstance(date.WEEKDAY(serial_number, 0),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 4),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 5),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 6),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 7),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 8),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 9),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 10),
+                              xlerrors.NumExcelError)
+        self.assertIsInstance(date.WEEKDAY(serial_number, 18),
+                              xlerrors.NumExcelError)
+
     def test_YEAR(self):
         sample_date_2008 = date.DATE(2008, 5, 7)
         serial_number_2008 = int(sample_date_2008)

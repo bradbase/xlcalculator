@@ -96,6 +96,83 @@ def TODAY() -> func_xltypes.XlNumber:
 
 @xl.register()
 @xl.validate_args
+def WEEKDAY(
+        serial_number: func_xltypes.XlNumber,
+        return_type: func_xltypes.XlNumber = None
+) -> func_xltypes.XlNumber:
+    """Returns the day of the week corresponding to a date. The day is given
+    as an integer, ranging from 1 (Sunday) to 7 (Saturday), by default.
+
+    https://support.microsoft.com/en-us/office/
+        weekday-function-60e44483-2ed1-439f-8bd0-e404c190949a
+    """
+
+    date = utils.number_to_datetime(int(serial_number))
+
+    if return_type is None:
+        # Numbers 1 (Sunday) through 7 (Saturday)
+        weekDays = (2, 3, 4, 5, 6, 7, 1)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 1:
+        # Numbers 1 (Sunday) through 7 (Saturday)
+        weekDays = (2, 3, 4, 5, 6, 7, 1)
+        return weekDays[date.weekday()]
+
+    # weekday() is 0 based, starting on a Monday
+    elif int(return_type) == 2:
+        # Numbers 1 (Monday) through 7 (Sunday)
+        weekDays = (1, 2, 3, 4, 5, 6, 7)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 3:
+        # Numbers 0 (Monday) through 6 (Sunday)
+        weekDays = (0, 1, 2, 3, 4, 5, 6)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 11:
+        # Numbers 1 (Monday) through 7 (Sunday)
+        weekDays = (1, 2, 3, 4, 5, 6, 7)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 12:
+        # Numbers 1 (Tuesday) through 7 (Monday)
+        weekDays = (7, 1, 2, 3, 4, 5, 6)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 13:
+        # Numbers 1 (Wednesday) through 7 (Tuesday)
+        weekDays = (6, 7, 1, 2, 3, 4, 5)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 14:
+        # Numbers 1 (Thursday) through 7 (Wednesday)
+        weekDays = (5, 6, 7, 1, 2, 3, 4)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 15:
+        # Numbers 1 (Friday) through 7 (Thursday)
+        weekDays = (4, 5, 6, 7, 1, 2, 3)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 16:
+        # Numbers 1 (Saturday) through 7 (Friday)
+        weekDays = (3, 4, 5, 6, 7, 1, 2)
+        return weekDays[date.weekday()]
+
+    elif int(return_type) == 17:
+        # Numbers 1 (Sunday) through 7 (Saturday)
+        weekDays = (2, 3, 4, 5, 6, 7, 1)
+        return weekDays[date.weekday()]
+
+    else:
+        raise xlerrors.NumExcelError(
+            f"return_type needs to be omitted or one of 1, 2, 3, 11, 12, 13,\
+            14, 15, 16 or 17. You supplied {return_type}")
+
+
+@xl.register()
+@xl.validate_args
 def YEAR(
         serial_number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
