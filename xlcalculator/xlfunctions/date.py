@@ -77,7 +77,7 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.DAILY,
                                      dtstart=datetime_start_date,
                                      until=datetime_end_date))
-        return len(date_list) - 1  # exclusive of "today"
+        return len(date_list) - 1  # One based.
 
     elif str(unit).upper() == 'MD':
         modified_datetime_start_date = datetime_start_date.replace(year=1900,
@@ -105,7 +105,7 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.DAILY,
                                      dtstart=modified_datetime_start_date,
                                      until=modified_datetime_end_date))
-        return len(date_list) - 1  # exclusive of "today"
+        return len(date_list) - 1  # One based.
 
 
 @xl.register()
