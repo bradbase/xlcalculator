@@ -1,6 +1,7 @@
 language: python
-sudo: false
-matrix:
+dist: xenial
+os: linux
+jobs:
     include:
         - python: 3.7
           env: TOXENV=py37
