@@ -66,10 +66,20 @@ class DateModuleTest(unittest.TestCase):
         target_serial_number = utils.datetime_to_number(dt(2011, 2, 15))
         self.assertEqual(date.EDATE(the_date, 1), target_serial_number)
 
+    def test_EDATE_must_be_greater_than_epoch(self):
+        the_date = date.DATE(1901, 1, 15)
+        self.assertIsInstance(date.EDATE(the_date, -24),
+                              xlerrors.NumExcelError)
+
     def test_EOMONTH(self):
         the_date = date.DATE(2011, 1, 1)
         target_serial_number = utils.datetime_to_number(dt(2011, 2, 28))
         self.assertEqual(date.EOMONTH(the_date, 1), target_serial_number)
+
+    def test_EOMONTH_must_be_greater_than_epoch(self):
+        the_date = date.DATE(1901, 1, 1)
+        self.assertIsInstance(date.EOMONTH(the_date, -24),
+                              xlerrors.NumExcelError)
 
     def test_MONTH(self):
         sample_date = date.DATE(1911, 4, 15)
