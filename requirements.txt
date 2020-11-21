@@ -29,7 +29,7 @@ pyflakes==2.2.0           # via flake8
 pyparsing==2.4.7          # via packaging
 pytest-cov==2.9.0         # via xlcalculator
 pytest==5.4.2             # via pytest-cov, xlcalculator
-python-dateutil==2.8.1    # via pandas
+python-dateutil==2.8.1    # via pandas, xlcalculator
 pytz==2020.1              # via pandas
 six==1.15.0               # via packaging, pip-tools, python-dateutil
 wcwidth==0.1.9            # via pytest
