@@ -54,6 +54,53 @@ class DateModuleTest(unittest.TestCase):
     def test_DATE_day_superior_to_365_change_year(self):
         self.assertEqual(date.DATE(2009, 1, 400), dt(2010, 2, 4))
 
+    def test_DATEDIF_year(self):
+        start_date = date.DATE(2011, 1, 1)
+        end_date = date.DATE(2011, 12, 31)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 1)
+
+        start_date = date.DATE(2011, 1, 1)
+        end_date = date.DATE(2012, 12, 31)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 2)
+
+    def test_DATEDIF_month(self):
+        start_date = date.DATE(2011, 1, 1)
+        end_date = date.DATE(2011, 12, 31)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'M'), 12)
+
+    def test_DATEDIF_day(self):
+        start_date = date.DATE(2001, 6, 1)
+        end_date = date.DATE(2002, 8, 15)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'D'), 440)
+
+    def test_DATEDIF_MD(self):
+        start_date = date.DATE(2011, 1, 1)
+        end_date = date.DATE(2011, 12, 31)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'MD'), 31)
+
+    def test_DATEDIF_YM(self):
+        start_date = date.DATE(2011, 1, 1)
+        end_date = date.DATE(2011, 12, 31)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'YM'), 12)
+
+    def test_DATEDIF_YD(self):
+        start_date = date.DATE(2001, 6, 1)
+        end_date = date.DATE(2002, 8, 15)
+
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'YD'), 75)
+
+    def test_DATEDIF_M_start_beyond_end(self):
+        start_date = date.DATE(2002, 8, 15)
+        end_date = date.DATE(2001, 6, 1)
+
+        self.assertIsInstance(date.DATEDIF(start_date, end_date, 'M'),
+                              xlerrors.NumExcelError)
+
     def test_DAY(self):
         sample_date = date.DATE(1911, 4, 15)
         serial_number = int(sample_date)
@@ -65,6 +112,11 @@ class DateModuleTest(unittest.TestCase):
         start_date = date.DATE(2011, 1, 1)
 
         self.assertEqual(date.DAYS(end_date, start_date), 364)
+
+    def test_ISOWEEKNUM(self):
+        sample_date = date.DATE(2012, 3, 9)
+
+        self.assertEqual(date.ISOWEEKNUM(sample_date), 10)
 
     def test_MONTH(self):
         sample_date = date.DATE(1911, 4, 15)

@@ -59,12 +59,14 @@ xlcalculator is a modernization of the
         * COUNTIF
         * COUNTIFS
         * DATE
+        * DATEDIF
         * DAY
         * DAYS
         * IF
         * IRR
         * ISBLANK
         * ISNA
+        * ISOWEEKNUM
         * ISTEXT
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
