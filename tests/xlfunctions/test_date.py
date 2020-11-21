@@ -60,6 +60,12 @@ class DateModuleTest(unittest.TestCase):
 
         self.assertEqual(date.DAY(serial_number), 15)
 
+    def test_DAYS(self):
+        end_date = date.DATE(2011, 12, 31)
+        start_date = date.DATE(2011, 1, 1)
+
+        self.assertEqual(date.DAYS(end_date, start_date), 364)
+
     def test_MONTH(self):
         sample_date = date.DATE(1911, 4, 15)
         serial_number = int(sample_date)

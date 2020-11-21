@@ -57,6 +57,22 @@ def DAY(
 
 @xl.register()
 @xl.validate_args
+def DAYS(
+        end_date: func_xltypes.XlDateTime,
+        start_date: func_xltypes.XlDateTime
+) -> func_xltypes.XlNumber:
+    """Returns the number of days between two dates.
+
+    https://support.microsoft.com/en-us/office/
+        days-function-57740535-d549-4395-8728-0f07bff0b9df
+    """
+
+    days = end_date - start_date
+    return days
+
+
+@xl.register()
+@xl.validate_args
 def MONTH(
         serial_number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
