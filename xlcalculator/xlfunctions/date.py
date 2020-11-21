@@ -65,19 +65,19 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.YEARLY,
                                      dtstart=datetime_start_date,
                                      until=datetime_end_date))
-        return len(date_list)
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
     elif str(unit).upper() == 'M':
         date_list = list(rrule.rrule(rrule.MONTHLY,
                                      dtstart=datetime_start_date,
                                      until=datetime_end_date))
-        return len(date_list)
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
     elif str(unit).upper() == 'D':
         date_list = list(rrule.rrule(rrule.DAILY,
                                      dtstart=datetime_start_date,
                                      until=datetime_end_date))
-        return len(date_list) - 1  # One based.
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
     elif str(unit).upper() == 'MD':
         modified_datetime_start_date = datetime_start_date.replace(year=1900,
@@ -87,7 +87,7 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.DAILY,
                                      dtstart=modified_datetime_start_date,
                                      until=modified_datetime_end_date))
-        return len(date_list)
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
     elif str(unit).upper() == 'YM':
         modified_datetime_start_date = datetime_start_date.replace(year=1900,
@@ -97,7 +97,7 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.MONTHLY,
                                      dtstart=modified_datetime_start_date,
                                      until=modified_datetime_end_date))
-        return len(date_list)
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
     elif str(unit).upper() == 'YD':
         modified_datetime_start_date = datetime_start_date.replace(year=1900)
@@ -105,7 +105,7 @@ def DATEDIF(
         date_list = list(rrule.rrule(rrule.DAILY,
                                      dtstart=modified_datetime_start_date,
                                      until=modified_datetime_end_date))
-        return len(date_list) - 1  # One based.
+        return len(date_list) - 1  # end of day to end of day / "full days"
 
 
 @xl.register()

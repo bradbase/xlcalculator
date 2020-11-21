@@ -58,17 +58,17 @@ class DateModuleTest(unittest.TestCase):
         start_date = date.DATE(2011, 1, 1)
         end_date = date.DATE(2011, 12, 31)
 
-        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 1)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 0)
 
         start_date = date.DATE(2011, 1, 1)
         end_date = date.DATE(2012, 12, 31)
-        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 2)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'Y'), 1)
 
     def test_DATEDIF_month(self):
         start_date = date.DATE(2011, 1, 1)
         end_date = date.DATE(2011, 12, 31)
 
-        self.assertEqual(date.DATEDIF(start_date, end_date, 'M'), 12)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'M'), 11)
 
     def test_DATEDIF_day(self):
         start_date = date.DATE(2001, 6, 1)
@@ -80,13 +80,13 @@ class DateModuleTest(unittest.TestCase):
         start_date = date.DATE(2011, 1, 1)
         end_date = date.DATE(2011, 12, 31)
 
-        self.assertEqual(date.DATEDIF(start_date, end_date, 'MD'), 31)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'MD'), 30)
 
     def test_DATEDIF_YM(self):
         start_date = date.DATE(2011, 1, 1)
         end_date = date.DATE(2011, 12, 31)
 
-        self.assertEqual(date.DATEDIF(start_date, end_date, 'YM'), 12)
+        self.assertEqual(date.DATEDIF(start_date, end_date, 'YM'), 11)
 
     def test_DATEDIF_YD(self):
         start_date = date.DATE(2001, 6, 1)
