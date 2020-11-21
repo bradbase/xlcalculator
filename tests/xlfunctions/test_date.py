@@ -15,6 +15,7 @@ class DateModuleTest(unittest.TestCase):
         self.assertEqual(date.DATE(2024, 1, 1), dt(2024, 1, 1))
         self.assertEqual(date.DATE(2025, 1, 1), dt(2025, 1, 1))
         self.assertEqual(date.DATE(2026, 1, 1), dt(2026, 1, 1))
+        self.assertEqual(date.DATE(1911, 1, 15), dt(1911, 1, 15))
 
     def test_DATE_with_short_year(self):
         self.assertEqual(date.DATE(99, 1, 1), dt(1999, 1, 1))
@@ -59,6 +60,16 @@ class DateModuleTest(unittest.TestCase):
         serial_number = int(sample_date)
 
         self.assertEqual(date.DAY(serial_number), 15)
+
+    def test_EDATE(self):
+        the_date = date.DATE(2011, 1, 15)
+        target_serial_number = utils.datetime_to_number(dt(2011, 2, 15))
+        self.assertEqual(date.EDATE(the_date, 1), target_serial_number)
+
+    def test_EOMONTH(self):
+        the_date = date.DATE(2011, 1, 1)
+        target_serial_number = utils.datetime_to_number(dt(2011, 2, 28))
+        self.assertEqual(date.EOMONTH(the_date, 1), target_serial_number)
 
     def test_MONTH(self):
         sample_date = date.DATE(1911, 4, 15)

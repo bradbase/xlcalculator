@@ -60,6 +60,8 @@ xlcalculator is a modernization of the
         * COUNTIFS
         * DATE
         * DAY
+        * EDATE
+        * EOMONTH
         * IF
         * IRR
         * ISBLANK

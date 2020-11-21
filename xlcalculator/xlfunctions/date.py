@@ -57,6 +57,53 @@ def DAY(
 
 @xl.register()
 @xl.validate_args
+def EDATE(
+        start_date: func_xltypes.XlDateTime,
+        months: func_xltypes.XlNumber
+) -> func_xltypes.XlDateTime:
+    """Returns the serial number that represents the date that is the
+    indicated number of months before or after a specified date
+    (the start_date)
+
+    https://support.office.com/en-us/article/
+        edate-function-3c920eb2-6e66-44e7-a1f5-753ae47ee4f5
+    """
+    delta = relativedelta(months=int(months))
+    edate = utils.number_to_datetime(int(start_date)) + delta
+
+    if edate <= utils.EXCEL_EPOCH:
+        raise xlerrors.NumExcelError(
+            f"Date result before {utils.EXCEL_EPOCH}")
+
+    return utils.datetime_to_number(edate)
+
+
+@xl.register()
+@xl.validate_args
+def EOMONTH(
+        start_date: func_xltypes.XlDateTime,
+        months: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the serial number for the last day of the month that is the
+    indicated number of months before or after start_date.
+
+    https://support.office.com/en-us/article/
+        eomonth-function-7314ffa1-2bc9-4005-9d66-f49db127d628
+    """
+    delta = relativedelta(months=int(months))
+    edate = utils.number_to_datetime(int(start_date)) + delta
+
+    if edate <= utils.EXCEL_EPOCH:
+        raise xlerrors.NumExcelError(
+            f"Date result before {utils.EXCEL_EPOCH}")
+
+    eomonth = edate + relativedelta(day=31)
+
+    return utils.datetime_to_number(eomonth)
+
+
+@xl.register()
+@xl.validate_args
 def MONTH(
         serial_number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
