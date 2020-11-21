@@ -50,6 +50,15 @@ class TextModuleTest(unittest.TestCase):
         self.assertEqual(text.CONCAT(range0, range1),
                          "A'sa1a2a4a5a6a7B'sb1b2b4b5b6b7")
 
+    def test_FIND(self):
+        self.assertEqual(text.FIND('M', 'Miriam McGovern'), 1)
+        self.assertEqual(text.FIND('m', 'Miriam McGovern'), 6)
+        self.assertEqual(text.FIND('m', 'Miriam McGovern', 3), 6)
+
+    def test_FIND_ValueError(self):
+        self.assertIsInstance(
+            text.FIND('B', 'Miriam McGovern'), xlerrors.ValueExcelError)
+
     def test_MID(self):
         self.assertEqual(text.MID('Romain', 3, 4), 'main')
         self.assertEqual(text.MID('Romain', 1, 2), 'Ro')

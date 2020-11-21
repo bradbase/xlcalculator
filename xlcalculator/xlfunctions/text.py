@@ -49,6 +49,37 @@ def CONCATENATE(
 
 @xl.register()
 @xl.validate_args
+def FIND(
+        find_text: func_xltypes.XlText,
+        within_text: func_xltypes.XlText,
+        start_num: func_xltypes.Number = 0,
+) -> func_xltypes.Number:
+    """FIND and FINDB locate one text string within a second text string,
+    and return the number of the starting position of the first text string
+    from the first character of the second text string.
+
+    https://support.microsoft.com/en-us/office/
+        find-findb-functions-c7912941-af2a-4bdf-a553-d0d89b0a0628
+    """
+    index = 1
+    within_text_str = str(within_text)
+    find_text_str = str(find_text)
+
+    # Excel operates in 1-based land, Python is usually 0-based.
+    if start_num > 0:
+        start_num = start_num - 1
+
+    try:
+        index = within_text_str.index(find_text_str, start_num) + 1
+    except ValueError:
+        raise xlerrors.ValueExcelError(
+            f"Text {find_text} isn't found in {within_text_str[:start_num]}")
+
+    return index
+
+
+@xl.register()
+@xl.validate_args
 def MID(
         text: func_xltypes.XlText,
         start_num: func_xltypes.Number,
