@@ -82,6 +82,21 @@ def FIND(
 
 @xl.register()
 @xl.validate_args
+def LEFT(
+        text: func_xltypes.XlText,
+        num_chars: func_xltypes.XlNumber = 1
+) -> func_xltypes.XlText:
+    """LEFT returns the first character or characters in a text string,
+    based on the number of characters you specify.
+
+    https://support.office.com/en-us/article/
+        left-leftb-functions-9203d2d2-7960-479b-84c6-1ea52b99640c
+    """
+    return str(text)[:int(num_chars)]
+
+
+@xl.register()
+@xl.validate_args
 def MID(
         text: func_xltypes.XlText,
         start_num: func_xltypes.Number,

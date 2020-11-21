@@ -59,6 +59,10 @@ class TextModuleTest(unittest.TestCase):
         self.assertIsInstance(
             text.FIND('B', 'Miriam McGovern'), xlerrors.ValueExcelError)
 
+    def test_LEFT(self):
+        self.assertEqual(text.LEFT('Sale Price', 4), "Sale")
+        self.assertEqual(text.LEFT('Sweden'), "S")
+
     def test_MID(self):
         self.assertEqual(text.MID('Romain', 3, 4), 'main')
         self.assertEqual(text.MID('Romain', 1, 2), 'Ro')
