@@ -64,16 +64,18 @@ def FIND(
     index = 1
     within_text_str = str(within_text)
     find_text_str = str(find_text)
+    start_num_int = int(start_num)
 
     # Excel operates in 1-based land, Python is usually 0-based.
-    if start_num > 0:
-        start_num = start_num - 1
+    if start_num_int > 0:
+        start_num_int = start_num_int - 1
 
     try:
-        index = within_text_str.index(find_text_str, start_num) + 1
+        index = within_text_str.index(find_text_str, start_num_int) + 1
     except ValueError:
         raise xlerrors.ValueExcelError(
-            f"Text {find_text} isn't found in {within_text_str[:start_num]}")
+            f"Text {find_text} isn't found in"
+            f" {within_text_str[:start_num_int]}")
 
     return index
 

@@ -53,7 +53,7 @@ class TextModuleTest(unittest.TestCase):
     def test_FIND(self):
         self.assertEqual(text.FIND('M', 'Miriam McGovern'), 1)
         self.assertEqual(text.FIND('m', 'Miriam McGovern'), 6)
-        self.assertEqual(text.FIND('m', 'Miriam McGovern', 3), 6)
+        self.assertEqual(text.FIND('M', 'Miriam McGovern', 3), 8)
 
     def test_FIND_ValueError(self):
         self.assertIsInstance(
