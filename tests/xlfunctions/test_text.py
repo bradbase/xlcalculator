@@ -68,6 +68,10 @@ class TextModuleTest(unittest.TestCase):
         self.assertEqual(text.LEN(""), 0)
         self.assertEqual(text.LEN("        One"), 11)
 
+    def LOWER(self):
+        self.assertEqual(text.LOWER("E. E. Cummings"), "e. e. cummings")
+        self.assertEqual(text.LOWER("Apt. 2B"), "apt. 2b")
+
     def test_MID(self):
         self.assertEqual(text.MID('Romain', 3, 4), 'main')
         self.assertEqual(text.MID('Romain', 1, 2), 'Ro')

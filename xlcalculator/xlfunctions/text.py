@@ -110,6 +110,19 @@ def LEN(
 
 @xl.register()
 @xl.validate_args
+def LOWER(
+        text: func_xltypes.XlText
+) -> func_xltypes.XlText:
+    """Converts all uppercase letters in a text string to lowercase.
+
+    https://support.office.com/en-us/article/
+        lower-function-3f21df02-a80c-44b2-afaf-81358f9fdeb4
+    """
+    return str(text).lower()
+
+
+@xl.register()
+@xl.validate_args
 def MID(
         text: func_xltypes.XlText,
         start_num: func_xltypes.Number,

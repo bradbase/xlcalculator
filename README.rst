@@ -67,6 +67,8 @@ xlcalculator is a modernization of the
         * ISNA
         * ISTEXT
         * LEFT
+        * LEN
+        * LOWER
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
               Math.log()
