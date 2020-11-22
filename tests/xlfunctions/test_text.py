@@ -107,4 +107,8 @@ class TextModuleTest(unittest.TestCase):
 
     def test_TRIM(self):
         self.assertEqual(text.TRIM(" First Quarter Earnings "),
-                                   "First Quarter Earnings")
+                         "First Quarter Earnings")
+
+    def test_UPPER(self):
+        self.assertEqual(text.UPPER("total"), "TOTAL")
+        self.assertEqual(text.UPPER("Yield"), "YIELD")

@@ -99,6 +99,7 @@ xlcalculator is a modernization of the
         * TODAY
         * TRIM
         * TRUNC
+        * UPPER
         * VDB
         * VLOOKUP
           - Exact match only

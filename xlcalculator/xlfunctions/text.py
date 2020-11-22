@@ -203,3 +203,16 @@ def TRIM(
         trim-function-410388fa-c5df-49c6-b16c-9e5630b479f9
     """
     return str(text).strip()
+
+
+@xl.register()
+@xl.validate_args
+def UPPER(
+        text: func_xltypes.XlText
+) -> func_xltypes.XlText:
+    """Converts text to uppercase.
+
+    https://support.office.com/en-us/article/
+        upper-function-c11f29b3-d1a3-4537-8df6-04d0049963d6
+    """
+    return str(text).upper()
