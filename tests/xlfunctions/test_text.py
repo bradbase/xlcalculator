@@ -63,6 +63,11 @@ class TextModuleTest(unittest.TestCase):
         self.assertEqual(text.LEFT('Sale Price', 4), "Sale")
         self.assertEqual(text.LEFT('Sweden'), "S")
 
+    def test_LEN(self):
+        self.assertEqual(text.LEN("Phoenix, AZ"), 11)
+        self.assertEqual(text.LEN(""), 0)
+        self.assertEqual(text.LEN("        One"), 11)
+
     def test_MID(self):
         self.assertEqual(text.MID('Romain', 3, 4), 'main')
         self.assertEqual(text.MID('Romain', 1, 2), 'Ro')

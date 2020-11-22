@@ -97,6 +97,19 @@ def LEFT(
 
 @xl.register()
 @xl.validate_args
+def LEN(
+        text: func_xltypes.XlText
+) -> func_xltypes.XlNumber:
+    """LEN returns the number of characters in a text string.
+
+    https://support.office.com/en-us/article/
+        len-lenb-functions-29236f94-cedc-429d-affd-b5e33d2c67cb
+    """
+    return len(str(text))
+
+
+@xl.register()
+@xl.validate_args
 def MID(
         text: func_xltypes.XlText,
         start_num: func_xltypes.Number,
