@@ -41,18 +41,25 @@ xlcalculator is a modernization of the
     * Defined Names (a "named cell" or range)
     * Ranges
     * Shared formulas `not an Array Formula <https://stackoverflow.com/questions/1256359/what-is-the-difference-between-a-shared-formula-and-an-array-formula>`_
+
       * Operands (+, -, /, \*, ==, <>, <=, >=)
       * on cells only
+
     * Set cell value
     * Get cell value
     * `Parsing a dict into the Model object <https://stackoverflow.com/questions/31260686/excel-formula-evaluation-in-pandas/61586912#61586912>`_
+
         * Code is in examples\\third_party_datastructure
+        
     * Functions are at the bottom of this README
+
         * LN
             - Python Math.log() differs from Excel LN. Currently returning
               Math.log()
+
         * VLOOKUP
           - Exact match only
+
         * YEARFRAC
           - Basis 1, Actual/actual, is only within 3 decimal places
 
@@ -195,7 +202,7 @@ TODO
   problem space <https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python>`_
 
 
-  -------------------
+
   Supported Functions
   -------------------
 
