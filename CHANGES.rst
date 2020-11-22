@@ -7,7 +7,7 @@ CHANGES
 ------------------
 
 - Add functions: ``DAY()``, ``YEAR()``, ``MONTH()``, ``NOW()``, ``WEEKDAY()``
-  ``FIND()``, ``LEFT()``, ``LEN()``, ``LOWER()``
+  ``FIND()``, ``LEFT()``, ``LEN()``, ``LOWER()``, ``REPLACE()``
 
 0.2.10 (2020-10-30)
 ------------------

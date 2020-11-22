@@ -68,7 +68,7 @@ class TextModuleTest(unittest.TestCase):
         self.assertEqual(text.LEN(""), 0)
         self.assertEqual(text.LEN("        One"), 11)
 
-    def LOWER(self):
+    def test_LOWER(self):
         self.assertEqual(text.LOWER("E. E. Cummings"), "e. e. cummings")
         self.assertEqual(text.LOWER("Apt. 2B"), "apt. 2b")
 
@@ -95,6 +95,11 @@ class TextModuleTest(unittest.TestCase):
         self.assertIsInstance(
             text.MID('foo' + ' ' * xl.CELL_CHARACTER_LIMIT, 1, 3),
             xlerrors.ValueExcelError)
+
+    def test_REPLACE(self):
+        self.assertEqual(text.REPLACE("abcdefghijk", 6, 5, "*"), "abcde*k")
+        self.assertEqual(text.REPLACE("2009", 3, 2, "10"), "2010")
+        self.assertEqual(text.REPLACE("123456", 1, 3, "@"), "@456")
 
     def test_RIGHT(self):
         self.assertEqual(text.RIGHT("Sale Price", 5), "Price")

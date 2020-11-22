@@ -155,6 +155,31 @@ def MID(
 
 @xl.register()
 @xl.validate_args
+def REPLACE(
+        old_text: func_xltypes.XlText,
+        start_num: func_xltypes.XlNumber,
+        num_chars: func_xltypes.XlNumber,
+        new_text: func_xltypes.XlText
+) -> func_xltypes.XlText:
+    """REPLACE replaces part of a text string, based on the number of
+    characters you specify, with a different text string.
+
+    https://support.office.com/en-us/article/
+        replace-replaceb-functions-8d799074-2425-4a8a-84bc-82472868878a
+    """
+    old_text_str = str(old_text)
+    start_num_int = int(start_num) - 1  # Excel is 1-based, Python is 0-based
+    num_chars_int = int(num_chars)
+    new_text_str = str(new_text)
+
+    sliced_old_text = old_text_str[start_num_int:
+                                   start_num_int + num_chars_int]
+
+    return old_text_str.replace(sliced_old_text, new_text_str)
+
+
+@xl.register()
+@xl.validate_args
 def RIGHT(
         text: func_xltypes.XlText,
         num_chars: func_xltypes.XlNumber = 1

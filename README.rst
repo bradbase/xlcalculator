@@ -85,6 +85,7 @@ xlcalculator is a modernization of the
         * PI
         * PMT
         * POWER
+        * REPLACE
         * RIGHT
         * ROUND
         * ROUNDDOWN
