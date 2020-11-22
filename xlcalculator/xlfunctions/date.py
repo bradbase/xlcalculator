@@ -1,6 +1,7 @@
 import datetime
 import yearfrac
 from dateutil.relativedelta import relativedelta
+from dateutil import rrule
 
 from . import utils, xl, xlerrors, func_xltypes
 
@@ -41,6 +42,74 @@ def DATE(
 
 @xl.register()
 @xl.validate_args
+def DATEDIF(
+        start_date: func_xltypes.XlDateTime,
+        end_date: func_xltypes.XlDateTime,
+        unit: func_xltypes.XlText
+) -> func_xltypes.XlNumber:
+    """Calculates the number of days, months, or years between two dates.
+
+    https://support.office.com/en-us/article/
+        datedif-function-25dba1a4-2812-480b-84dd-8b32a451b35c
+    """
+
+    if start_date > end_date:
+        raise xlerrors.NumExcelError(
+            f'Start date must be before the end date. Got Start: \
+                {start_date}, End: {end_date}')
+
+    datetime_start_date = utils.number_to_datetime(int(start_date))
+    datetime_end_date = utils.number_to_datetime(int(end_date))
+
+    if str(unit).upper() == 'Y':
+        date_list = list(rrule.rrule(rrule.YEARLY,
+                                     dtstart=datetime_start_date,
+                                     until=datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+    elif str(unit).upper() == 'M':
+        date_list = list(rrule.rrule(rrule.MONTHLY,
+                                     dtstart=datetime_start_date,
+                                     until=datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+    elif str(unit).upper() == 'D':
+        date_list = list(rrule.rrule(rrule.DAILY,
+                                     dtstart=datetime_start_date,
+                                     until=datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+    elif str(unit).upper() == 'MD':
+        modified_datetime_start_date = datetime_start_date.replace(year=1900,
+                                                                   month=1)
+        modified_datetime_end_date = datetime_end_date.replace(year=1900,
+                                                               month=1)
+        date_list = list(rrule.rrule(rrule.DAILY,
+                                     dtstart=modified_datetime_start_date,
+                                     until=modified_datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+    elif str(unit).upper() == 'YM':
+        modified_datetime_start_date = datetime_start_date.replace(year=1900,
+                                                                   day=1)
+        modified_datetime_end_date = datetime_end_date.replace(year=1900,
+                                                               day=1)
+        date_list = list(rrule.rrule(rrule.MONTHLY,
+                                     dtstart=modified_datetime_start_date,
+                                     until=modified_datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+    elif str(unit).upper() == 'YD':
+        modified_datetime_start_date = datetime_start_date.replace(year=1900)
+        modified_datetime_end_date = datetime_end_date.replace(year=1900)
+        date_list = list(rrule.rrule(rrule.DAILY,
+                                     dtstart=modified_datetime_start_date,
+                                     until=modified_datetime_end_date))
+        return len(date_list) - 1  # end of day to end of day / "full days"
+
+
+@xl.register()
+@xl.validate_args
 def DAY(
         serial_number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
@@ -53,6 +122,83 @@ def DAY(
 
     date = utils.number_to_datetime(int(serial_number))
     return int(date.strftime("%d"))
+
+
+@xl.register()
+@xl.validate_args
+def DAYS(
+        end_date: func_xltypes.XlDateTime,
+        start_date: func_xltypes.XlDateTime
+) -> func_xltypes.XlNumber:
+    """Returns the number of days between two dates.
+
+    https://support.microsoft.com/en-us/office/
+        days-function-57740535-d549-4395-8728-0f07bff0b9df
+    """
+
+    days = end_date - start_date
+    return days
+
+@xl.register()
+@xl.validate_args
+def EDATE(
+        start_date: func_xltypes.XlDateTime,
+        months: func_xltypes.XlNumber
+) -> func_xltypes.XlDateTime:
+    """Returns the serial number that represents the date that is the
+    indicated number of months before or after a specified date
+    (the start_date)
+
+    https://support.office.com/en-us/article/
+        edate-function-3c920eb2-6e66-44e7-a1f5-753ae47ee4f5
+    """
+    delta = relativedelta(months=int(months))
+    edate = utils.number_to_datetime(int(start_date)) + delta
+
+    if edate <= utils.EXCEL_EPOCH:
+        raise xlerrors.NumExcelError(
+            f"Date result before {utils.EXCEL_EPOCH}")
+
+    return utils.datetime_to_number(edate)
+
+
+@xl.register()
+@xl.validate_args
+def EOMONTH(
+        start_date: func_xltypes.XlDateTime,
+        months: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the serial number for the last day of the month that is the
+    indicated number of months before or after start_date.
+
+    https://support.office.com/en-us/article/
+        eomonth-function-7314ffa1-2bc9-4005-9d66-f49db127d628
+    """
+    delta = relativedelta(months=int(months))
+    edate = utils.number_to_datetime(int(start_date)) + delta
+
+    if edate <= utils.EXCEL_EPOCH:
+        raise xlerrors.NumExcelError(
+            f"Date result before {utils.EXCEL_EPOCH}")
+
+    eomonth = edate + relativedelta(day=31)
+
+    return utils.datetime_to_number(eomonth)
+
+@xl.register()
+@xl.validate_args
+def ISOWEEKNUM(
+        date: func_xltypes.XlDateTime
+) -> func_xltypes.XlNumber:
+    """Returns number of the ISO week number of the year for a given date.
+
+    https://support.microsoft.com/en-us/office/
+        isoweeknum-function-1c2d0afe-d25b-4ab1-8894-8d0520e90e0e
+    """
+
+    datetime_date = utils.number_to_datetime(int(date))
+    isoweeknum = datetime_date.isocalendar()[1]
+    return isoweeknum
 
 
 @xl.register()

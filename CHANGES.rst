@@ -7,8 +7,10 @@ CHANGES
 ------------------
 
 - Add functions: ``DAY()``, ``YEAR()``, ``MONTH()``, ``NOW()``, ``WEEKDAY()``
+  ``EDATE()``, ``EOMONTH()``, ``DAYS()``, ``ISOWEEKNUM()``, ``DATEDIF()``
   ``FIND()``, ``LEFT()``, ``LEN()``, ``LOWER()``, ``REPLACE()``, ``TRIM()``
   ``UPPER()``, ``EXACT()``
+  
 
 0.2.10 (2020-10-30)
 ------------------
