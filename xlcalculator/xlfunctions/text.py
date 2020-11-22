@@ -190,3 +190,16 @@ def RIGHT(
         right-rightb-functions-240267ee-9afa-4639-a02b-f19e1786cf2f
     """
     return str(text)[-int(num_chars):]
+
+
+@xl.register()
+@xl.validate_args
+def TRIM(
+        text: func_xltypes.XlText
+) -> func_xltypes.XlText:
+    """Removes all spaces from text except for single spaces between words.
+
+    https://support.office.com/en-us/article/
+        trim-function-410388fa-c5df-49c6-b16c-9e5630b479f9
+    """
+    return str(text).strip()

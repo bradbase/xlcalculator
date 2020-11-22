@@ -97,6 +97,7 @@ xlcalculator is a modernization of the
         * SUMIFS
         * SUMPRODUCT
         * TODAY
+        * TRIM
         * TRUNC
         * VDB
         * VLOOKUP

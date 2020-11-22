@@ -104,3 +104,7 @@ class TextModuleTest(unittest.TestCase):
     def test_RIGHT(self):
         self.assertEqual(text.RIGHT("Sale Price", 5), "Price")
         self.assertEqual(text.RIGHT("Stock Number"), "r")
+
+    def test_TRIM(self):
+        self.assertEqual(text.TRIM(" First Quarter Earnings "),
+                                   "First Quarter Earnings")
