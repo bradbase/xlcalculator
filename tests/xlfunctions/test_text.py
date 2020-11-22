@@ -50,6 +50,11 @@ class TextModuleTest(unittest.TestCase):
         self.assertEqual(text.CONCAT(range0, range1),
                          "A'sa1a2a4a5a6a7B'sb1b2b4b5b6b7")
 
+    def test_EXACT(self):
+        self.assertEqual(text.EXACT("word", "word"), True)
+        self.assertEqual(text.EXACT("Word", "word"), False)
+        self.assertEqual(text.EXACT("w ord", "word"), False)
+
     def test_FIND(self):
         self.assertEqual(text.FIND('M', 'Miriam McGovern'), 1)
         self.assertEqual(text.FIND('m', 'Miriam McGovern'), 6)

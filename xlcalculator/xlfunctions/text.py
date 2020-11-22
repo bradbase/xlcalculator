@@ -49,6 +49,23 @@ def CONCATENATE(
 
 @xl.register()
 @xl.validate_args
+def EXACT(
+        text1: func_xltypes.XlText,
+        text2: func_xltypes.XlText
+) -> func_xltypes.XlBoolean:
+    """Compares two text strings and returns TRUE if they are exactly the
+    same, FALSE otherwise. EXACT is case-sensitive but ignores formatting
+    differences.
+
+    https://support.microsoft.com/en-us/office/
+        exact-function-d3087698-fc15-4a15-9631-12575cf29926
+    """
+
+    return str(text1) == str(text2)
+
+
+@xl.register()
+@xl.validate_args
 def FIND(
         find_text: func_xltypes.XlText,
         within_text: func_xltypes.XlText,
