@@ -139,6 +139,7 @@ def DAYS(
     days = end_date - start_date
     return days
 
+
 @xl.register()
 @xl.validate_args
 def EDATE(
@@ -184,6 +185,7 @@ def EOMONTH(
     eomonth = edate + relativedelta(day=31)
 
     return utils.datetime_to_number(eomonth)
+
 
 @xl.register()
 @xl.validate_args
