@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator.xlfunctions import information, xlerrors, func_xltypes
+from xlcalculator.xlfunctions import information, xlerrors, func_xltypes, date
 
 
 class InformationModuleTest(unittest.TestCase):
@@ -23,3 +23,29 @@ class InformationModuleTest(unittest.TestCase):
     def test_ISNA(self):
         self.assertTrue(information.ISNA(information.NA()))
         self.assertFalse(information.ISNA(xlerrors.ValueExcelError))
+
+    def test_ISEVEN(self):
+        self.assertFalse(information.ISEVEN(func_xltypes.Number(1)))
+        self.assertTrue(information.ISEVEN(func_xltypes.Number(2)))
+
+        self.assertFalse(information.ISEVEN(-1))
+        self.assertTrue(information.ISEVEN(2.5))
+        self.assertFalse(information.ISEVEN(5))
+        self.assertTrue(information.ISEVEN(0))
+        self.assertTrue(information.ISEVEN(date.DATE(2011, 12, 23)))
+
+    def test_ISEVEN_error(self):
+        self.assertIsInstance(information.ISEVEN(func_xltypes.Text("hello")),
+                              xlerrors.ValueExcelError)
+
+    def test_ISODD(self):
+        self.assertEqual(information.ISODD(1), True)
+        self.assertEqual(information.ISODD(2), False)
+
+        self.assertEqual(information.ISODD(-1), True)
+        self.assertEqual(information.ISODD(2.5), False)
+        self.assertEqual(information.ISODD(5), True)
+
+    def test_ISODD_error(self):
+        self.assertIsInstance(information.ISODD(func_xltypes.Text("hello")),
+                              xlerrors.ValueExcelError)
