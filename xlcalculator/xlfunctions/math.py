@@ -22,6 +22,32 @@ def ABS(
 
 @xl.register()
 @xl.validate_args
+def FLOOR(
+        number: func_xltypes.XlNumber,
+        significance: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Rounds number down, toward zero, to the nearest multiple of
+        significance.
+
+    https://support.office.com/en-us/article/
+        FLOOR-function-14BB497C-24F2-4E04-B327-B0B4DE5A8886
+    """
+
+    if significance < 0 < number:
+        raise xlerrors.NumExcelError('number and significance needto have \
+                                      the same sign')
+
+    if number == 0:
+        return 0
+
+    if significance == 0:
+        raise xlerrors.DivZeroExcelError()
+
+    return significance * math.floor(number / significance)
+
+
+@xl.register()
+@xl.validate_args
 def LN(
         number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
