@@ -1,7 +1,11 @@
-import numpy_financial
+
 from typing import Tuple
 
-from . import xl, xlerrors, func_xltypes
+import pandas as pd
+import numpy_financial as npf
+from scipy.optimize import newton
+
+from . import xl, xlerrors, func_xltypes, utils
 
 
 @xl.register()
@@ -17,7 +21,7 @@ def IRR(
     """
     # `guess` is not used, but unnecessary, since it is a pure perforamnce
     # optimization.
-    return numpy_financial.irr(xl.flatten(values))
+    return npf.irr(xl.flatten(values))
 
 
 @xl.register()
@@ -40,7 +44,7 @@ def NPV(
     rate = float(rate)
 
     if xl.COMPATIBILITY == 'PYTHON':
-        return numpy_financial.npv(rate, cashflow)
+        return npf.npv(rate, cashflow)
 
     return sum([
         val * (1 + rate) ** - (i + 1)
@@ -71,12 +75,35 @@ def PMT(
         when = 'end'
         if type != 0:
             when = 'begin'
-        return float(numpy_financial.pmt(
+        return float(npf.pmt(
             float(rate), float(nper), float(pv), fv=float(fv), when=when))
 
     # return -pv * rate / (1 - power(1 + rate, -nper))
-    return float(numpy_financial.pmt(
+    return float(npf.pmt(
         float(rate), float(nper), float(pv), fv=float(fv), when='end'))
+
+
+@xl.register()
+@xl.validate_args
+def PV(
+        rate: func_xltypes.XlNumber,
+        nper: func_xltypes.XlNumber,
+        pmt: func_xltypes.XlNumber,
+        fv: func_xltypes.XlNumber = 0,
+        type: func_xltypes.XlNumber = 0
+) -> func_xltypes.XlNumber:
+    """PV, one of the financial functions, calculates the present value of a
+    loan or an investment, based on a constant interest rate.
+
+    https://support.office.com/en-us/article/
+        pv-function-23879d31-0e02-4321-be01-da16e8168cbd
+    """
+
+    return npf.pv(float(rate),
+                  float(nper),
+                  float(pmt),
+                  fv=float(fv),
+                  when=int(type))
 
 
 @xl.register()
@@ -191,6 +218,66 @@ def VDB(
                 result += depr
 
     return result
+
+
+@xl.register()
+@xl.validate_args
+def XIRR(
+        values: func_xltypes.XlArray,
+        dates: func_xltypes.XlArray,
+        guess: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the internal rate of return for a schedule of cash flows that
+        is not necessarily periodic.
+
+    https://support.microsoft.com/en-us/office/
+        xirr-function-de1242ec-6477-445b-b11b-a303ad9adc9d
+
+    Algorithm found on stackoverflow:
+    https://stackoverflow.com/questions/63797804/
+        python-irr-function-giving-different-result-than-excel-xirr
+
+    From MS, Newton's method is used to optimize:
+    https://docs.microsoft.com/en-us/office/troubleshoot/excel/
+        algorithm-of-xirr-funcation
+    """
+    def xnpv(rate, values, dates):
+        if rate <= -1.0:
+            return float('inf')
+
+        min_date = min(dates)
+
+        return sum([value / (1 + rate)**((date - min_date).days / 365)
+                   for value, date in zip(values, dates)])
+
+    def xirr(values, dates, guess):
+        try:
+            return newton(lambda r: xnpv(r, values, dates), guess, maxiter=100)
+
+        except (RuntimeError, FloatingPointError):
+            raise xlerrors.NumExcelError('XIRR did not converge')
+
+    values = values.flatten(func_xltypes.Number, None)
+    dates = dates.flatten(func_xltypes.DateTime, None)
+    values = [float(value) for value in values]
+    dates = [utils.XlDateTime_to_datetime(date) for date in dates]
+    guess = float(guess)
+
+    test = pd.DataFrame({"dates": dates, "values": values})
+
+    # Filter all rows with 0 cashflows
+    test = test[test['values'] != 0]
+
+    # Sort dataframe by date
+    test = test.sort_values('dates', ascending=True)
+    test['values'] = test['values'].astype('float')
+
+    # Create separate lists for values and dates
+    test_values = list(test['values'])
+    test_dates = list(test['dates'])
+
+    # Calculate IRR
+    return xirr(test_values, test_dates, guess)
 
 
 @xl.register()

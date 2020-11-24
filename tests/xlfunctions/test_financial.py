@@ -61,6 +61,13 @@ class FinancialModuleTest(unittest.TestCase):
         self.assertAlmostEqual(
             financial.PMT(0.08 / 12, 10, 10000, type=1), -1030.164, 2)
 
+    def test_PV(self):
+        self.assertAlmostEqual(
+            financial.PV(0.08 / 12, 12 * 20, 500.00, 0, 0),
+            -59777.15,
+            places=2
+        )
+
     def test_SLN(self):
         self.assertEqual(financial.SLN(30000, 7500, 10), 2250)
 
@@ -115,6 +122,20 @@ class FinancialModuleTest(unittest.TestCase):
             ),
             98708.55092429437
         )
+
+    def test_XIRR(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 2750, 4250, 3250, 2750]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2008, 1, 1),
+            date.DATE(2008, 3, 1),
+            date.DATE(2008, 10, 30),
+            date.DATE(2009, 2, 15),
+            date.DATE(2009, 4, 1)
+        ]])
+
+        self.assertAlmostEqual(
+            financial.XIRR(range_00, range_01, 0.1), 0.37336253)
 
     def test_XNPV(self):
         range_00 = func_xltypes.Array(
