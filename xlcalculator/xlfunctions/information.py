@@ -11,6 +11,15 @@ def ISBLANK(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
 
 @xl.register()
 @xl.validate_args
+def ISERROR(value: func_xltypes.XlAnything) -> func_xltypes.Boolean:
+    """Value refers to any error value
+    (#N/A, #VALUE!, #REF!, #DIV/0!, #NUM!, #NAME?, or #NULL!).
+    """
+    return isinstance(value, xlerrors.ExcelError)
+
+
+@xl.register()
+@xl.validate_args
 def ISEVEN(num: func_xltypes.XlNumber) -> func_xltypes.Boolean:
     """Returns TRUE if number is even, or FALSE if number is odd.
 
@@ -26,6 +35,14 @@ def ISEVEN(num: func_xltypes.XlNumber) -> func_xltypes.Boolean:
 
     else:
         return False
+
+
+@xl.register()
+@xl.validate_args
+def ISNUMBER(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
+    """Returns True if the cell is number.
+    """
+    return isinstance(cell, func_xltypes.Number)
 
 
 @xl.register()

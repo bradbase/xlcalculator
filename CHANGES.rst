@@ -6,8 +6,8 @@ CHANGES
 0.2.12 (2020-11-23)
 -------------------
 
-- Add functions: ``PV()``, ``XIRR``, ``ISEVEN()``, ``ISODD()``
-
+- Add functions: ``PV()``, ``XIRR``, ``ISEVEN()``, ``ISODD()``, ``ISNUMBER()``
+  ``ISERROR()``
 
 0.2.11 (2020-11-16)
 -------------------

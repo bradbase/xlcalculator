@@ -49,3 +49,17 @@ class InformationModuleTest(unittest.TestCase):
     def test_ISODD_error(self):
         self.assertIsInstance(information.ISODD(func_xltypes.Text("hello")),
                               xlerrors.ValueExcelError)
+
+    def test_ISNUMBER(self):
+        self.assertFalse(information.ISNUMBER(func_xltypes.Text("hello")))
+        self.assertTrue(information.ISNUMBER(func_xltypes.Number(1234)))
+        self.assertFalse(information.ISNUMBER("hello"))
+        self.assertTrue(information.ISNUMBER(1234))
+        self.assertFalse(information.ISNUMBER("1234"))
+
+    def test_ISERROR(self):
+        num_error = xlerrors.NumExcelError()
+        na_error = xlerrors.NaExcelError()
+
+        self.assertTrue(information.ISERROR(num_error))
+        self.assertTrue(information.ISERROR(na_error))
