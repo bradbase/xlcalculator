@@ -135,7 +135,23 @@ class FinancialModuleTest(unittest.TestCase):
         ]])
 
         self.assertAlmostEqual(
-            financial.XIRR(range_00, range_01, 0.1), 0.37336253)
+            financial.XIRR(range_00, range_01, 0.1), 0.373362535)
+
+    def test_XIRR_length_mismatch(self):
+        range_00 = [[-10000, 2750, 4250]]
+        range_01 = [[date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]]
+        self.assertIsInstance(
+            financial.XIRR(range_00, range_01, 0.1), xlerrors.NumExcelError)
+
+    def test_XIRR_not_converge(self):
+        dates = [date.DATE(2020, 8, 31),
+                 date.DATE(2020, 5, 5),
+                 date.DATE(2020, 2, 28),
+                 date.DATE(2020, 8, 31),
+                 date.DATE(2018, 6, 30)]
+        values = [50289.0, -75000.0, 0.0, 0.0, 0.0]
+        self.assertIsInstance(
+            financial.XIRR(values, dates, 0), xlerrors.NumExcelError)
 
     def test_XNPV(self):
         range_00 = func_xltypes.Array(
@@ -155,3 +171,16 @@ class FinancialModuleTest(unittest.TestCase):
         range_01 = [date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]
         self.assertIsInstance(
             financial.XNPV(0.09, range_00, range_01), xlerrors.NumExcelError)
+
+    def test_XNPV_rate_lt_minus_one(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 2750, 4250, 3250, 2750]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2008, 1, 1),
+            date.DATE(2008, 3, 1),
+            date.DATE(2008, 10, 30),
+            date.DATE(2009, 2, 15),
+            date.DATE(2009, 4, 1)
+        ]])
+        self.assertEqual(
+            financial.XNPV(-1.1, range_00, range_01), float('inf'))

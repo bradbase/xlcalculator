@@ -10,7 +10,6 @@ def ISBLANK(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
 
 
 @xl.register()
-@xl.validate_args
 def ISERROR(value: func_xltypes.XlAnything) -> func_xltypes.Boolean:
     """Value refers to any error value
     (#N/A, #VALUE!, #REF!, #DIV/0!, #NUM!, #NAME?, or #NULL!).

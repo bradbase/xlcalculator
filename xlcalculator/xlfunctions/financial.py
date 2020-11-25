@@ -5,7 +5,7 @@ import pandas as pd
 import numpy_financial as npf
 from scipy.optimize import newton
 
-from . import xl, xlerrors, func_xltypes, utils
+from . import xl, xlerrors, func_xltypes
 
 
 @xl.register()
@@ -220,12 +220,28 @@ def VDB(
     return result
 
 
+def _xnpv(rate, values, dates):
+    if rate <= -1.0:
+        return float('inf')
+
+    return sum([value / ((1.0 + rate)**((date - dates[0]) / 365))
+               for value, date in zip(values, dates)])
+
+
+def _xirr(values, dates, guess=None):
+    try:
+        return newton(lambda r: _xnpv(r, values, dates), guess, maxiter=100)
+
+    except (RuntimeError, FloatingPointError):
+        raise xlerrors.NumExcelError('XIRR did not converge')
+
+
 @xl.register()
 @xl.validate_args
 def XIRR(
         values: func_xltypes.XlArray,
         dates: func_xltypes.XlArray,
-        guess: func_xltypes.XlNumber
+        guess: func_xltypes.XlNumber = 0.1
 ) -> func_xltypes.XlNumber:
     """Returns the internal rate of return for a schedule of cash flows that
         is not necessarily periodic.
@@ -241,43 +257,34 @@ def XIRR(
     https://docs.microsoft.com/en-us/office/troubleshoot/excel/
         algorithm-of-xirr-funcation
     """
-    def xnpv(rate, values, dates):
-        if rate <= -1.0:
-            return float('inf')
-
-        min_date = min(dates)
-
-        return sum([value / (1 + rate)**((date - min_date).days / 365)
-                   for value, date in zip(values, dates)])
-
-    def xirr(values, dates, guess):
-        try:
-            return newton(lambda r: xnpv(r, values, dates), guess, maxiter=100)
-
-        except (RuntimeError, FloatingPointError):
-            raise xlerrors.NumExcelError('XIRR did not converge')
 
     values = values.flatten(func_xltypes.Number, None)
     dates = dates.flatten(func_xltypes.DateTime, None)
-    values = [float(value) for value in values]
-    dates = [utils.XlDateTime_to_datetime(date) for date in dates]
+    # need to cast dates and guess to Python types else optimizer complains
+    dates = [float(date) for date in dates]
     guess = float(guess)
 
-    test = pd.DataFrame({"dates": dates, "values": values})
+    # TODO: Ignore non numeric cells and boolean cells.
+    if len(values) != len(dates):
+        raise xlerrors.NumExcelError(
+            f'`values` range must be the same length as `dates` range '
+            f'in XIRR, {len(values)} != {len(dates)}')
+
+    series = pd.DataFrame({"dates": dates, "values": values})
 
     # Filter all rows with 0 cashflows
-    test = test[test['values'] != 0]
+    series = series[series['values'] != 0]
 
     # Sort dataframe by date
-    test = test.sort_values('dates', ascending=True)
-    test['values'] = test['values'].astype('float')
+    series = series.sort_values('dates', ascending=True)
+    series['values'] = series['values'].astype('float')
 
     # Create separate lists for values and dates
-    test_values = list(test['values'])
-    test_dates = list(test['dates'])
+    series_values = list(series['values'])
+    series_dates = list(series['dates'])
 
     # Calculate IRR
-    return xirr(test_values, test_dates, guess)
+    return _xirr(series_values, series_dates, guess)
 
 
 @xl.register()
@@ -302,7 +309,4 @@ def XNPV(
             f'`values` range must be the same length as `dates` range '
             f'in XNPV, {len(values)} != {len(dates)}')
 
-    def npv(value, date):
-        return value / ((1.0 + rate) ** ((date - dates[0]) / 365))
-
-    return sum([npv(value, date) for value, date in zip(values, dates)])
+    return _xnpv(rate, values, dates)
