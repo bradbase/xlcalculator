@@ -10,6 +10,19 @@ def ISBLANK(cell: func_xltypes.XlAnything) -> func_xltypes.Boolean:
 
 
 @xl.register()
+def ISERR(value: func_xltypes.XlAnything) -> func_xltypes.Boolean:
+    """Value refers to error values
+    (#VALUE!, #REF!, #DIV/0!, #NUM!, #NAME?, or #NULL!)
+    And NOT error #N/A
+    """
+    if isinstance(value, xlerrors.ExcelError) \
+            and not isinstance(value, xlerrors.NaExcelError):
+        return True
+    else:
+        return False
+
+
+@xl.register()
 def ISERROR(value: func_xltypes.XlAnything) -> func_xltypes.Boolean:
     """Value refers to any error value
     (#N/A, #VALUE!, #REF!, #DIV/0!, #NUM!, #NAME?, or #NULL!).

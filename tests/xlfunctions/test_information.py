@@ -57,6 +57,13 @@ class InformationModuleTest(unittest.TestCase):
         self.assertTrue(information.ISNUMBER(1234))
         self.assertFalse(information.ISNUMBER("1234"))
 
+    def test_ISERR(self):
+        num_error = xlerrors.NumExcelError()
+        na_error = xlerrors.NaExcelError()
+
+        self.assertTrue(information.ISERR(num_error))
+        self.assertFalse(information.ISERR(na_error))
+
     def test_ISERROR(self):
         num_error = xlerrors.NumExcelError()
         na_error = xlerrors.NaExcelError()
