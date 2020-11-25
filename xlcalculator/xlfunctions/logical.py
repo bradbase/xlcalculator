@@ -79,3 +79,14 @@ def IF(
     # Use delayed evaluation to only evaluate the true or false value but not
     # both.
     return value_if_true() if logical_test() else value_if_false()
+
+
+@xl.register()
+@xl.validate_args
+def TRUE() -> func_xltypes.XlBoolean:
+    """Returns the logical value TRUE.
+
+    https://support.office.com/en-us/article/
+        true-function-7652c6e3-8987-48d0-97cd-ef223246b3fb
+    """
+    return True

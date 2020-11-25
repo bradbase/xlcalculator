@@ -40,3 +40,6 @@ class LogicalModuleTest(unittest.TestCase):
         # Values get converted to expressions to not break the APIs.
         self.assertEqual(logical.IF(True, 1, 2), 1)
         self.assertEqual(logical.IF(False, 1, 2), 2)
+
+    def test_TRUE(self):
+        self.assertTrue(logical.TRUE())
