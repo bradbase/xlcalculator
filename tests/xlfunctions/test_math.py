@@ -12,6 +12,10 @@ class MathModuleTest(unittest.TestCase):
     def test_ABS_with_bad_arg(self):
         self.assertIsInstance(math.ABS('bad'), xlerrors.ValueExcelError)
 
+    def test_ARTAN2(self):
+        self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
+        self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)
+
     def test_FLOOR(self):
         self.assertEqual(math.FLOOR(3.7, 2), 2)
         self.assertEqual(math.FLOOR(-2.5, -2), -2)

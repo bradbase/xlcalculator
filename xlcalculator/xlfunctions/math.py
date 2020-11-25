@@ -1,7 +1,7 @@
 import decimal
 import math
-import numpy
-import pandas
+import numpy as np
+import pandas as pd
 from typing import Tuple, Union
 
 from . import xl, xlerrors, xlcriteria, func_xltypes
@@ -18,6 +18,21 @@ def ABS(
         abs-function-3420200f-5628-4e8c-99da-c99d7c87713c
     """
     return abs(number)
+
+
+@xl.register()
+@xl.validate_args
+def ATAN2(
+        x_num: func_xltypes.XlNumber,
+        y_num: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the arctangent, or inverse tangent, of the specified
+        x- and y-coordinates.
+
+    https://support.office.com/en-us/article/
+        atan2-function-c04592ab-b9e3-4908-b428-c96b3a565033
+    """
+    return np.arctan2(float(x_num), float(y_num))
 
 
 @xl.register()
@@ -96,7 +111,7 @@ def POWER(
     https://support.office.com/en-us/article/
         power-function-d3f2908b-56f4-4c3f-895a-07fb519c362a
     """
-    return numpy.power(number, power)
+    return np.power(number, power)
 
 
 @xl.register()
@@ -280,7 +295,7 @@ def SUMPRODUCT(
             raise xlerrors.NaExcelError(
                 "Excel Errors are present in the sumproduct items.")
 
-    sumproduct = pandas.concat(arrays, axis=1)
+    sumproduct = pd.concat(arrays, axis=1)
     return sumproduct.prod(axis=1).sum()
 
 
