@@ -7,7 +7,7 @@ CHANGES
 -------------------
 
 - Add functions: ``PV()``, ``XIRR()``, ``ISEVEN()``, ``ISODD()``,
-  ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``
+  ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``, ``FALSE()``
 
 0.2.11 (2020-11-16)
 -------------------
