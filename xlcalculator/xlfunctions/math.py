@@ -35,6 +35,23 @@ def ACOS(
 
 @xl.register()
 @xl.validate_args
+def ACOSH(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the inverse hyperbolic cosine of a number.
+
+    https://support.office.com/en-us/article/
+        acosh-function-e3992cc1-103f-4e72-9f04-624b9ef5ebfe
+    """
+    if number < 1:
+        raise xlerrors.NameExcelError(f'number {number} must be greater'
+                                      f'than or equal to 1')
+
+    return np.arccosh(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def ATAN2(
         x_num: func_xltypes.XlNumber,
         y_num: func_xltypes.XlNumber
@@ -59,7 +76,6 @@ def DEGREES(
         degrees-function-4d6ec4db-e694-4b94-ace0-1cc3f61f9ba1
     """
     return np.degrees(float(angle))
-
 
 
 @xl.register()

@@ -16,6 +16,13 @@ class MathModuleTest(unittest.TestCase):
     def test_ACOS(self):
         self.assertAlmostEqual(math.ACOS(-0.5), 2.094395102)
 
+    def test_ACOSH(self):
+        self.assertAlmostEqual(math.ACOSH(1), 0)
+        self.assertAlmostEqual(math.ACOSH(10), 2.9932228)
+
+    def test_ACOSH_less_than_1(self):
+        self.assertIsInstance(math.ACOSH(-1), xlerrors.NameExcelError)
+
     def test_ARTAN2(self):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)
