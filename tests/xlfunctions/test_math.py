@@ -1,4 +1,5 @@
 import unittest
+import math as pymath
 
 from xlcalculator.xlfunctions import math, xlerrors, func_xltypes
 
@@ -12,9 +13,15 @@ class MathModuleTest(unittest.TestCase):
     def test_ABS_with_bad_arg(self):
         self.assertIsInstance(math.ABS('bad'), xlerrors.ValueExcelError)
 
+    def test_ACOS(self):
+        self.assertAlmostEqual(math.ACOS(-0.5), 2.094395102)
+
     def test_ARTAN2(self):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)
+
+    def test_DEGREES(self):
+        self.assertEqual(math.DEGREES(pymath.pi), 180)
 
     def test_FLOOR(self):
         self.assertEqual(math.FLOOR(3.7, 2), 2)

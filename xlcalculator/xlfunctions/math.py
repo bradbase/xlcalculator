@@ -22,6 +22,19 @@ def ABS(
 
 @xl.register()
 @xl.validate_args
+def ACOS(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the arccosine, or inverse cosine, of a number.
+
+    https://support.office.com/en-us/article/
+        acos-function-cb73173f-d089-4582-afa1-76e5524b5d5b
+    """
+    return np.arccos(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def ATAN2(
         x_num: func_xltypes.XlNumber,
         y_num: func_xltypes.XlNumber
@@ -33,6 +46,20 @@ def ATAN2(
         atan2-function-c04592ab-b9e3-4908-b428-c96b3a565033
     """
     return np.arctan2(float(x_num), float(y_num))
+
+
+@xl.register()
+@xl.validate_args
+def DEGREES(
+        angle: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Converts radians into degrees.
+
+    https://support.office.com/en-us/article/
+        degrees-function-4d6ec4db-e694-4b94-ace0-1cc3f61f9ba1
+    """
+    return np.degrees(float(angle))
+
 
 
 @xl.register()
