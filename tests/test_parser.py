@@ -42,6 +42,12 @@ class FormulaParserTest(unittest.TestCase):
     def test_parse_prefix_op(self):
         self.assertEqual(str(self.parse('-(A1+1)')), '- ((A1) + (1))')
 
+    def test_parse_consecutive_unary_negation(self):
+        self.assertEqual(str(self.parse('--A1')), '- (- (A1))')
+
+    def test_parse_infix_and_prefix_op(self):
+        self.assertEqual(str(self.parse('B1--A1')), '(B1) - (- (A1))')
+
     def test_parse_percent(self):
         # Should be a proper postfix op, but tokenizer takes care of it right
         # away.
