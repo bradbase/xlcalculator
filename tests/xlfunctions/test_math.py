@@ -23,6 +23,13 @@ class MathModuleTest(unittest.TestCase):
     def test_ACOSH_less_than_1(self):
         self.assertIsInstance(math.ACOSH(-1), xlerrors.NameExcelError)
 
+    def test_ASIN(self):
+        self.assertAlmostEqual(math.ASIN(-0.5), -0.523598776)
+
+    def test_ASIN_out_of_bounds(self):
+        self.assertIsInstance(math.ASIN(-2), xlerrors.NumExcelError)
+        self.assertIsInstance(math.ASIN(-2), xlerrors.NumExcelError)
+
     def test_ARTAN2(self):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)

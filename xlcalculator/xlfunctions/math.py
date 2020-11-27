@@ -52,6 +52,24 @@ def ACOSH(
 
 @xl.register()
 @xl.validate_args
+def ASIN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the arcsine, or inverse sine, of a number.
+
+    https://support.office.com/en-us/article/
+        asin-function-81fb95e5-6d6f-48c4-bc45-58f955c6d347
+    """
+    if number < -1 or number > 1:
+        raise xlerrors.NumExcelError(f'number {number} must be less than '
+                                     f'or equal to -1 or greater ot equal '
+                                     f'to 1')
+
+    return np.arcsin(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def ATAN2(
         x_num: func_xltypes.XlNumber,
         y_num: func_xltypes.XlNumber
