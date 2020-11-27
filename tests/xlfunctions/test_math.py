@@ -30,6 +30,13 @@ class MathModuleTest(unittest.TestCase):
         self.assertIsInstance(math.ASIN(-2), xlerrors.NumExcelError)
         self.assertIsInstance(math.ASIN(-2), xlerrors.NumExcelError)
 
+    def test_ASINH(self):
+        self.assertAlmostEqual(math.ASINH(-2.5), -1.647231146)
+        self.assertAlmostEqual(math.ASINH(10), 2.99822295)
+
+    def test_ATAN(self):
+        self.assertAlmostEqual(math.ATAN(1), 0.785398163)
+
     def test_ARTAN2(self):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)

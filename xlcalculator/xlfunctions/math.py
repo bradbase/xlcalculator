@@ -70,6 +70,32 @@ def ASIN(
 
 @xl.register()
 @xl.validate_args
+def ASINH(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the inverse hyperbolic sine of a number.
+
+    https://support.office.com/en-us/article/
+        asinh-function-4e00475a-067a-43cf-926a-765b0249717c
+    """
+    return np.arcsinh(float(number))
+
+
+@xl.register()
+@xl.validate_args
+def ATAN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the arctangent, or inverse tangent, of a number.
+
+    https://support.office.com/en-us/article/
+        atan-function-50746fa8-630a-406b-81d0-4a2aed395543
+    """
+    return np.arctan(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def ATAN2(
         x_num: func_xltypes.XlNumber,
         y_num: func_xltypes.XlNumber
