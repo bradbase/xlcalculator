@@ -46,3 +46,9 @@ class CEILINGTest(testing.FunctionalTestCase):
             self.evaluator.evaluate('Sheet1!A8'),
             self.evaluator.get_cell_value('Sheet1!A8')
         )
+
+    def test_evaluation_A9(self):
+        self.assertEqual(
+            self.evaluator.evaluate('Sheet1!A9'),
+            self.evaluator.get_cell_value('Sheet1!A9')
+        )

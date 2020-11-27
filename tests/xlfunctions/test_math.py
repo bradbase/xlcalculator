@@ -49,6 +49,7 @@ class MathModuleTest(unittest.TestCase):
         self.assertEqual(math.CEILING(0.234, 0.01), 0.24)
         self.assertEqual(math.CEILING(0, -2), 0)
         self.assertEqual(math.CEILING(2, 0), 0)
+        self.assertIsInstance(math.CEILING(2, -2), xlerrors.NumExcelError)
 
     def test_DEGREES(self):
         self.assertEqual(math.DEGREES(pymath.pi), 180)

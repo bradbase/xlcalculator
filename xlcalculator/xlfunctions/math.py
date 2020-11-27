@@ -126,6 +126,10 @@ def CEILING(
     if significance == 0:
         return 0
 
+    if significance < 0 < number:
+        raise xlerrors.NumExcelError('significance below zero and number \
+                                      above zero is not allowed')
+
     number = float(number)
     significance = float(significance)
 
