@@ -41,6 +41,15 @@ class MathModuleTest(unittest.TestCase):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)
 
+    def test_CEILING_number(self):
+        self.assertEqual(math.CEILING(2.5, 1), 3)
+        self.assertEqual(math.CEILING(-2.5, -2), -4)
+        self.assertEqual(math.CEILING(-2.5, 2), -2)
+        self.assertEqual(math.CEILING(1.5, 0.1), 1.5)
+        self.assertEqual(math.CEILING(0.234, 0.01), 0.24)
+        self.assertEqual(math.CEILING(0, -2), 0)
+        self.assertEqual(math.CEILING(2, 0), 0)
+
     def test_DEGREES(self):
         self.assertEqual(math.DEGREES(pymath.pi), 180)
 

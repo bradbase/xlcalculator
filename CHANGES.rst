@@ -9,7 +9,7 @@ CHANGES
 - Add functions: ``PV()``, ``XIRR()``, ``ISEVEN()``, ``ISODD()``,
   ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``, ``FALSE()``
   ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, ``ARCCOSH()``,
-  ``ASIN()``, ``ASINH()``, ``ATAN()``
+  ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``
 
 0.2.11 (2020-11-16)
 -------------------

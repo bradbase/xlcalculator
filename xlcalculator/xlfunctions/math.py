@@ -1,8 +1,9 @@
 import decimal
 import math
+from typing import Tuple, Union
+
 import numpy as np
 import pandas as pd
-from typing import Tuple, Union
 
 from . import xl, xlerrors, xlcriteria, func_xltypes
 
@@ -107,6 +108,57 @@ def ATAN2(
         atan2-function-c04592ab-b9e3-4908-b428-c96b3a565033
     """
     return np.arctan2(float(x_num), float(y_num))
+
+
+@xl.register()
+@xl.validate_args
+def CEILING(
+        number: func_xltypes.XlNumber,
+        significance: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns number rounded up, away from zero, to the nearest multiple of
+        significance.
+
+    https://support.office.com/en-us/article/
+        ceiling-function-0a5cd7c8-0720-4f0a-bd2c-c943e510899f
+    """
+
+    if significance == 0:
+        return 0
+
+    number = float(number)
+    significance = float(significance)
+
+    ceiling = significance * math.ceil(number / significance)
+
+    # If number is an exact multiple of significance, no rounding occurs
+    if (number % significance) == 0:
+        return ceiling
+
+    quantize_multiplier = str(significance % 1)
+
+    # If number is negative, and significance is negative, the value is
+    # rounded down, away from zero.
+    if number < 0 and significance < 0:
+        result = decimal.Decimal(ceiling)
+        result = result.quantize(decimal.Decimal(quantize_multiplier),
+                                 rounding=decimal.ROUND_DOWN)
+        return float(result)
+
+    # If number is negative, and significance is positive, the value is
+    # rounded up towards zero.
+    if number < 0 < significance:
+        result = decimal.Decimal(ceiling)
+        result = result.quantize(decimal.Decimal(quantize_multiplier),
+                                 rounding=decimal.ROUND_UP)
+        return float(result)
+
+    # Regardless of the sign of number, a value is rounded up when adjusted
+    # away from zero.
+    result = decimal.Decimal(ceiling)
+    result = result.quantize(decimal.Decimal(quantize_multiplier),
+                             rounding=decimal.ROUND_UP)
+    return float(result)
 
 
 @xl.register()
