@@ -51,6 +51,9 @@ class MathModuleTest(unittest.TestCase):
         self.assertEqual(math.CEILING(2, 0), 0)
         self.assertIsInstance(math.CEILING(2, -2), xlerrors.NumExcelError)
 
+    def test_COS(self):
+        self.assertAlmostEqual(math.COS(1.047), 0.5001711)
+
     def test_DEGREES(self):
         self.assertEqual(math.DEGREES(pymath.pi), 180)
 
@@ -107,6 +110,9 @@ class MathModuleTest(unittest.TestCase):
     def test_POWER_with_bad_arg(self):
         self.assertIsInstance(math.POWER('bad', 2), xlerrors.ValueExcelError)
         self.assertIsInstance(math.POWER(10, 'bad'), xlerrors.ValueExcelError)
+
+    def test_RADIANS(self):
+        self.assertAlmostEqual(math.RADIANS(270), 4.712389)
 
     def test_ROUND(self):
         self.assertEqual(math.ROUND(0.6), 1)

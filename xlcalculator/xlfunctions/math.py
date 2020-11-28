@@ -167,6 +167,19 @@ def CEILING(
 
 @xl.register()
 @xl.validate_args
+def COS(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the cosine of the given angle.
+
+    https://support.office.com/en-us/article/
+        cos-function-0fb808a5-95d6-4553-8148-22aebdce5f05
+    """
+    return np.cos(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def DEGREES(
         angle: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
@@ -255,6 +268,19 @@ def POWER(
         power-function-d3f2908b-56f4-4c3f-895a-07fb519c362a
     """
     return np.power(number, power)
+
+
+@xl.register()
+@xl.validate_args
+def RADIANS(
+        angle: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Converts degrees to radians.
+
+    https://support.office.com/en-us/article/
+        radians-function-ac409508-3d48-45f5-ac02-1497c92de5bf
+    """
+    return np.radians(float(angle))
 
 
 @xl.register()
