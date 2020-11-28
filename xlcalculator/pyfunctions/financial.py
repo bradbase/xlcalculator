@@ -1,5 +1,4 @@
 
-import datetime
 import decimal
 from typing import List
 
@@ -29,7 +28,7 @@ def _xnpv(
 
 def _xirr(
         values: List[decimal.Decimal],
-        dates: List[datetime.date],
+        dates: List[float],
         guess: float = 0.1
 ) -> float:
     """XIRR."""
@@ -75,9 +74,9 @@ def XIRR(
     # really represent a valid scenario, so returning None is better than
     # infinity.
     if all(series['values'] >= 0):
-        return None  # Infinity
+        raise xlerrors.NumExcelError('All values are greater than zero')
     if all(series['values'] <= 0):
-        return None  # -Infinity
+        raise xlerrors.NumExcelError('All values are less than zero')
 
     # Sort dataframe by date
     series = series.sort_values('dates', ascending=True)
@@ -93,7 +92,7 @@ def XIRR(
     except RuntimeError:
         # The XIRR function can raise a runtime error if it cannot converge to
         # a value.
-        return None
+        raise xlerrors.NumExcelError('Did not converge')
     except (ValueError, decimal.InvalidOperation):
         # Happened at least once that the return was so high, xirr errd out.
-        return None
+        raise xlerrors.NumExcelError('Return was too high')

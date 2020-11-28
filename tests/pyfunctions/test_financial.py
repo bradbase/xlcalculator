@@ -1,8 +1,9 @@
 
 import unittest
+from unittest import mock
 
 from xlcalculator.xlfunctions import (
-    # xlerrors,
+    xlerrors,
     func_xltypes,
     date
 )
@@ -64,43 +65,78 @@ class PyFunctions_FinancialModuleTest(unittest.TestCase):
         self.assertEqual(
             financial.XIRR(range_00, range_01, -0.99), 0.01006126516492058)
 
-    # def test_xirr(self):
-    #     data = [(-10000, float(date.DATE(2019, 1, 1))),
-    #             (20000, float(date.DATE(2020, 1, 1)))]
-    #     self.assertEqual(financial._xirr(data), Decimal('1.0000'))
+    def test_XIRR_allPositiveValues(self):
+        range_00 = func_xltypes.Array(
+            [[10000, 20, 10100]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2010, 12, 29),
+            date.DATE(2012, 1, 25),
+            date.DATE(2012, 3, 8)
+        ]])
 
-    # def test_xirr_allPositiveValues(self):
-    #     data = [(10000, date(2019, 1, 1)), (20000, date(2020, 1, 1))]
-    #     self.assertEqual(math.xirr(data), None)
+        self.assertIsInstance(financial.XIRR(range_00, range_01, 0.1),
+                              xlerrors.NumExcelError)
 
-    # def test_xirr_allNegativeValues(self):
-    #     data = [(-10000, date(2019, 1, 1)), (-20000, date(2020, 1, 1))]
-    #     self.assertEqual(math.xirr(data), None)
-    #
-    # def test_xirr_withRuntimeError(self):
-    #     data = [(-10000, date(2019, 1, 1)), (20000, date(2020, 1, 1))]
-    #     with mock.patch.object(math, '_excel_xirr',
-    #                  side_effect=RuntimeError()):
-    #         self.assertEqual(math.xirr(data), None)
-    #
-    # def test_xirr_withValueError(self):
-    #     data = [(-10000, date(2019, 1, 1)), (20000, date(2020, 1, 1))]
-    #     with mock.patch.object(math, '_excel_xirr',
-    #                 side_effect=ValueError()):
-    #         self.assertEqual(math.xirr(data), None)
+    def test_XIRR_allNegativeValues(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, -20, -10100]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2010, 12, 29),
+            date.DATE(2012, 1, 25),
+            date.DATE(2012, 3, 8)
+        ]])
 
-    # def test_XIRR_length_mismatch(self):
-    #     range_00 = [[-10000, 2750, 4250]]
-    #     range_01 = [[date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]]
-    #     self.assertIsInstance(
-    #         financial.XIRR(range_00, range_01, 0.1), xlerrors.NumExcelError)
+        self.assertIsInstance(financial.XIRR(range_00, range_01, 0.1),
+                              xlerrors.NumExcelError)
 
-    # def test_XIRR_not_converge(self):
-    #     dates = [date.DATE(2020, 8, 31),
-    #              date.DATE(2020, 5, 5),
-    #              date.DATE(2020, 2, 28),
-    #              date.DATE(2020, 8, 31),
-    #              date.DATE(2018, 6, 30)]
-    #     values = [50289.0, -75000.0, 0.0, 0.0, 0.0]
-    #     self.assertIsInstance(
-    #         financial.XIRR(values, dates, 0), xlerrors.NumExcelError)
+    def test_XIRR_withRuntimeError(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 20, 10100]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2010, 12, 29),
+            date.DATE(2012, 1, 25),
+            date.DATE(2012, 3, 8)
+        ]])
+
+        with mock.patch.object(financial, '_xirr',
+                               side_effect=RuntimeError()):
+            self.assertIsInstance(financial.XIRR(range_00, range_01, 0.1),
+                                  xlerrors.NumExcelError)
+
+    def test_XIRR_withValueError(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 20, 10100]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2010, 12, 29),
+            date.DATE(2012, 1, 25),
+            date.DATE(2012, 3, 8)
+        ]])
+
+        with mock.patch.object(financial, '_xirr',
+                               side_effect=ValueError()):
+            self.assertIsInstance(financial.XIRR(range_00, range_01, 0.1),
+                                  xlerrors.NumExcelError)
+
+    def test_XIRR_dates_length_mismatch(self):
+        range_00 = [[-10000, 2750, 4250]]
+        range_01 = [[date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]]
+
+        self.assertIsInstance(
+            financial.XIRR(range_00, range_01, 0.1), xlerrors.NumExcelError)
+
+    def test_XIRR_values_length_mismatch(self):
+        range_00 = [[-10000, 2750]]
+        range_01 = [[date.DATE(2008, 1, 1), date.DATE(2008, 3, 1), date.DATE(2008, 10, 30)]]
+
+        self.assertIsInstance(
+            financial.XIRR(range_00, range_01, 0.1), xlerrors.NumExcelError)
+
+    def test_XIRR_not_converge(self):
+        dates = [date.DATE(2020, 8, 31),
+                 date.DATE(2020, 5, 5),
+                 date.DATE(2020, 2, 28),
+                 date.DATE(2020, 8, 31),
+                 date.DATE(2018, 6, 30)]
+        values = [50289.0, -75000.0, 0.0, 0.0, 0.0]
+        self.assertIsInstance(
+            financial.XIRR(values, dates, 0), xlerrors.NumExcelError)
