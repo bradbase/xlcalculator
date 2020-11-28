@@ -54,8 +54,15 @@ class MathModuleTest(unittest.TestCase):
     def test_COS(self):
         self.assertAlmostEqual(math.COS(1.047), 0.5001711)
 
+    def test_COSH(self):
+        self.assertAlmostEqual(math.COSH(4), 27.3082328)
+
     def test_DEGREES(self):
         self.assertEqual(math.DEGREES(pymath.pi), 180)
+
+    def test_EXP(self):
+        self.assertAlmostEqual(math.EXP(1), 2.71828183)
+        self.assertAlmostEqual(math.EXP(2), 7.3890561)
 
     def test_FLOOR(self):
         self.assertEqual(math.FLOOR(3.7, 2), 2)

@@ -180,6 +180,19 @@ def COS(
 
 @xl.register()
 @xl.validate_args
+def COSH(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the hyperbolic cosine of a number.
+
+    https://support.office.com/en-us/article/
+        cosh-function-e460d426-c471-43e8-9540-a57ff3b70555
+    """
+    return np.cosh(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def DEGREES(
         angle: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
@@ -189,6 +202,19 @@ def DEGREES(
         degrees-function-4d6ec4db-e694-4b94-ace0-1cc3f61f9ba1
     """
     return np.degrees(float(angle))
+
+
+@xl.register()
+@xl.validate_args
+def EXP(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns e raised to the power of number.
+
+    https://support.office.com/en-us/article/
+        exp-function-c578f034-2c45-4c37-bc8c-329660a63abe
+    """
+    return np.exp(float(number))
 
 
 @xl.register()
