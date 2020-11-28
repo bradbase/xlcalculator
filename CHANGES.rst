@@ -3,11 +3,14 @@
 CHANGES
 =======
 
-0.2.12 (2020-11-23)
+0.2.12 (2020-11-28)
 -------------------
 
 - Add functions: ``PV()``, ``XIRR()``, ``ISEVEN()``, ``ISODD()``,
   ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``
+- Bugfix unary operator needed to be right associated to handle cases of
+  double use eg; double-negative.. --4 == 4
+
 
 0.2.11 (2020-11-16)
 -------------------
