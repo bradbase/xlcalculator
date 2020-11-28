@@ -4,6 +4,7 @@ from typing import Tuple, Union
 
 import numpy as np
 import pandas as pd
+from scipy.special import factorial2
 
 from . import xl, xlerrors, xlcriteria, func_xltypes
 
@@ -235,6 +236,38 @@ def EXP(
         exp-function-c578f034-2c45-4c37-bc8c-329660a63abe
     """
     return np.exp(float(number))
+
+
+@xl.register()
+@xl.validate_args
+def FACT(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the factorial of a number
+
+    https://support.office.com/en-us/article/
+        fact-function-ca8588c2-15f2-41c0-8e8c-c11bd471a4f3
+    """
+    if number < 0:
+        raise xlerrors.NumExcelError('Negative values are not allowed')
+
+    return math.factorial(int(number))
+
+
+@xl.register()
+@xl.validate_args
+def FACTDOUBLE(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the double factorial of a number.
+
+    https://support.office.com/en-us/article/
+        factdouble-function-e67697ac-d214-48eb-b7b7-cce2589ecac8
+    """
+    if number < 0:
+        raise xlerrors.NumExcelError('Negative values are not allowed')
+
+    return factorial2(int(number), exact=True)
 
 
 @xl.register()

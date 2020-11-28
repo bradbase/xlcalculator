@@ -10,7 +10,7 @@ CHANGES
   ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``, ``FALSE()``
   ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, ``ARCCOSH()``,
   ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``, ``COS()``, ``RADIANS()``
-  ``COSH()``, ``EXP()``, ``EVEN()``
+  ``COSH()``, ``EXP()``, ``EVEN()``, ``FACT()``, ``FACTDOUBLE()``
 
 0.2.11 (2020-11-16)
 -------------------

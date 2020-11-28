@@ -71,6 +71,20 @@ class MathModuleTest(unittest.TestCase):
         self.assertAlmostEqual(math.EXP(1), 2.71828183)
         self.assertAlmostEqual(math.EXP(2), 7.3890561)
 
+    def test_FACT(self):
+        self.assertEqual(math.FACT(5), 120)
+        self.assertEqual(math.FACT(1.9), 1)
+        self.assertEqual(math.FACT(0), 1)
+        self.assertIsInstance(math.FACT(-1), xlerrors.NumExcelError)
+        self.assertEqual(math.FACT(1), 1)
+
+    def test_FACTDOUBLE(self):
+        self.assertEqual(math.FACTDOUBLE(6), 48)
+        self.assertEqual(math.FACTDOUBLE(7), 105)
+        self.assertEqual(math.FACTDOUBLE(0), 1)
+        self.assertIsInstance(math.FACTDOUBLE(-1), xlerrors.NumExcelError)
+        self.assertEqual(math.FACTDOUBLE(1), 1)
+
     def test_FLOOR(self):
         self.assertEqual(math.FLOOR(3.7, 2), 2)
         self.assertEqual(math.FLOOR(-2.5, -2), -2)
