@@ -12,6 +12,29 @@ class MathModuleTest(unittest.TestCase):
     def test_ABS_with_bad_arg(self):
         self.assertIsInstance(math.ABS('bad'), xlerrors.ValueExcelError)
 
+    def test_FLOOR(self):
+        self.assertEqual(math.FLOOR(3.7, 2), 2)
+        self.assertEqual(math.FLOOR(-2.5, -2), -2)
+        self.assertEqual(math.FLOOR(1.58, 0.1), 1.5)
+        self.assertEqual(math.FLOOR(0.234, 0.01), 0.23)
+
+    def test_FLOOR_number(self):
+        self.assertEqual(math.FLOOR(0, -2), 0)
+
+    def test_FLOOR_significance(self):
+        self.assertIsInstance(math.FLOOR(2, 0), xlerrors.DivZeroExcelError)
+        self.assertIsInstance(math.FLOOR(2.5, -2), xlerrors.NumExcelError)
+
+    def test_FLOOR_errors(self):
+        self.assertIsInstance(math.FLOOR(2.5, -2), xlerrors.NumExcelError)
+
+        self.assertIsInstance(math.FLOOR("hello", -2),
+                              xlerrors.ValueExcelError)
+        self.assertIsInstance(math.FLOOR(2.5, "hello"),
+                              xlerrors.ValueExcelError)
+        self.assertIsInstance(math.FLOOR("hello", "hello"),
+                              xlerrors.ValueExcelError)
+
     def test_LN(self):
         self.assertEqual(math.LN(2.718281828459045), 1)
 

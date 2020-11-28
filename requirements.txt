@@ -31,6 +31,7 @@ pytest-cov==2.9.0         # via xlcalculator
 pytest==5.4.2             # via pytest-cov, xlcalculator
 python-dateutil==2.8.1    # via pandas, xlcalculator
 pytz==2020.1              # via pandas
+scipy==1.5.4              # via xlcalculator
 six==1.15.0               # via packaging, pip-tools, python-dateutil
 wcwidth==0.1.9            # via pytest
 yearfrac==0.4.4           # via via xlcalculator

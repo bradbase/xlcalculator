@@ -87,7 +87,8 @@ setuptools.setup(
         'openpyxl',
         'numpy-financial',
         'yearfrac==0.4.4',
-        'mock'
+        'mock',
+        'scipy'
     ],
     extras_require=dict(
         test=TESTS_REQUIRE,

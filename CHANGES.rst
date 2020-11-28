@@ -3,11 +3,11 @@
 CHANGES
 =======
 
-0.2.12
+0.2.12 (2020-11-23)
 -------------------
 
-- No changes yet
-
+- Add functions: ``PV()``, ``XIRR()``, ``ISEVEN()``, ``ISODD()``,
+  ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``
 
 0.2.11 (2020-11-16)
 -------------------

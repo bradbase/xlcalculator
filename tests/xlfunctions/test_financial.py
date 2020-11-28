@@ -61,6 +61,13 @@ class FinancialModuleTest(unittest.TestCase):
         self.assertAlmostEqual(
             financial.PMT(0.08 / 12, 10, 10000, type=1), -1030.164, 2)
 
+    def test_PV(self):
+        self.assertAlmostEqual(
+            financial.PV(0.08 / 12, 12 * 20, 500.00, 0, 0),
+            -59777.15,
+            places=2
+        )
+
     def test_SLN(self):
         self.assertEqual(financial.SLN(30000, 7500, 10), 2250)
 
@@ -116,6 +123,36 @@ class FinancialModuleTest(unittest.TestCase):
             98708.55092429437
         )
 
+    def test_XIRR(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 2750, 4250, 3250, 2750]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2008, 1, 1),
+            date.DATE(2008, 3, 1),
+            date.DATE(2008, 10, 30),
+            date.DATE(2009, 2, 15),
+            date.DATE(2009, 4, 1)
+        ]])
+
+        self.assertAlmostEqual(
+            financial.XIRR(range_00, range_01, 0.1), 0.373362535)
+
+    def test_XIRR_length_mismatch(self):
+        range_00 = [[-10000, 2750, 4250]]
+        range_01 = [[date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]]
+        self.assertIsInstance(
+            financial.XIRR(range_00, range_01, 0.1), xlerrors.NumExcelError)
+
+    def test_XIRR_not_converge(self):
+        dates = [date.DATE(2020, 8, 31),
+                 date.DATE(2020, 5, 5),
+                 date.DATE(2020, 2, 28),
+                 date.DATE(2020, 8, 31),
+                 date.DATE(2018, 6, 30)]
+        values = [50289.0, -75000.0, 0.0, 0.0, 0.0]
+        self.assertIsInstance(
+            financial.XIRR(values, dates, 0), xlerrors.NumExcelError)
+
     def test_XNPV(self):
         range_00 = func_xltypes.Array(
             [[-10000, 2750, 4250, 3250, 2750]])
@@ -134,3 +171,16 @@ class FinancialModuleTest(unittest.TestCase):
         range_01 = [date.DATE(2008, 1, 1), date.DATE(2008, 3, 1)]
         self.assertIsInstance(
             financial.XNPV(0.09, range_00, range_01), xlerrors.NumExcelError)
+
+    def test_XNPV_rate_lt_minus_one(self):
+        range_00 = func_xltypes.Array(
+            [[-10000, 2750, 4250, 3250, 2750]])
+        range_01 = func_xltypes.Array([[
+            date.DATE(2008, 1, 1),
+            date.DATE(2008, 3, 1),
+            date.DATE(2008, 10, 30),
+            date.DATE(2009, 2, 15),
+            date.DATE(2009, 4, 1)
+        ]])
+        self.assertEqual(
+            financial.XNPV(-1.1, range_00, range_01), float('inf'))
