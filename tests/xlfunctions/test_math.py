@@ -60,6 +60,13 @@ class MathModuleTest(unittest.TestCase):
     def test_DEGREES(self):
         self.assertEqual(math.DEGREES(pymath.pi), 180)
 
+    def test_EVEN(self):
+        self.assertEqual(math.EVEN(1.5), 2)
+        self.assertEqual(math.EVEN(1.5), 2)
+        self.assertEqual(math.EVEN(3), 4)
+        self.assertEqual(math.EVEN(2), 2)
+        self.assertEqual(math.EVEN(-1), -2)
+
     def test_EXP(self):
         self.assertAlmostEqual(math.EXP(1), 2.71828183)
         self.assertAlmostEqual(math.EXP(2), 7.3890561)

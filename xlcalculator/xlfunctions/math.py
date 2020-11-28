@@ -206,6 +206,26 @@ def DEGREES(
 
 @xl.register()
 @xl.validate_args
+def EVEN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns number rounded up to the nearest even integer.
+
+    https://support.office.com/en-us/article/
+        even-function-197b5f06-c795-4c1e-8696-3c3b8a646cf9
+
+    algorithm found here;
+        https://stackoverflow.com/questions/25361757/
+            python-2-7-round-a-float-up-to-next-even-number
+    """
+    if number < 0:
+        return math.ceil(abs(float(number)) / 2.) * -2
+    else:
+        return math.ceil(float(number) / 2.) * 2
+
+
+@xl.register()
+@xl.validate_args
 def EXP(
         number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
