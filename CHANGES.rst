@@ -11,7 +11,8 @@ CHANGES
   ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, ``ARCCOSH()``,
   ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``, ``COS()``, ``RADIANS()``
   ``COSH()``, ``EXP()``, ``EVEN()``, ``FACT()``, ``FACTDOUBLE()``, ``INT()``
-  ``LOG()``, ``LOG10()``. ``RAND()``, ``RANDBETWRRN()``
+  ``LOG()``, ``LOG10()``. ``RAND()``, ``RANDBETWRRN()``, ``SIGN()``,
+  ``SIN()``, ``SQRTPI()``
 
 
 0.2.11 (2020-11-16)

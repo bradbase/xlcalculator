@@ -525,6 +525,22 @@ def SQRT(
 
 @xl.register()
 @xl.validate_args
+def SQRTPI(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the square root of (number * pi).
+
+    https://support.office.com/en-us/article/
+        sqrtpi-function-1fb4e63f-9b51-46d6-ad68-b3e7a8b519b4
+    """
+    if number < 0:
+        raise xlerrors.NumExcelError(f'number {number} must be non-negative')
+
+    return math.sqrt(number * math.pi)
+
+
+@xl.register()
+@xl.validate_args
 def SUM(
         *numbers: Tuple[func_xltypes.XlNumber]
 ) -> func_xltypes.XlNumber:
