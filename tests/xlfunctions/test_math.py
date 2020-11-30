@@ -112,6 +112,11 @@ class MathModuleTest(unittest.TestCase):
         self.assertEqual(math.INT(8.9), 8)
         self.assertEqual(math.INT(-8.9), -9)
 
+    def test_LOG(self):
+        self.assertEqual(math.LOG(10), 1)
+        self.assertEqual(math.LOG(8, 2), 3)
+        self.assertAlmostEqual(math.LOG(86, 2.7182818), 4.4543473)
+
     def test_LN(self):
         self.assertEqual(math.LN(2.718281828459045), 1)
 
