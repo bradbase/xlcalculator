@@ -663,6 +663,19 @@ def SUMPRODUCT(
 
 @xl.register()
 @xl.validate_args
+def TAN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the tangent of the given angle.
+
+    https://support.office.com/en-us/article/
+        tan-function-08851a40-179f-4052-b789-d7f699447401
+    """
+    return float(np.tan(float(number)))
+
+
+@xl.register()
+@xl.validate_args
 def TRUNC(
         number: func_xltypes.XlNumber,
         num_digits: func_xltypes.XlNumber = 0

@@ -294,6 +294,11 @@ class MathModuleTest(unittest.TestCase):
     def test_SUMPRODUCT_with_single_value(self):
         self.assertEqual(math.SUMPRODUCT(1), 1.0)
 
+    def test_TAN(self):
+        self.assertAlmostEqual(math.TAN(0.785), 0.99920399)
+        self.assertAlmostEqual(math.TAN(45 * math.PI() / 180), 1)
+        self.assertAlmostEqual(math.TAN(math.RADIANS(45)), 1)
+
     def test_TRUNC(self):
         self.assertEqual(math.TRUNC(0.6), 0)
         self.assertEqual(math.TRUNC(1.3), 1)
