@@ -286,7 +286,6 @@ def FLOOR(
     if significance < 0 < number:
         raise xlerrors.NumExcelError('number and significance needto have \
                                       the same sign')
-
     if number == 0:
         return 0
 
@@ -364,6 +363,32 @@ def MOD(
         mod-function-9b6cd169-b6ee-406a-a97b-edf2a9dc24f3
     """
     return number % divisor
+
+
+@xl.register()
+@xl.validate_args
+def RAND() -> func_xltypes.XlNumber:
+    """RAND returns an evenly distributed random real number greater than or
+        equal to 0 and less than 1.
+
+    https://support.office.com/en-us/article/
+        rand-function-4cbfa695-8869-4788-8d90-021ea9f5be73
+    """
+    return np.random.rand()
+
+
+@xl.register()
+@xl.validate_args
+def RANDBETWEEN(
+            bottom: func_xltypes.XlNumber,
+            top: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns a random integer number between the numbers you specify.
+
+    https://support.office.com/en-us/article/
+        randbetween-function-4cc7f0d1-87dc-4eb7-987f-a469ab381685
+    """
+    return np.random.rand() * (top - bottom) + bottom
 
 
 @xl.register()
