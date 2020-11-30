@@ -112,16 +112,22 @@ class MathModuleTest(unittest.TestCase):
         self.assertEqual(math.INT(8.9), 8)
         self.assertEqual(math.INT(-8.9), -9)
 
-    def test_LOG(self):
-        self.assertEqual(math.LOG(10), 1)
-        self.assertEqual(math.LOG(8, 2), 3)
-        self.assertAlmostEqual(math.LOG(86, 2.7182818), 4.4543473)
-
     def test_LN(self):
         self.assertEqual(math.LN(2.718281828459045), 1)
 
     def test_LN_with_bad_arg(self):
         self.assertIsInstance(math.LN('bad'), xlerrors.ValueExcelError)
+
+    def test_LOG(self):
+        self.assertEqual(math.LOG(10), 1)
+        self.assertEqual(math.LOG(8, 2), 3)
+        self.assertAlmostEqual(math.LOG(86, 2.7182818), 4.4543473)
+
+    def test_LOG10(self):
+        self.assertAlmostEqual(math.LOG10(86), 1.93449845)
+        self.assertEqual(math.LOG10(10), 1)
+        self.assertEqual(math.LOG10(100000), 5)
+        self.assertEqual(math.LOG10(1E+5), 5)
 
     def test_MOD(self):
         self.assertEqual(math.MOD(1, 2), 1)

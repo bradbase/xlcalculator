@@ -314,21 +314,6 @@ def INT(
 
 @xl.register()
 @xl.validate_args
-def LOG(
-        number: func_xltypes.Number,
-        base: func_xltypes.Number = 10
-) -> func_xltypes.XlNumber:
-    """Returns the logarithm of a number to the base you specify.
-
-    https://support.office.com/en-us/article/
-        log-function-4e82f196-1ca9-4747-8fb0-6c4a3abb3280
-    """
-
-    return math.log(float(number), float(base))
-
-
-@xl.register()
-@xl.validate_args
 def LN(
         number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
@@ -338,6 +323,33 @@ def LN(
         ln-function-81fe1ed7-dac9-4acd-ba1d-07a142c6118f
     """
     return math.log(number)
+
+
+@xl.register()
+@xl.validate_args
+def LOG(
+        number: func_xltypes.Number,
+        base: func_xltypes.Number = 10
+) -> func_xltypes.XlNumber:
+    """Returns the logarithm of a number to the base you specify.
+
+    https://support.office.com/en-us/article/
+        log-function-4e82f196-1ca9-4747-8fb0-6c4a3abb3280
+    """
+    return math.log(float(number), float(base))
+
+
+@xl.register()
+@xl.validate_args
+def LOG10(
+        number: func_xltypes.Number
+) -> func_xltypes.XlNumber:
+    """Returns the base-10 logarithm of a number.
+
+    https://support.office.com/en-us/article/
+        log10-function-c75b881b-49dd-44fb-b6f4-37e3486a0211
+    """
+    return np.log10(float(number))
 
 
 @xl.register()
