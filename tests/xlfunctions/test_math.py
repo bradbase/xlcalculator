@@ -108,6 +108,10 @@ class MathModuleTest(unittest.TestCase):
         self.assertIsInstance(math.FLOOR("hello", "hello"),
                               xlerrors.ValueExcelError)
 
+    def test_INT(self):
+        self.assertEqual(math.INT(8.9), 8)
+        self.assertEqual(math.INT(-8.9), -9)
+
     def test_LN(self):
         self.assertEqual(math.LN(2.718281828459045), 1)
 

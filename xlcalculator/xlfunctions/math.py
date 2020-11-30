@@ -298,6 +298,22 @@ def FLOOR(
 
 @xl.register()
 @xl.validate_args
+def INT(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Rounds a number down to the nearest integer.
+
+    https://support.office.com/en-us/article/
+        int-function-a6c4af9e-356d-4369-ab6a-cb1fd9d343ef
+    """
+    if number < 0:
+        return _round(number, 0, _rounding=decimal.ROUND_UP)
+    else:
+        return _round(number, 0, _rounding=decimal.ROUND_DOWN)
+
+
+@xl.register()
+@xl.validate_args
 def LN(
         number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
@@ -362,6 +378,14 @@ def RADIANS(
     return np.radians(float(angle))
 
 
+def _round(number, num_digits, _rounding=decimal.ROUND_HALF_UP):
+    number = decimal.Decimal(str(number))
+    dc = decimal.getcontext()
+    dc.rounding = _rounding
+    ans = round(number, int(num_digits))
+    return float(ans)
+
+
 @xl.register()
 @xl.validate_args
 def ROUND(
@@ -374,11 +398,7 @@ def ROUND(
     https://support.office.com/en-us/article/
         ROUND-function-c018c5d8-40fb-4053-90b1-b3e7f61a213c
     """
-    number = decimal.Decimal(str(number))
-    dc = decimal.getcontext()
-    dc.rounding = _rounding
-    ans = round(number, int(num_digits))
-    return float(ans)
+    return _round(number=number, num_digits=num_digits, _rounding=_rounding)
 
 
 @xl.register()
@@ -392,7 +412,7 @@ def ROUNDUP(
     https://support.office.com/en-us/article/
          ROUNDUP-function-f8bc9b23-e795-47db-8703-db171d0c42a7
     """
-    return ROUND(number, num_digits=num_digits, _rounding=decimal.ROUND_UP)
+    return _round(number, num_digits=num_digits, _rounding=decimal.ROUND_UP)
 
 
 @xl.register()
@@ -406,7 +426,7 @@ def ROUNDDOWN(
     https://support.office.com/en-us/article/
         rounddown-function-2ec94c73-241f-4b01-8c6f-17e6d7968f53
     """
-    return ROUND(number, num_digits=num_digits, _rounding=decimal.ROUND_DOWN)
+    return _round(number, num_digits=num_digits, _rounding=decimal.ROUND_DOWN)
 
 
 @xl.register()
