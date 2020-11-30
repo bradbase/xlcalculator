@@ -483,6 +483,19 @@ def ROUNDDOWN(
 
 @xl.register()
 @xl.validate_args
+def SIGN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Determines the sign of a number.
+
+    https://support.office.com/en-us/article/
+        sign-function-109c932d-fcdc-4023-91f1-2dd0e916a1d8
+    """
+    return np.sign(float(number))
+
+
+@xl.register()
+@xl.validate_args
 def SQRT(
         number: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:

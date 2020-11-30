@@ -190,6 +190,11 @@ class MathModuleTest(unittest.TestCase):
         self.assertIsInstance(
             math.ROUNDDOWN(1.3, 'bad'), xlerrors.ValueExcelError)
 
+    def test_SIGN(self):
+        self.assertEqual(math.SIGN(10), 1)
+        self.assertEqual(math.SIGN(4-4), 0)
+        self.assertEqual(math.SIGN(-0.00001), -1)
+
     def test_SQRT(self):
         self.assertEqual(math.SQRT(4), 2)
         self.assertEqual(math.SQRT(4.0), 2.0)
