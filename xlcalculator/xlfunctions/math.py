@@ -380,8 +380,8 @@ def RAND() -> func_xltypes.XlNumber:
 @xl.register()
 @xl.validate_args
 def RANDBETWEEN(
-            bottom: func_xltypes.XlNumber,
-            top: func_xltypes.XlNumber
+        bottom: func_xltypes.XlNumber,
+        top: func_xltypes.XlNumber
 ) -> func_xltypes.XlNumber:
     """Returns a random integer number between the numbers you specify.
 
@@ -492,6 +492,19 @@ def SIGN(
         sign-function-109c932d-fcdc-4023-91f1-2dd0e916a1d8
     """
     return np.sign(float(number))
+
+
+@xl.register()
+@xl.validate_args
+def SIN(
+        number: func_xltypes.XlNumber
+) -> func_xltypes.XlNumber:
+    """Returns the sine of the given angle.
+
+    https://support.office.com/en-us/article/
+        sin-function-cf0e3432-8b9e-483c-bc55-a76651c95602
+    """
+    return float(np.sin(float(number)))
 
 
 @xl.register()

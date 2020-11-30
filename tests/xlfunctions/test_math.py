@@ -192,8 +192,14 @@ class MathModuleTest(unittest.TestCase):
 
     def test_SIGN(self):
         self.assertEqual(math.SIGN(10), 1)
-        self.assertEqual(math.SIGN(4-4), 0)
+        self.assertEqual(math.SIGN(4 - 4), 0)
         self.assertEqual(math.SIGN(-0.00001), -1)
+
+    def test_SIN(self):
+        self.assertAlmostEqual(math.SIN(math.PI()), 0.0)
+        self.assertAlmostEqual(math.SIN(math.PI() / 2), 1.0)
+        self.assertAlmostEqual(math.SIN(30 * math.PI() / 180), 0.5)
+        self.assertAlmostEqual(math.SIN(math.RADIANS(30)), 0.5)
 
     def test_SQRT(self):
         self.assertEqual(math.SQRT(4), 2)
