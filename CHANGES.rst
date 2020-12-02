@@ -3,16 +3,24 @@
 CHANGES
 =======
 
-0.2.12 (2020-11-23)
+0.2.13 (2020-12-02)
+-------------------
+
+- Add functions: ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``,
+  ``FALSE()``, ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, 
+  ``ARCCOSH()``, ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``, ``COS()``,
+  ``RADIANS()``, ``COSH()``, ``EXP()``, ``EVEN()``, ``FACT()``, ``FACTDOUBLE()``,
+  ``INT()``, ``LOG()``, ``LOG10()``. ``RAND()``, ``RANDBETWRRN()``, ``SIGN()``,
+  ``SIN()``, ``SQRTPI()``, ``TAN()``
+
+
+0.2.12 (2020-11-28)
 -------------------
 
 - Add functions: ``PV()``, ``XIRR()``, ``ISEVEN()``, ``ISODD()``,
-  ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``, ``FALSE()``
-  ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, ``ARCCOSH()``,
-  ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``, ``COS()``, ``RADIANS()``
-  ``COSH()``, ``EXP()``, ``EVEN()``, ``FACT()``, ``FACTDOUBLE()``, ``INT()``
-  ``LOG()``, ``LOG10()``. ``RAND()``, ``RANDBETWRRN()``, ``SIGN()``,
-  ``SIN()``, ``SQRTPI()``, ``TAN()``
+  ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``
+- Bugfix unary operator needed to be right associated to handle cases of
+  double use eg; double-negative.. --4 == 4
 
 
 0.2.11 (2020-11-16)

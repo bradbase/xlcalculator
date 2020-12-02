@@ -16,7 +16,7 @@ OPERATORS = {
     ':': Operator(':', 8, 'left'),
     '': Operator(' ', 8, 'left'),
     ',': Operator(',', 8, 'left'),
-    'u-': Operator('u-', 7, 'left'),  # unary negation
+    'u-': Operator('u-', 7, 'right'),  # unary negation
     '%': Operator('%', 6, 'left'),
     '^': Operator('^', 5, 'left'),
     '*': Operator('*', 4, 'left'),
