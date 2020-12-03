@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator import evaluator, model, xlfunctions
+from xlcalculator import evaluator, model
 from . import testing
 
 
