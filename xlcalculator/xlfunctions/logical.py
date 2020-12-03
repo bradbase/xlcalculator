@@ -30,6 +30,17 @@ def AND(
 
 @xl.register()
 @xl.validate_args
+def FALSE() -> func_xltypes.XlBoolean:
+    """Returns the logical value FALSE.
+
+    https://support.office.com/en-us/article/
+        false-function-2d58dfa5-9c03-4259-bf8f-f0ae14346904
+    """
+    return False
+
+
+@xl.register()
+@xl.validate_args
 def OR(
         *logicals: Tuple[func_xltypes.XlExpr]
 ) -> func_xltypes.XlBoolean:
@@ -68,3 +79,14 @@ def IF(
     # Use delayed evaluation to only evaluate the true or false value but not
     # both.
     return value_if_true() if logical_test() else value_if_false()
+
+
+@xl.register()
+@xl.validate_args
+def TRUE() -> func_xltypes.XlBoolean:
+    """Returns the logical value TRUE.
+
+    https://support.office.com/en-us/article/
+        true-function-7652c6e3-8987-48d0-97cd-ef223246b3fb
+    """
+    return True

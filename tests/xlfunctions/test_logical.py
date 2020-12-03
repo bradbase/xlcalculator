@@ -18,6 +18,9 @@ class LogicalModuleTest(unittest.TestCase):
         self.assertEqual(logical.AND(3, True, None), True)
         self.assertEqual(logical.AND(True, 0), False)
 
+    def test_FALSE(self):
+        self.assertFalse(logical.FALSE())
+
     def test_OR(self):
         self.assertEqual(logical.OR(VExpr(None), VExpr(3)), True)
         self.assertEqual(logical.OR(VExpr(False), VExpr(0)), False)
@@ -37,3 +40,6 @@ class LogicalModuleTest(unittest.TestCase):
         # Values get converted to expressions to not break the APIs.
         self.assertEqual(logical.IF(True, 1, 2), 1)
         self.assertEqual(logical.IF(False, 1, 2), 2)
+
+    def test_TRUE(self):
+        self.assertTrue(logical.TRUE())

@@ -3,10 +3,15 @@
 CHANGES
 =======
 
-0.2.13 ()
+0.2.13 (2020-12-02)
 -------------------
 
-- No changes yet
+- Add functions: ``ISNUMBER()``, ``ISERROR()``, ``FLOOR()``, ``ISERR()``,
+  ``FALSE()``, ``TRUE()``, ``ATAN2()``, ``ACOS()``, ``DEGREES()``, 
+  ``ARCCOSH()``, ``ASIN()``, ``ASINH()``, ``ATAN()``, ``CEILING()``, ``COS()``,
+  ``RADIANS()``, ``COSH()``, ``EXP()``, ``EVEN()``, ``FACT()``, ``FACTDOUBLE()``,
+  ``INT()``, ``LOG()``, ``LOG10()``. ``RAND()``, ``RANDBETWRRN()``, ``SIGN()``,
+  ``SIN()``, ``SQRTPI()``, ``TAN()``
 
 
 0.2.12 (2020-11-28)
