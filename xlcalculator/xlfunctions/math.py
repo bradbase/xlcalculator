@@ -8,6 +8,8 @@ from scipy.special import factorial2
 
 from . import xl, xlerrors, xlcriteria, func_xltypes
 
+# Testing Hook
+rand = np.random.rand
 
 @xl.register()
 @xl.validate_args
@@ -374,7 +376,7 @@ def RAND() -> func_xltypes.XlNumber:
     https://support.office.com/en-us/article/
         rand-function-4cbfa695-8869-4788-8d90-021ea9f5be73
     """
-    return np.random.rand()
+    return rand()
 
 
 @xl.register()
@@ -388,7 +390,7 @@ def RANDBETWEEN(
     https://support.office.com/en-us/article/
         randbetween-function-4cc7f0d1-87dc-4eb7-987f-a469ab381685
     """
-    return np.random.rand() * (top - bottom) + bottom
+    return int(rand() * (top - bottom) + bottom)
 
 
 @xl.register()

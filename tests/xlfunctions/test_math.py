@@ -1,5 +1,6 @@
 import unittest
 import math as pymath
+import mock
 
 from xlcalculator.xlfunctions import math, xlerrors, func_xltypes
 
@@ -156,6 +157,16 @@ class MathModuleTest(unittest.TestCase):
 
     def test_RADIANS(self):
         self.assertAlmostEqual(math.RADIANS(270), 4.712389)
+
+    def test_RAND(self):
+        with mock.patch.object(math, 'rand', lambda: 0.5):
+            self.assertEqual(
+                math.RAND(), 0.5)
+
+    def test_RANDBETWEEN(self):
+        with mock.patch.object(math, 'rand', lambda: 0.5):
+            self.assertEqual(
+                math.RANDBETWEEN(5, 10), 7)
 
     def test_ROUND(self):
         self.assertEqual(math.ROUND(0.6), 1)
