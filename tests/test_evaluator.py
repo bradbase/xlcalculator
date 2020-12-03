@@ -1,6 +1,6 @@
 import unittest
 
-from xlcalculator import evaluator, model, xlfunctions, pyfunctions
+from xlcalculator import evaluator, model, xlfunctions
 from . import testing
 
 
@@ -11,28 +11,6 @@ class TestEvaluator(unittest.TestCase):
         self.model.construct_from_json_file(
             testing.get_resource("model.json"), build_code=True)
         self.evaluator = evaluator.Evaluator(self.model)
-
-    def test_construction_with_alternate_namespace(self):
-
-        #  Alter a known defined function
-        @pyfunctions.pyxl.registerpy()
-        def PI() -> xlfunctions.func_xltypes.XlNumber:
-            """test version to override Pi"""
-            return 3
-
-        #  create a model using above function which will be evaluated
-        model_dict = {
-            "A1": "=PI()"
-        }
-
-        model_compiler = model.ModelCompiler()
-        my_model = model_compiler.read_and_parse_dict(model_dict)
-
-        pyfuncs_ns = pyfunctions.pyxl.PYFUNCTIONS  # convenience re-name
-        pyxl_evaluator = evaluator.Evaluator(my_model, namespace=pyfuncs_ns)
-
-        #  cells need a sheet and Sheet1 is default.
-        self.assertEqual(3, pyxl_evaluator.evaluate("Sheet1!A1"))
 
     def test_evaluate(self):
         evaluated_result_00 = self.evaluator.evaluate('First!A2')
