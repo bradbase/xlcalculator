@@ -11,6 +11,7 @@ from . import xl, xlerrors, xlcriteria, func_xltypes
 # Testing Hook
 rand = np.random.rand
 
+
 @xl.register()
 @xl.validate_args
 def ABS(

@@ -222,6 +222,13 @@ class MathModuleTest(unittest.TestCase):
     def test_SQRT_with_bad_arg(self):
         self.assertIsInstance(math.SQRT('bad'), xlerrors.ValueExcelError)
 
+    def test_SQRTPI(self):
+        self.assertAlmostEqual(math.SQRTPI(1), 1.77245385)
+        self.assertAlmostEqual(math.SQRTPI(2), 2.50662827)
+
+    def test_SQRTPI_negative_number(self):
+        self.assertIsInstance(math.SQRTPI(-2), xlerrors.NumExcelError)
+
     def test_SUM(self):
         self.assertEqual(math.SUM(func_xltypes.Array([[1, 2], [3, 4]])), 10)
         self.assertEqual(math.SUM(1, 2, 3, 4.0), 10.0)
