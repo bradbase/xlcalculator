@@ -53,6 +53,9 @@ class EvalContext:
     def eval_cell(self, addr):
         raise NotImplementedError()
 
+    def reset(self):
+        self.sheet = self.refsheet
+
 
 class ASTNode(object):
     """A generic node in the AST"""

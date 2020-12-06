@@ -31,10 +31,6 @@ class EvaluatorContext(ast_nodes.EvalContext):
 
         return self.evaluator.evaluate(addr, self)
 
-    def reset(self):
-        self.sheet = self.refsheet
-
-
 class Evaluator:
     """Traverses and evaluates a given model."""
 
