@@ -24,7 +24,7 @@ class XlCriteriaModuleTest(unittest.TestCase):
     def test_parse_criteria_with_implicit_operator_string_value(self):
         # Assumes equality.
         check = xlcriteria.parse_criteria('data')
-        self.assertTrue(check('DATA'))  # case insensitive, uppercase.
+        self.assertTrue(check('data'))
         self.assertFalse(check(2))
 
     def test_parse_criteria_with_simple_number(self):
