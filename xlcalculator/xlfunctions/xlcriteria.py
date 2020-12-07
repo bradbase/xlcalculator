@@ -17,7 +17,6 @@ CRITERIA_OPERATORS = {
 def parse_criteria(criteria):
 
     if isinstance(criteria, (str, func_xltypes.Text)):
-        criteria = criteria.upper()
         search = re.search(CRITERIA_REGEX, str(criteria)).group
         str_operator, str_value = search(1), search(2)
 

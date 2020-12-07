@@ -26,6 +26,7 @@ class OperatorModuleTest(unittest.TestCase):
         self.assertEqual(operator.OP_EQ("2", 2), False)
         self.assertEqual(operator.OP_EQ(True, 1), True)
         self.assertEqual(operator.OP_EQ(1, 2), False)
+        self.assertEqual(operator.OP_EQ("a", "A"), True)
 
     def test_OP_NE(self):
         self.assertEqual(operator.OP_NE(2, 2), False)
