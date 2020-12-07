@@ -61,9 +61,14 @@ class StatisticsModuleTest(unittest.TestCase):
         condition = ">2"
         self.assertEqual(statistics.COUNTIF(countRange, condition), 2)
 
+    def test_COUNTIF_text(self):
+        countRange = func_xltypes.Array(["a", "b", "A"])
+        condition = "=A"
+        self.assertEqual(statistics.COUNTIF(countRange, condition), 2)
+
     def test_COUNTIFS(self):
         countRange = func_xltypes.Array([1, 2, 3, 4])
-        countRange2 = func_xltypes.Array(["A", "B", "A", "A"])
+        countRange2 = func_xltypes.Array(["a", "B", "A", "A"])
         condition = "<3"
         condition2 = "A"
         self.assertEqual(statistics.COUNTIFS(

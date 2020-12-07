@@ -250,6 +250,9 @@ class MathModuleTest(unittest.TestCase):
     def test_SUMIF(self):
         self.assertEqual(math.SUMIF([0, 1, 2], '>=1', [10, 20, 30]), 50)
 
+    def test_SUMIF_text(self):
+        self.assertEqual(math.SUMIF(['a', 'b', 'A'], '=a', [10, 20, 30]), 40)
+
     def test_SUMIF_invalid_criteria(self):
         self.assertIsInstance(
             math.SUMIF([0, 1, 2], [0, 1], [10, 20, 30]),
@@ -266,8 +269,12 @@ class MathModuleTest(unittest.TestCase):
 
     def test_SUMIFS(self):
         self.assertEqual(
-            math.SUMIFS([10, 20, 30], [0, 1, 2], ">=1", ["a", "b", "a"], "a"),
-            30
+            math.SUMIFS([10, 20, 30, 40],
+                        [0, 1, 2, 3],
+                        ">=1",
+                        ["a", "b", "a", "A"],
+                        "a"),
+            70
         )
 
     def test_SUMIFS_invalid_criteria(self):

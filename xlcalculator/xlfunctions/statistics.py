@@ -77,6 +77,9 @@ def COUNTIF(
     """
     check = xlcriteria.parse_criteria(criteria)
     countRange = countRange.flat
+    countRange = [item.upper() if isinstance(item, (str, func_xltypes.Text))
+                  else item
+                  for item in countRange]
     return sum([check(val) for val in countRange])
 
 
@@ -106,6 +109,8 @@ def COUNTIFS(
             newRange = []
             idx = 0
         else:
+            if isinstance(item, func_xltypes.Text):
+                item = item.upper()
             newRange.append(item)
             idx += 1
     return sum(

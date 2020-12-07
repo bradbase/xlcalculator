@@ -580,6 +580,9 @@ def SUMIF(
         sum_range = range
 
     range = range.flat
+    range = [item.upper() if isinstance(item, (str, func_xltypes.Text))
+             else item
+             for item in range]
     sum_range = sum_range.cast_to_numbers().flat
 
     # zip() will automatically drop any range values that have indexes larger
@@ -621,6 +624,8 @@ def SUMIFS(
             newRange = []
             idx = 0
         else:
+            if isinstance(item, func_xltypes.Text):
+                item = item.upper()
             newRange.append(item)
             idx += 1
     sum_range = sum_range.cast_to_numbers().flat

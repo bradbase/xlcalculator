@@ -267,6 +267,9 @@ class Text(ExcelType):
     def __Blank__(self):
         return self.__class__('')
 
+    def upper(self):
+        return self.value.upper()
+
 
 @register
 class Boolean(ExcelType):
