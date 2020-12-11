@@ -44,12 +44,6 @@ def OP_EQ(
         left: func_xltypes.XlAnything,
         right: func_xltypes.XlAnything
 ) -> func_xltypes.XlBoolean:
-    if isinstance(left, (str, func_xltypes.Text)):
-        left = left.upper()
-
-    if isinstance(right, (str, func_xltypes.Text)):
-        right = right.upper()
-
     return left == right
 
 

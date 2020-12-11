@@ -390,10 +390,6 @@ class TextTest(AbstractExcelTypeTest, unittest.TestCase):
         self.assertIsInstance(blank, func_xltypes.Text)
         self.assertEqual(blank.value, '')
 
-    def test_upper(self):
-        self.assertEqual(func_xltypes.Text('a').upper(), 'A')
-        self.assertEqual(func_xltypes.Text('fOo').upper(), 'FOO')
-
 
 class BooleanTest(AbstractExcelTypeTest, unittest.TestCase):
 

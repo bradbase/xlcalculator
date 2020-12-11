@@ -267,8 +267,15 @@ class Text(ExcelType):
     def __Blank__(self):
         return self.__class__('')
 
-    def upper(self):
-        return self.value.upper()
+    def __eq__(self, other):
+        if self.value in [None, ''] and (other in [None, ''] or isinstance(other, None)):
+            return True
+
+        else:
+            return Boolean(self.value.upper() == str(other).upper())
+
+    def __hash__(self):
+        return hash(self.value)
 
 
 @register
