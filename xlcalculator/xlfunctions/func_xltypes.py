@@ -268,7 +268,8 @@ class Text(ExcelType):
         return self.__class__('')
 
     def __eq__(self, other):
-        if self.value in [None, ''] and (other in [None, ''] or isinstance(other, None)):
+        if self.value in [None, ''] \
+                and (other in [None, ''] or isinstance(other, None)):
             return True
 
         else:
