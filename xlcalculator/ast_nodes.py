@@ -42,19 +42,23 @@ class EvalContext:
     namespace = None
     seen = None
     ref = None
+    refsheet = None
+    sheet = None
 
     def __init__(self, namespace=None, ref=None, seen=None):
         self.seen = seen if seen is not None else []
         self.namespace = namespace if namespace is not None else xl.FUNCTIONS
         self.ref = ref
-        self.refsheet = ref.split("!")[0]
-        self.sheet = self.refsheet
+        self.sheet = self.refsheet = ref.split("!")[0]
 
     def eval_cell(self, addr):
         raise NotImplementedError()
 
-    def reset(self):
-        self.sheet = self.refsheet
+    def set_sheet(self, sheet=None):
+        if sheet is None:
+            self.sheet = self.refsheet
+        else:
+            self.sheet = sheet
 
 
 class ASTNode(object):
@@ -153,7 +157,7 @@ class RangeNode(OperandNode):
             return data
 
         value = context.eval_cell(addr)
-        context.reset()
+        context.set_sheet()
         return value
 
 
