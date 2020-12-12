@@ -271,8 +271,8 @@ class Text(ExcelType):
         # Text is always greater for comparison and is not converted.
         if isinstance(other, DateTime):
             return Boolean(False)
-        else:
-            return Boolean(self.value.upper() < str(other).upper())
+
+        return Boolean(self.value.upper() < str(other).upper())
 
     def __le__(self, other):
         return Boolean(self.value.upper() <= str(other).upper())
@@ -280,10 +280,9 @@ class Text(ExcelType):
     def __eq__(self, other):
         if self.value in (None, '') \
                 and (other in (None, '') or isinstance(other, None)):
-            return True
+            return Boolean(True)
 
-        else:
-            return Boolean(self.value.upper() == str(other).upper())
+        return Boolean(self.value.upper() == str(other).upper())
 
     def __ne__(self, other):
         return Boolean(self.value.upper() != str(other).upper())
