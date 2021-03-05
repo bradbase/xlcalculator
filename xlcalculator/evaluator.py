@@ -27,6 +27,7 @@ class EvaluatorContext(ast_nodes.EvalContext):
             raise RuntimeError(
                 f'Cycle detected for {addr}:\n- ' + '\n- '.join(self.seen))
         self.seen.append(addr)
+        self.set_sheet(sheet=addr.split("!")[0])
 
         return self.evaluator.evaluate(addr, self)
 

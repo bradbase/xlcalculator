@@ -42,14 +42,23 @@ class EvalContext:
     namespace = None
     seen = None
     ref = None
+    refsheet = None
+    sheet = None
 
     def __init__(self, namespace=None, ref=None, seen=None):
         self.seen = seen if seen is not None else []
         self.namespace = namespace if namespace is not None else xl.FUNCTIONS
         self.ref = ref
+        self.sheet = self.refsheet = ref.split("!")[0]
 
     def eval_cell(self, addr):
         raise NotImplementedError()
+
+    def set_sheet(self, sheet=None):
+        if sheet is None:
+            self.sheet = self.refsheet
+        else:
+            self.sheet = sheet
 
 
 class ASTNode(object):
@@ -127,15 +136,14 @@ class RangeNode(OperandNode):
     def address(self):
         return self.tvalue
 
-    def full_address(self, ref):
+    def full_address(self, context):
         addr = self.address
         if '!' not in addr:
-            sheet, _, _ = utils.resolve_address(ref)
-            addr = f'{sheet}!{addr}'
+            addr = f'{context.sheet}!{addr}'
         return addr
 
     def eval(self, context):
-        addr = self.full_address(context.ref)
+        addr = self.full_address(context)
 
         if addr in context.ranges:
             range_cells = [
@@ -148,7 +156,9 @@ class RangeNode(OperandNode):
             context.ranges[addr].value = data = func_xltypes.Array(range_cells)
             return data
 
-        return context.eval_cell(addr)
+        value = context.eval_cell(addr)
+        context.set_sheet()
+        return value
 
 
 class OperatorNode(ASTNode):
