@@ -267,6 +267,35 @@ class Text(ExcelType):
     def __Blank__(self):
         return self.__class__('')
 
+    def __lt__(self, other):
+        # Text is always greater for comparison and is not converted.
+        if isinstance(other, DateTime):
+            return Boolean(False)
+
+        return Boolean(self.value.upper() < str(other).upper())
+
+    def __le__(self, other):
+        return Boolean(self.value.upper() <= str(other).upper())
+
+    def __eq__(self, other):
+        if self.value in (None, '') \
+                and (other in (None, '') or isinstance(other, None)):
+            return Boolean(True)
+
+        return Boolean(self.value.upper() == str(other).upper())
+
+    def __ne__(self, other):
+        return Boolean(self.value.upper() != str(other).upper())
+
+    def __gt__(self, other):
+        return Boolean(self.value.upper() > str(other).upper())
+
+    def __ge__(self, other):
+        return Boolean(self.value.upper() >= str(other).upper())
+
+    def __hash__(self):
+        return hash(self.value)
+
 
 @register
 class Boolean(ExcelType):
