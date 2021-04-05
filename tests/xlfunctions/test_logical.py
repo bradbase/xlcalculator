@@ -41,5 +41,14 @@ class LogicalModuleTest(unittest.TestCase):
         self.assertEqual(logical.IF(True, 1, 2), 1)
         self.assertEqual(logical.IF(False, 1, 2), 2)
 
+    def test_NOT(self):
+        self.assertEqual(logical.NOT(VExpr(True)), False)
+        self.assertEqual(logical.NOT(VExpr(False)), True)
+
+    def test_NOT_with_direct_values(self):
+        # Values get converted to expressions to not break the APIs.
+        self.assertEqual(logical.NOT(True), False)
+        self.assertEqual(logical.NOT(False), True)
+
     def test_TRUE(self):
         self.assertTrue(logical.TRUE())
