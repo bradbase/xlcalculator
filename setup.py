@@ -12,6 +12,7 @@ TESTS_REQUIRE = [
     'mock',
     'pytest',
     'pytest-cov',
+    'hypothesis',
 ]
 
 
