@@ -8,7 +8,7 @@ from typing import Any, Optional
 from _pytest.mark.structures import MarkDecorator
 import pytest
 
-from xlcalculator import model, evaluator
+from xlcalculator import model, evaluator, xlerrors
 
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), 'resources')
@@ -194,3 +194,12 @@ def parametrize_cases(*cases: Case) -> MarkDecorator:
         return pytest.mark.parametrize(argnames=argnames, argvalues=argvalues)
 
     return pytest.mark.parametrize(argnames=argnames, argvalues=argvalues, ids=ids)
+
+
+def assert_equivalent(result, expected, normalize: Optional[Callable]=None):
+    if isinstance(expected, type) and issubclass(expected, xlerrors.ExcelError):
+        assert isinstance(result, expected), f"Expected {expected!r}, got {result!r}"
+    elif normalize:
+        assert normalize(result, expected)
+    else:
+        assert result == expected, f"Expected {expected!r}, got {result!r}"

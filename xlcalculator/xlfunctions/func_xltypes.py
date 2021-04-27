@@ -516,3 +516,23 @@ XlExpr = NewType('XlExpr', Union[_Anything, Expr])
 # excluded, since that is not a valid return type.
 XlAnything = Union[
     XlNumber, XlText, XlBoolean, XlDateTime, XlBlank, XlArray]
+
+
+class Unused:
+    """Some Excel formulae behave differently if you use a blank cell for one parameter vs
+    not using that parameter at all. For example:
+
+        =DEC2BIN(35)
+        =DEC2BIN(35, A1)
+
+    where A1 is a blank cell. The first will give "100011", the second gives a #NUM error.
+
+    So, we have to be careful when using `None` as a default parameter value in the Python
+    implementations. In cases where the distinction matters, use an instance of this
+    `UNUSED` class as a default, instead of `None`.
+    """
+
+    pass
+
+
+UNUSED = Unused()
