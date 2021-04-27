@@ -1,8 +1,12 @@
 import pytest
 
 
-# https://stackoverflow.com/a/54736376/6107981
-pytest_plugins = ["tests.xlwings_fixtures"]
+try:
+    import xlwings
+    # https://stackoverflow.com/a/54736376/6107981
+    pytest_plugins = ["tests.xlwings_fixtures"]
+except ImportError:
+    pass
 
 
 # https://docs.pytest.org/en/latest/example/simple.html#control-skipping-of-tests-according-to-command-line-option
