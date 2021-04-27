@@ -16,7 +16,8 @@ from .xlfunctions import (  # noqa: F401
     math,
     operator,
     statistics,
-    text
+    text,
+    engineering
 )
 
 

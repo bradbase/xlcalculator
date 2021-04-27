@@ -8,7 +8,9 @@ from typing import Any, Optional
 from _pytest.mark.structures import MarkDecorator
 import pytest
 
-from xlcalculator import model, evaluator, xlerrors
+from xlcalculator import xlerrors
+from xlcalculator.model import ModelCompiler
+from xlcalculator.evaluator import Evaluator
 
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), 'resources')
@@ -110,10 +112,10 @@ class FunctionalTestCase(XlCalculatorTestCase):
     filename = None
 
     def setUp(self):
-        compiler = model.ModelCompiler()
+        compiler = ModelCompiler()
         self.model = compiler.read_and_parse_archive(
             get_resource(self.filename))
-        self.evaluator = evaluator.Evaluator(self.model)
+        self.evaluator = Evaluator(self.model)
 
 
 class Case:
@@ -203,3 +205,20 @@ def assert_equivalent(result, expected, normalize: Optional[Callable]=None):
         assert normalize(result, expected)
     else:
         assert result == expected, f"Expected {expected!r}, got {result!r}"
+
+
+def workbook_test_cases(filename: str) -> MarkDecorator:
+    compiler = ModelCompiler()
+    resolved_filename = get_resource(filename)
+    model = compiler.read_and_parse_archive(resolved_filename)
+    evaluator = Evaluator(model)
+    
+    cases = [
+        Case(
+            f"{filename} {address}",
+            sheet_value=evaluator.get_cell_value(address),
+            calculated_value=evaluator.evaluate(address)
+        )
+        for address in model.formulae
+    ]
+    return parametrize_cases(*cases)
