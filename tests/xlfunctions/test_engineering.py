@@ -1,4 +1,3 @@
-import pytest
 from xlcalculator.xlfunctions import engineering
 from xlcalculator.xlfunctions.xlerrors import NumExcelError, ValueExcelError
 
@@ -118,9 +117,9 @@ def test_booleans_give_other_errors_with_places(func, number, places, expected):
     assert_equivalent(func(number, places), expected)
 
 
-###################################
-#### Test individual functions ####
-###################################
+#############################
+# Test individual functions #
+#############################
 
 
 @parametrize_cases(

@@ -4,7 +4,7 @@ import os
 import unittest
 from dataclasses import dataclass
 from decimal import Decimal, ROUND_UP, ROUND_DOWN
-from typing import Any, Optional
+from typing import Any, Optional, Callable
 from _pytest.mark.structures import MarkDecorator
 import pytest
 
@@ -198,7 +198,7 @@ def parametrize_cases(*cases: Case) -> MarkDecorator:
     return pytest.mark.parametrize(argnames=argnames, argvalues=argvalues, ids=ids)
 
 
-def assert_equivalent(result, expected, normalize: Optional[Callable]=None):
+def assert_equivalent(result, expected, normalize: Optional[Callable] = None):
     if isinstance(expected, type) and issubclass(expected, xlerrors.ExcelError):
         assert isinstance(result, expected), f"Expected {expected!r}, got {result!r}"
     elif normalize:
@@ -212,7 +212,7 @@ def workbook_test_cases(filename: str) -> MarkDecorator:
     resolved_filename = get_resource(filename)
     model = compiler.read_and_parse_archive(resolved_filename)
     evaluator = Evaluator(model)
-    
+
     cases = [
         Case(
             f"{filename} {address}",

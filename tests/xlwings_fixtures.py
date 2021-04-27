@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Sequence, Callable, Union
+from typing import Sequence, Callable
 
 import xlwings
 import pytest
@@ -146,7 +146,7 @@ def fuzz_scalars(wb, formula, values, settings=None):
     values: the result of a hypothesis.given invocation (would normally be a decorator)
     settings: optional hypothesis.settings object (e.g. to override max_examples)
     """
-    
+
     if not hasattr(values, "given_kwargs"):
         raise ValueError(
             f"You can't use the `given` function from hypothesis; you need to use the patched version defined in {given.__module__}.py"
@@ -154,7 +154,7 @@ def fuzz_scalars(wb, formula, values, settings=None):
 
     argnames = list(values.given_kwargs.keys())
     env = FormulaTestingEnvironment(wb, formula, argnames)
-    
+
     # workaround limitation / design choice in hypothesis regarding reuse of
     # function-scoped fixtures; see this github issue:
     # https://github.com/HypothesisWorks/hypothesis/issues/2731

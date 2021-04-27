@@ -1,6 +1,4 @@
-#%%
 import pytest
-from hypothesis import settings, given
 from hypothesis.strategies import (
     integers,
     floats,
@@ -12,7 +10,7 @@ from hypothesis.strategies import (
     sampled_from,
 )
 
-from tests.testing import assert_equivalent, Case, parametrize_cases
+from tests.testing import Case, parametrize_cases
 from xlcalculator.xlfunctions.engineering import (
     DEC2BIN,
     DEC2OCT,
@@ -34,6 +32,7 @@ try:
     import xlwings
 except ImportError:
     pytestmark = pytest.mark.skip("xlwings is not installed; skipping module")
+    from hypothesis import given
 else:
     from tests.xlwings_fixtures import fuzz_scalars, given
 
