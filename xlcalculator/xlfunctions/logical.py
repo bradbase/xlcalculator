@@ -16,7 +16,7 @@ def AND(
     if not logicals:
         raise xlerrors.NullExcelError('logical1 is required')
 
-    # Use delayed evaluation to minimize th amount of valaues to evaluate.
+    # Use delayed evaluation to minimize th amount of values to evaluate.
     for logical in logicals:
         val = logical()
         for item in xl.flatten([val]):
@@ -79,6 +79,17 @@ def IF(
     # Use delayed evaluation to only evaluate the true or false value but not
     # both.
     return value_if_true() if logical_test() else value_if_false()
+
+
+@xl.register()
+@xl.validate_args
+def NOT(logical: func_xltypes.XlExpr) -> func_xltypes.XlBoolean:
+    """Return inverse of boolean representation of value.
+
+    https://support.microsoft.com/en-us/office/
+        not-function-9cfc6011-a054-40c7-a140-cd4ba2d87d77
+    """
+    return not bool(logical())
 
 
 @xl.register()
