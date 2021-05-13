@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.3.0 (unreleased)
+0.3.0 (2021-05-13)
 ------------------
 
 - Add support for cross-sheet references.
