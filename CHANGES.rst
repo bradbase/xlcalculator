@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.4.0 (unreleased)
+0.4.0 (2021-05-13)
 ------------------
 
 - Pass ``ignore_hidden`` from ``read_and_parse_archive()`` to
