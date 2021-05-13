@@ -1,13 +1,16 @@
-
 =======
 CHANGES
 =======
 
 
-0.2.14
--------------------
+0.3.0 (unreleased)
+------------------
 
-- No changes yet
+- Add support for cross-sheet references.
+
+- Make *IF functions case insensitive to properly adhere to Excel specs.
+
+- Support for Python 3.9.
 
 
 0.2.13 (2020-12-02)
