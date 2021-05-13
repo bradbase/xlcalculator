@@ -17,11 +17,11 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version='0.2.14.dev',
+    version='0.4.1.dev0',
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
-    long_description_content_type =(
+    long_description=(
         read('README.rst')
         + '\n\n' +
         read('CHANGES.rst')
@@ -57,7 +57,8 @@ setuptools.setup(
         'calculation',
         'evaluation',
         'data science',
-        'openpyxl'],
+        'openpyxl'
+    ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -68,8 +69,8 @@ setuptools.setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Office/Business :: Financial :: Spreadsheet",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Information Analysis",

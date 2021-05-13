@@ -181,7 +181,8 @@ class ModelCompiler:
             build_code=True
     ):
         archive = self.read_excel_file(file_name)
-        self.parse_archive(archive, ignore_sheets=ignore_sheets)
+        self.parse_archive(
+            archive, ignore_sheets=ignore_sheets, ignore_hidden=ignore_hidden)
 
         if build_code:
             self.model.build_code()

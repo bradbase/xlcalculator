@@ -1,13 +1,39 @@
-
 =======
 CHANGES
 =======
 
 
-0.2.14
--------------------
+0.4.1 (unreleased)
+------------------
 
-- No changes yet
+- Nothing changed yet.
+
+
+0.4.0 (2021-05-13)
+------------------
+
+- Pass ``ignore_hidden`` from ``read_and_parse_archive()`` to
+  ``parse_archive()``
+
+- Add Excel tests for ``IF()``.
+
+- Add ``NOT()`` function.
+
+- Implemented ``BIN2OCT()``, ``BIN2DEC()``, ``BIN2HEX()``, ``OCT2BIN()``,
+  ``OCT2DEC()``, ``OCT2HEX()``, ``DEC2BIN()``, ``DEC2OCT()``, ``DEC2HEX()``,
+  ``HEX2BIN()``, ``HEX2OCT()``, ``HEX2DEC()``.
+
+- Drop Python 3.7 support.
+
+
+0.3.0 (2021-05-13)
+------------------
+
+- Add support for cross-sheet references.
+
+- Make ``*IF()`` functions case insensitive to properly adhere to Excel specs.
+
+- Support for Python 3.9.
 
 
 0.2.13 (2020-12-02)
