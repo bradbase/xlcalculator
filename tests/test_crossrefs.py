@@ -19,6 +19,32 @@ class CrossSheetTest(testing.FunctionalTestCase):
         # This tests going back and forth between original Sheet1 and Sheet2
         # multiple times in different orders
         self.assertEqual(
+            self.evaluator.evaluate('Sheet2!B1'),
+            4
+        )
+
+        for coord, cell in self.model.cells.items():
+            if cell.formula is None or cell.value is None:
+                continue
+            expected = cell.value
+            cell.value = None
+            got = self.evaluator.evaluate(coord)
+            self.assertEqual(
+                got,
+                expected,
+                msg=f"{coord} got: {got} expected: {expected}"
+            )
+
+        self.assertEqual(
             self.evaluator.evaluate('Sheet1!A4'),
-            5
+            4
+        )
+        self.assertEqual(
+            self.evaluator.evaluate('Sheet1!C4'),
+            28
+        )
+
+        self.assertEqual(
+            self.evaluator.evaluate('Sheet2!C1'),
+            12
         )
