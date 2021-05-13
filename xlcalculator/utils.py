@@ -47,7 +47,16 @@ def resolve_ranges(ranges, default_sheet='Sheet1'):
                 min_col is None or min_row is None
                 or max_col is None or max_row is None
         ):
-            continue
+            # These are things that exist in real life. This should handle it.
+            # But it is so slow to evaluate.
+            if min_col is None:
+                min_col = 1
+            if min_row is None:
+                min_row = 1
+            if max_col is None:
+                max_col = MAX_COL
+            if max_row is None:
+                max_row = MAX_ROW
 
         # Excel ranges are boundaries inclusive!
         for row_idx in range(min_row, max_row + 1):

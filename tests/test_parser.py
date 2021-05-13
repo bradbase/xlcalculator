@@ -59,6 +59,9 @@ class FormulaParserTest(unittest.TestCase):
     def test_parse_open_range_end(self):
         self.assertEqual(str(self.parse('A1:')), 'A1:')
 
+    def test_parse_col_range(self):
+        self.assertEqual(str(self.parse("A:A")), "A:A")
+
     @unittest.skip(
         'Not properly supported during shunting. Does not remove func node.')
     def test_parse_with_offser(self):
