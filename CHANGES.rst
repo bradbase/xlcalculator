@@ -6,7 +6,12 @@ CHANGES
 0.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Pass ``ignore_hidden`` from ``read_and_parse_archive()`` to
+  ``parse_archive()``
+
+- Add Excel tests for ``IF()``.
+
+- Add ``NOT()`` function.
 
 
 0.3.0 (2021-05-13)
