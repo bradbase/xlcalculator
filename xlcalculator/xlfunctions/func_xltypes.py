@@ -279,7 +279,7 @@ class Text(ExcelType):
 
     def __eq__(self, other):
         if self.value in (None, '') \
-                and (other in (None, '') or isinstance(other, None)):
+                and (other in (None, '') or other is None):
             return Boolean(True)
 
         return Boolean(self.value.upper() == str(other).upper())
