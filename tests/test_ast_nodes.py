@@ -120,7 +120,10 @@ class RangeNodeTest(unittest.TestCase):
     def setUp(self):
         self.model = mock.Mock(
             cells={
-                'Sh1!' + addr: xltypes.XLCell('Sh1!' + addr, value=idx)
+                'Sh1!' + addr: xltypes.XLCell(
+                    'Sh1!' + addr,
+                    value=func_xltypes.Number(idx)
+                )
                 for idx, addr in enumerate(('A1', 'A2', 'B1', 'B2'))
             },
             ranges={'Sh1!A1:B2': xltypes.XLRange('Sh1!A1:B2')},

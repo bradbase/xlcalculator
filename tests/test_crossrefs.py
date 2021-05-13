@@ -19,8 +19,8 @@ class CrossSheetTest(testing.FunctionalTestCase):
         # This tests going back and forth between original Sheet1 and Sheet2
         # multiple times in different orders
         self.assertEqual(
-            self.evaluator.evaluate('Sheet2!B1'),
-            4
+            self.evaluator.evaluate('Sheet1!D2'),
+            8
         )
 
         for coord, cell in self.model.cells.items():
@@ -36,11 +36,11 @@ class CrossSheetTest(testing.FunctionalTestCase):
             )
 
         self.assertEqual(
-            self.evaluator.evaluate('Sheet1!A4'),
+            self.evaluator.evaluate('Sheet1!A5'),
             4
         )
         self.assertEqual(
-            self.evaluator.evaluate('Sheet1!C4'),
+            self.evaluator.evaluate('Sheet1!C5'),
             28
         )
 

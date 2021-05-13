@@ -34,6 +34,8 @@ INFIX_OP_TO_FUNC = {
     "<=": operator.OP_LE,
 }
 
+MAX_EMPTY = 1000
+
 
 class EvalContext:
 
@@ -146,13 +148,23 @@ class RangeNode(OperandNode):
         addr = self.full_address(context)
 
         if addr in context.ranges:
-            range_cells = [
-                [
-                    context.eval_cell(addr)
-                    for addr in range_row
-                ]
-                for range_row in context.ranges[addr].cells
-            ]
+            empty_row = 0
+            empty_col = 0
+            range_cells = []
+            for range_row in context.ranges[addr].cells:
+                row_cells = []
+                for col_addr in range_row:
+                    cell = context.eval_cell(col_addr)
+                    if cell.value == '' or cell.value is None:
+                        empty_col += 1
+                        if empty_col > MAX_EMPTY:
+                            break
+                    row_cells.append(cell)
+                if not row_cells:
+                    empty_row += 1
+                    if empty_row > MAX_EMPTY:
+                        break
+                range_cells.append(row_cells)
             context.ranges[addr].value = data = func_xltypes.Array(range_cells)
             return data
 
