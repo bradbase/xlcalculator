@@ -20,7 +20,7 @@ class CrossSheetTest(testing.FunctionalTestCase):
         # multiple times in different orders
         self.assertEqual(
             self.evaluator.evaluate('Sheet1!D2'),
-            8
+            24
         )
 
         for coord, cell in self.model.cells.items():

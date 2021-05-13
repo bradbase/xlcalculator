@@ -159,11 +159,15 @@ class RangeNode(OperandNode):
                         empty_col += 1
                         if empty_col > MAX_EMPTY:
                             break
+                    else:
+                        empty_col = 0
                     row_cells.append(cell)
                 if not row_cells:
                     empty_row += 1
                     if empty_row > MAX_EMPTY:
                         break
+                else:
+                    empty_row = 0
                 range_cells.append(row_cells)
             context.ranges[addr].value = data = func_xltypes.Array(range_cells)
             return data
