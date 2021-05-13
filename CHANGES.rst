@@ -8,7 +8,7 @@ CHANGES
 
 - Add support for cross-sheet references.
 
-- Make *IF functions case insensitive to properly adhere to Excel specs.
+- Make ``*IF()`` functions case insensitive to properly adhere to Excel specs.
 
 - Support for Python 3.9.
 

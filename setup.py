@@ -17,11 +17,11 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version='0.2.14.dev',
+    version='0.3.0.dev0',
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
-    long_description_content_type =(
+    long_description=(
         read('README.rst')
         + '\n\n' +
         read('CHANGES.rst')
