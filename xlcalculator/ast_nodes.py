@@ -34,7 +34,7 @@ INFIX_OP_TO_FUNC = {
     "<=": operator.OP_LE,
 }
 
-MAX_EMPTY = 1000
+MAX_EMPTY = 100
 
 
 class EvalContext:
