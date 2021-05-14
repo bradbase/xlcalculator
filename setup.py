@@ -97,7 +97,7 @@ setuptools.setup(
             'pip-tools',
         ],
     ),
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     tests_require=TESTS_REQUIRE,
     include_package_data=True,
     zip_safe=False,
