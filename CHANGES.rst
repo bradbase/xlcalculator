@@ -6,7 +6,7 @@ CHANGES
 0.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed cross-sheet references.
 
 
 0.4.0 (2021-05-13)
