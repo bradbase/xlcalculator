@@ -43,14 +43,14 @@ def resolve_ranges(ranges, default_sheet='Sheet1'):
             sheet = rng_sheet
         min_col, min_row, max_col, max_row = range_boundaries(rng)
 
-        if (
-                min_col is None or min_row is None
-                or max_col is None or max_row is None
-        ):
-            continue
+        # Unbound ranges (e.g., A:A) might not have these set!
+        min_col = min_col or 1
+        min_row = min_row or 1
+        max_col = max_col or MAX_COL
+        max_row = max_row or MAX_ROW
 
         # Excel ranges are boundaries inclusive!
-        for row_idx in range(min_row, max_row + 1):
+        for row_idx in range(min_row or 1, max_row + 1):
             row_cells = range_cells[row_idx]
             for col_idx in range(min_col, max_col + 1):
                 row_cells.add(col_idx)
