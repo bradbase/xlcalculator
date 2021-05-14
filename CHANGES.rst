@@ -3,6 +3,12 @@ CHANGES
 =======
 
 
+0.3.1 (unreleased)
+------------------
+
+- Fixed cross-sheet references.
+
+
 0.3.0 (2021-05-13)
 ------------------
 
