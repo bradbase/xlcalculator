@@ -6,8 +6,7 @@ CHANGES
 0.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Make sure that decimal rounding is only set in context and not system wide.
 
 0.4.1 (2021-05-14)
 ------------------
