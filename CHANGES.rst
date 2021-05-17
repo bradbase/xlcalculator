@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-0.4.2 (unreleased)
+0.4.2 (2021-05-17)
 ------------------
 
 - Make sure that decimal rounding is only set in context and not system wide.
