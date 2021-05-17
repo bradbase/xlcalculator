@@ -435,9 +435,9 @@ def RADIANS(
 
 def _round(number, num_digits, _rounding=decimal.ROUND_HALF_UP):
     number = decimal.Decimal(str(number))
-    dc = decimal.getcontext()
-    dc.rounding = _rounding
-    ans = round(number, int(num_digits))
+    with decimal.localcontext() as dc:
+        dc.rounding = _rounding
+        ans = round(number, int(num_digits))
     return float(ans)
 
 
