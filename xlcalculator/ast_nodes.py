@@ -136,7 +136,7 @@ class RangeNode(OperandNode):
 
     @property
     def address(self):
-        return self.tvalue
+        return self.tvalue.replace("$","")
 
     def full_address(self, context):
         addr = self.address
