@@ -19,16 +19,17 @@ class EvaluatorContext(ast_nodes.EvalContext):
     @property
     def ranges(self):
         return self.evaluator.model.ranges
-
-    @lru_cache(maxsize=None)
+    
     def eval_cell(self, addr):
         # Check for a cycle.
         if addr in self.seen:
             raise RuntimeError(
                 f'Cycle detected for {addr}:\n- ' + '\n- '.join(self.seen))
+        
         self.seen.append(addr)
-
-        return self.evaluator.evaluate(addr, None)
+        val = self.evaluator.evaluate(addr, None)
+        self.seen.remove(addr)
+        return val
 
 
 class Evaluator:
