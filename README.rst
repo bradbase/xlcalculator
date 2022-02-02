@@ -200,7 +200,7 @@ TODO
 - Improve integration with pyopenxl for reading and writing files `example of
   problem space <https://stackoverflow.com/questions/40248564/pre-calculate-excel-formulas-when-exporting-data-with-python>`_
 
-
+- Support named constants
 
 Supported Functions
 -------------------
