@@ -3,8 +3,8 @@ Excel Calculator
 ================
 
 
-.. image:: https://travis-ci.org/bradbase/xlcalculator.png?branch=master
-   :target: https://travis-ci.org/bradbase/xlcalculator
+.. image:: https://github.com/bradbase/xlcalculator/actions/workflows/test.yml/badge.svg
+   :target: https://github.com/bradbase/xlcalculator/actions
 
 .. image:: https://coveralls.io/repos/github/bradbase/xlcalculator/badge.svg?branch=master
    :target: https://coveralls.io/github/bradbase/xlcalculator?branch=master
