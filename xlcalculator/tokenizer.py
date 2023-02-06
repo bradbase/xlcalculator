@@ -546,7 +546,7 @@ class ExcelParser(ExcelParserTokens):
             if (token.ttype == self.TOK_TYPE_WSPACE):
                 if ((tokens.BOF()) or (tokens.EOF())):
                     pass
-                elif (not(
+                elif (not (
                      (
                          (tokens.previous().ttype == self.TOK_TYPE_FUNCTION)
                          and (tokens.previous().tsubtype
@@ -560,7 +560,7 @@ class ExcelParser(ExcelParserTokens):
                      )
                 )):
                     pass
-                elif (not(
+                elif (not (
                     (
                         (tokens.next().ttype == self.TOK_TYPE_FUNCTION)
                         and (tokens.next().tsubtype

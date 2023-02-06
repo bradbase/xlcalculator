@@ -15,7 +15,7 @@ class Reader():
     def read_defined_names(self, ignore_sheets=[], ignore_hidden=False):
         return {
             defn.name: defn.value
-            for defn in self.book.defined_names.definedName
+            for name, defn in self.book.defined_names.items()
             if defn.hidden is None and defn.value != '#REF!'
         }
 
@@ -30,7 +30,13 @@ class Reader():
             for cell in sheet._cells.values():
                 addr = f'{sheet_name}!{cell.coordinate}'
                 if cell.data_type == 'f':
-                    formula = xltypes.XLFormula(cell.value, sheet_name)
+                    value = cell.value
+                    if isinstance(
+                            value,
+                            openpyxl.worksheet.formula.ArrayFormula
+                    ):
+                        value = value.text
+                    formula = xltypes.XLFormula(value, sheet_name)
                     formulae[addr] = formula
                     value = cell.cvalue
                 else:

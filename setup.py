@@ -17,7 +17,7 @@ TESTS_REQUIRE = [
 
 setuptools.setup(
     name="xlcalculator",
-    version='0.4.2',
+    version='0.5.0dev1',
     author="Bradley van Ree",
     author_email="brads@bradbase.net",
     description="Converts MS Excel formulas to Python and evaluates them.",
@@ -69,8 +69,8 @@ setuptools.setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Office/Business :: Financial :: Spreadsheet",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Information Analysis",
@@ -87,7 +87,7 @@ setuptools.setup(
         'pandas',
         'openpyxl',
         'numpy-financial',
-        'yearfrac==0.4.4',
+        'yearfrac>=0.4.8',
         'mock',
         'scipy'
     ],
@@ -97,7 +97,7 @@ setuptools.setup(
             'pip-tools',
         ],
     ),
-    python_requires='>=3.8',
+    python_requires='>=3.9',
     tests_require=TESTS_REQUIRE,
     include_package_data=True,
     zip_safe=False,

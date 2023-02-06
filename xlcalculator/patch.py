@@ -23,11 +23,12 @@ class WorkSheetParser(openpyxl.worksheet._reader.WorkSheetParser):
 
 class WorksheetReader(openpyxl.worksheet._reader.WorksheetReader):
 
-    def __init__(self, ws, xml_source, shared_strings, data_only):
-        super().__init__(ws, xml_source, shared_strings, data_only)
+    def __init__(self, ws, xml_source, shared_strings, data_only, rich_text):
+        self.ws = ws
         self.parser = WorkSheetParser(
             xml_source, shared_strings, data_only, ws.parent.epoch,
-            ws.parent._date_formats)
+            ws.parent._date_formats, ws.parent._timedelta_formats, rich_text)
+        self.tables = []
 
     def bind_cells(self):
         for idx, row in self.parser.parse():
@@ -42,8 +43,9 @@ class WorksheetReader(openpyxl.worksheet._reader.WorksheetReader):
                 if c.data_type == 'f':
                     c.cvalue = cell['cvalue']
                 self.ws._cells[(cell['row'], cell['column'])] = c
-        self.ws.formula_attributes = self.parser.array_formulae
+
         if self.ws._cells:
+            # use cells not row dimensions
             self.ws._current_row = self.ws.max_row
 
 

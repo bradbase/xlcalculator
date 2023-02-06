@@ -76,7 +76,7 @@ Run tests
 
 Setup your environment::
 
-  virtualenv -p 3.7 ve
+  virtualenv -p 3.10 ve
   ve/bin/pip install -e .[test]
 
 From the root xlcalculator directory::

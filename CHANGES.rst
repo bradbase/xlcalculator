@@ -2,6 +2,17 @@
 CHANGES
 =======
 
+0.5.0 (unreleased)
+------------------
+
+- Added support for Python 3.10, dropped 3.8.
+
+- Upgraded requirements.txt to latest versions.
+
+  * `yearfrac==0.4.4` was incompatible with latest setuptools.
+
+  * `openpyxl` had API changes that were addressed and tests fixed.
+
 
 0.4.2 (2021-05-17)
 ------------------
