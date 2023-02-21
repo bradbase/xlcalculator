@@ -147,7 +147,7 @@ class FormulaParser:
                                 # these 2 lines are needed to remove INDEX()
                                 new_tokens.pop()
                                 new_tokens.pop()
-                                expr = rev.next().tvalue + expr
+                                expr = rev.__next__().tvalue + expr
                                 break
 
                         expr += token.tvalue
