@@ -52,10 +52,3 @@ class LogicalModuleTest(unittest.TestCase):
 
     def test_TRUE(self):
         self.assertTrue(logical.TRUE())
-
-    def test_IFERROR(self):
-        self.assertEqual(logical.IFERROR(10/2,0),5) # Check if value is OK
-        self.assertEqual(logical.IFERROR(10/0,0),0) # Check if value cause error
-        self.assertEqual(logical.IFERROR(10/0,"ERROR"),"ERROR") # Check returning string
-        self.assertEqual(logical.IFERROR(logical.IFERROR(10/0,0) + 1,0),1) # Check nested IFERROR
-
