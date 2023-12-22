@@ -54,7 +54,10 @@ def VLOOKUP(
         raise xlerrors.NaExcelError(
             '`lookup_value` not in first column of `table_array`.')
 
-    return table_array.loc[lookup_value].values[0]
+    if col_index_num <= 1:
+        col_index_num = 2
+        
+    return table_array.loc[lookup_value].values[col_index_num-2]
 
 
 @xl.register()

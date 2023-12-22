@@ -47,6 +47,18 @@ class LookupModuleTest(unittest.TestCase):
         self.assertIsInstance(
             lookup.VLOOKUP(102, range1, 2, False), xlerrors.NaExcelError)
 
+    def test_VLOOOKUP_low_lookup_id(self):
+        # Excel Doc example.
+        range1 = func_xltypes.Array([
+            [101, 'Davis', 'Sara'],
+            [102, 'Fortana', 'Olivier'],
+            [103, 'Leal', 'Karina'],
+            [104, 'Patten', 'Michael'],
+            [105, 'Burke', 'Brian'],
+            [106, 'Sousa', 'Luis'],
+        ])
+        self.assertEqual(lookup.VLOOKUP(102, range1, 1, False), 'Fortana')
+
     def test_MATCH(self):
         range1 = [25, 28, 40, 41]
         self.assertEqual(lookup.MATCH(39, range1), 2)
