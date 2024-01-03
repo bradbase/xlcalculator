@@ -1,7 +1,5 @@
 from .. import testing
 
-from xlcalculator.xlfunctions import xlerrors
-
 
 class SqrtTest(testing.FunctionalTestCase):
     filename = "IFERROR.xlsx"
@@ -17,19 +15,19 @@ class SqrtTest(testing.FunctionalTestCase):
             self.evaluator.get_cell_value('Sheet1!C2!'),
             self.evaluator.evaluate('Sheet1!C2')
         )
-    
+
     def test_evaluation_C3(self):
         self.assertEqual(
             self.evaluator.get_cell_value('Sheet1!C3!'),
             self.evaluator.evaluate('Sheet1!C3')
         )
-    
+
     def test_evaluation_C4(self):
         self.assertEqual(
             self.evaluator.get_cell_value('Sheet1!C4!'),
             self.evaluator.evaluate('Sheet1!C4')
         )
-    
+
     def test_evaluation_C5(self):
         self.assertEqual(
             self.evaluator.get_cell_value('Sheet1!C5!'),

@@ -120,7 +120,7 @@ class FormulaParser:
             for index, token in enumerate(tokens):
                 new_tokens.append(token)
 
-                if type(token.tvalue) == str:
+                if type(token.tvalue) is str:
 
                     # example -> :OFFSET( or simply :A10
                     if token.tvalue.startswith(':'):

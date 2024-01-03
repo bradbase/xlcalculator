@@ -102,12 +102,13 @@ def TRUE() -> func_xltypes.XlBoolean:
     """
     return True
 
+
 @xl.register()
 @xl.validate_args
-def IFERROR(value: func_xltypes.XlExpr,
-            value_if_error: func_xltypes.XlAnything) -> func_xltypes.XlAnything:
-    """Evaluate value, return value if has no error, otherwise return value_if_error.
-
+def IFERROR(value: func_xltypes.XlExpr, value_if_error: func_xltypes.XlAnything
+            ) -> func_xltypes.XlAnything:
+    """Evaluate value, return value if has no error,
+    otherwise return value_if_error.
     https://support.microsoft.com/en-au/office/iferror-function-c526fd07-caeb-47b8-8bb6-63f3e417f611
     """
     if isinstance(value(), xlerrors.ExcelError):
