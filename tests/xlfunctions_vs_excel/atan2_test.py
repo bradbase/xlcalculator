@@ -28,3 +28,9 @@ class ATAN2Test(testing.FunctionalTestCase):
             self.evaluator.evaluate('Sheet1!A5'),
             self.evaluator.get_cell_value('Sheet1!A5')
         )
+
+    def test_evaluation_A6(self):
+        self.assertEqual(
+            self.evaluator.evaluate('Sheet1!A6'),
+            self.evaluator.get_cell_value('Sheet1!A6')
+        )
