@@ -41,6 +41,7 @@ class MathModuleTest(unittest.TestCase):
     def test_ARTAN2(self):
         self.assertAlmostEqual(math.ATAN2(1, 1), 0.785398163)
         self.assertAlmostEqual(math.ATAN2(-1, -1), -2.35619449)
+        self.assertAlmostEqual(math.ATAN2(1, 2), 1.10714872)
 
     def test_CEILING_number(self):
         self.assertEqual(math.CEILING(2.5, 1), 3)

@@ -111,7 +111,7 @@ def ATAN2(
     https://support.office.com/en-us/article/
         atan2-function-c04592ab-b9e3-4908-b428-c96b3a565033
     """
-    return np.arctan2(float(x_num), float(y_num))
+    return np.arctan2(float(y_num), float(x_num))
 
 
 @xl.register()
