@@ -1,7 +1,7 @@
 import unittest
 
 from xlcalculator import evaluator, model
-from . import testing
+from tests import testing
 
 
 class TestEvaluator(unittest.TestCase):

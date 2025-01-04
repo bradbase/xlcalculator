@@ -3,7 +3,7 @@ import unittest
 from xlcalculator import xltypes
 from xlcalculator.tokenizer import f_token
 
-from . import testing
+from tests import testing
 
 
 class XLFormulaTest(testing.XlCalculatorTestCase):

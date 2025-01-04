@@ -1,4 +1,4 @@
-from .. import testing
+from tests import testing
 
 
 class CountIfsTest(testing.FunctionalTestCase):

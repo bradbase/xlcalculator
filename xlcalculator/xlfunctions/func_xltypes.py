@@ -448,13 +448,13 @@ class Array(pandas.DataFrame):
         return list(filter(filt, [cast(item) for item in self.values.flat]))
 
     def cast_to_numbers(self):
-        return self.applymap(_safe_cast(Number.cast, Number(0.0)))
+        return self.map(_safe_cast(Number.cast, Number(0.0)))
 
     def cast_to_booleans(self):
-        return self.applymap(_safe_cast(Boolean.cast, Boolean(True)))
+        return self.map(_safe_cast(Boolean.cast, Boolean(True)))
 
     def cast_to_texts(self):
-        return self.applymap(_safe_cast(Text.cast, Text('')))
+        return self.map(_safe_cast(Text.cast, Text('')))
 
 
 class Expr:

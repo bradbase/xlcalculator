@@ -109,3 +109,17 @@ class FunctionalTestCase(XlCalculatorTestCase):
         self.model = compiler.read_and_parse_archive(
             get_resource(self.filename))
         self.evaluator = evaluator.Evaluator(self.model)
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+    p_dir = Path(__file__).parent
+    # Discover all tests in the current directory
+    test_loader = unittest.defaultTestLoader
+    test_suite = test_loader.discover(start_dir=p_dir, pattern="*.py")
+
+    # Create a test runner
+    test_runner = unittest.TextTestRunner()
+
+    # Run the tests
+    test_runner.run(test_suite)

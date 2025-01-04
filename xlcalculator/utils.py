@@ -7,7 +7,7 @@ MAX_COL = 18278
 MAX_ROW = 1048576
 
 
-def resolve_sheet(sheet_str):
+def resolve_sheet(sheet_str: str) -> str:
     sheet_str = sheet_str.strip()
     sheet_match = re.match(SHEET_TITLE.strip(), sheet_str + '!')
     if sheet_match is None:
@@ -18,7 +18,7 @@ def resolve_sheet(sheet_str):
     return sheet_match.group("quoted") or sheet_match.group("notquoted")
 
 
-def resolve_address(addr):
+def resolve_address(addr: str) -> tuple[str, str, str]:
     # Addresses without sheet name are not supported.
     sheet_str, addr_str = addr.split('!')
     sheet = resolve_sheet(sheet_str)
@@ -27,7 +27,8 @@ def resolve_address(addr):
     return sheet, col, row
 
 
-def resolve_ranges(ranges, default_sheet='Sheet1'):
+# TODO: double check the return type, that seems odd
+def resolve_ranges(ranges: str, default_sheet: str='Sheet1') -> tuple[str, list[list[str]]]:  # noqa: E252
     sheet = None
     range_cells = collections.defaultdict(set)
     for rng in ranges.split(','):

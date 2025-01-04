@@ -1,4 +1,4 @@
-from .. import testing
+from tests import testing
 
 
 class ATAN2Test(testing.FunctionalTestCase):

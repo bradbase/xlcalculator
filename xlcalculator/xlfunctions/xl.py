@@ -1,6 +1,7 @@
 import functools
 import inspect
 import typing
+from typing import Union
 
 from . import func_xltypes, xlerrors
 
@@ -20,7 +21,7 @@ TYPE_TO_CAST = {
 
 class Functions(dict):
 
-    def register(self, func, name=None):
+    def register(self, func, name: Union[str, None] = None):
         if name is None:
             name = func.__name__
         self[name] = func

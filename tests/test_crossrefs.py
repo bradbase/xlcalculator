@@ -1,6 +1,6 @@
 
 
-from . import testing
+from tests import testing
 
 
 class CrossSheetTest(testing.FunctionalTestCase):

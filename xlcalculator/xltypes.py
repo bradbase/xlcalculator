@@ -31,11 +31,9 @@ class XLFormula(XLType):
         """Supplimentary initialisation."""
         self.tokens = tokenizer.ExcelParser().getTokens(self.formula).items
         for token in self.tokens:
-            if (
-                    (token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND)
-                    and (token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE)
-                    and (token.tvalue not in self.terms)
-            ):
+            if (token.ttype == ExcelParserTokens.TOK_TYPE_OPERAND
+                    and token.tsubtype == ExcelParserTokens.TOK_SUBTYPE_RANGE
+                    and token.tvalue not in self.terms):
                 # Make sure we have a full address.
                 term = token.tvalue
                 if '!' not in term:

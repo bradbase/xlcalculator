@@ -1,6 +1,6 @@
 from xlcalculator.tokenizer import f_token, ExcelParser
 
-from . import testing
+from tests import testing
 
 
 class ExcelParserTest(testing.XlCalculatorTestCase):

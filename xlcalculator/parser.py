@@ -10,35 +10,38 @@ class Operator(object):
         self.associativity = associativity
 
 
+# TODO: why is this like the third time that the operators are defined?
+
 # http://office.microsoft.com/en-us/excel-help/
 #    calculation-operators-and-precedence-HP010078886.aspx
 OPERATORS = {
-    ':': Operator(':', 8, 'left'),
-    '': Operator(' ', 8, 'left'),
-    ',': Operator(',', 8, 'left'),
-    'u-': Operator('u-', 7, 'right'),  # unary negation
-    '%': Operator('%', 6, 'left'),
-    '^': Operator('^', 5, 'left'),
-    '*': Operator('*', 4, 'left'),
-    '/': Operator('/', 4, 'left'),
-    '+': Operator('+', 3, 'left'),
-    '-': Operator('-', 3, 'left'),
-    '&': Operator('&', 2, 'left'),
-    '=': Operator('=', 1, 'left'),
-    '<': Operator('<', 1, 'left'),
-    '>': Operator('>', 1, 'left'),
-    '<=': Operator('<=', 1, 'left'),
-    '>=': Operator('>=', 1, 'left'),
-    '<>': Operator('<>', 1, 'left'),
+    ":": Operator(":", 8, "left"),
+    "": Operator(" ", 8, "left"),
+    ",": Operator(",", 8, "left"),
+    "u-": Operator("u-", 7, "right"),  # unary negation
+    "%": Operator("%", 6, "left"),
+    "^": Operator("^", 5, "left"),
+    "*": Operator("*", 4, "left"),
+    "/": Operator("/", 4, "left"),
+    "+": Operator("+", 3, "left"),
+    "-": Operator("-", 3, "left"),
+    "&": Operator("&", 2, "left"),
+    "=": Operator("=", 1, "left"),
+    "<": Operator("<", 1, "left"),
+    ">": Operator(">", 1, "left"),
+    "<=": Operator("<=", 1, "left"),
+    ">=": Operator(">=", 1, "left"),
+    "<>": Operator("<>", 1, "left"),
 }
 
 
 class FormulaParser:
     """Excel Formula Parser"""
 
-    def parse(self, formula, named_ranges=None, tokenize_range=False):
-        """Parse formula into evaluable AST.
-        """
+    # TODO: Changed the default for named ranges to something that dons't crash
+    # TODO: deal with unused variables
+    def parse(self, formula: str, named_ranges=None, tokenize_range=False):
+        """Parse formula into evaluable AST."""
         # 1. Parse the formula into syntactic tokens.
         tokens = self.tokenize(formula)
         # 2. Organize tokens into reverse polish notation.
@@ -47,15 +50,22 @@ class FormulaParser:
         ast = self.build_ast(nodes)
         return ast
 
-    def tokenize(self, formula, tokenize_range=False):
+    def tokenize(
+        self, formula: str, tokenize_range: bool = False
+    ) -> list[tokenizer.f_token]:
         # Remove leading "=" sign.
-        if formula.startswith('='):
+        if formula.startswith("="):
             formula = formula[1:]
 
         excel_parser = tokenizer.ExcelParser(tokenize_range=tokenize_range)
         return excel_parser.parse(formula).items
 
-    def shunting_yard(self, raw_tokens, named_ranges, tokenize_range=False):
+    def shunting_yard(
+        self,
+        raw_tokens: list[tokenizer.f_token],
+        named_ranges: list[str],
+        tokenize_range: bool = False,
+    ) -> list[ast_nodes.ASTNode]:
         """Reorganize tokens into proper reverse polish notation.
 
         Core algorithm taken from wikipedia with varargs extensions from
@@ -85,21 +95,20 @@ class FormulaParser:
             if token.ttype == "function" and token.tsubtype == "start":
                 token.tsubtype = ""
                 tokens.append(token)
-                tokens.append(tokenizer.f_token('(', 'arglist', 'start'))
+                tokens.append(tokenizer.f_token("(", "arglist", "start"))
 
             elif token.ttype == "function" and token.tsubtype == "stop":
-                tokens.append(tokenizer.f_token(')', 'arglist', 'stop'))
+                tokens.append(tokenizer.f_token(")", "arglist", "stop"))
 
             elif token.ttype == "subexpression" and token.tsubtype == "start":
-                token.tvalue = '('
+                token.tvalue = "("
                 tokens.append(token)
 
             elif token.ttype == "subexpression" and token.tsubtype == "stop":
-                token.tvalue = ')'
+                token.tvalue = ")"
                 tokens.append(token)
 
-            elif (token.ttype == "operand" and token.tsubtype == "range"
-                    and token.tvalue in named_ranges):
+            elif (token.ttype == "operand" and token.tsubtype == "range" and token.tvalue in named_ranges):
                 # Resolve the named range once and for all.
                 token.tvalue = named_ranges[token.tvalue]
                 tokens.append(token)
@@ -120,23 +129,19 @@ class FormulaParser:
             for index, token in enumerate(tokens):
                 new_tokens.append(token)
 
-                if type(token.tvalue) == str:
-
+                if type(token.tvalue) is str:
                     # example -> :OFFSET( or simply :A10
-                    if token.tvalue.startswith(':'):
+                    if token.tvalue.startswith(":"):
                         depth = 0
-                        expr = ''
+                        expr = ""
                         rev = reversed(tokens[:index])
 
                         # going backwards, 'stop' starts, 'start' stops
                         for reversed_token in rev:
-                            if reversed_token.tsubtype == 'stop':
+                            if reversed_token.tsubtype == "stop":
                                 depth += 1
 
-                            elif (
-                                depth > 0
-                                and reversed_token.tsubtype == 'start'
-                            ):
+                            elif depth > 0 and reversed_token.tsubtype == "start":
                                 depth -= 1
 
                             expr = reversed_token.tvalue + expr
@@ -154,12 +159,12 @@ class FormulaParser:
 
                         depth = 0
 
-                        if token.tvalue[1:] in ['OFFSET', 'INDEX']:
+                        if token.tvalue[1:] in ["OFFSET", "INDEX"]:
                             for t in tokens[(index + 1):]:
-                                if t.tsubtype == 'start':
+                                if t.tsubtype == "start":
                                     depth += 1
 
-                                elif depth > 0 and t.tsubtype == 'stop':
+                                elif depth > 0 and t.tsubtype == "stop":
                                     depth -= 1
 
                                 expr += t.tvalue
@@ -168,20 +173,19 @@ class FormulaParser:
                                 if depth == 0:
                                     break
 
-                        new_tokens.append(
-                            tokenizer.f_token(expr, 'operand', 'pointer'))
+                        new_tokens.append(tokenizer.f_token(expr, "operand", "pointer"))
 
                     # example -> A1:OFFSET(
-                    elif ':OFFSET' in token.tvalue or ':INDEX' in token.tvalue:
+                    elif ":OFFSET" in token.tvalue or ":INDEX" in token.tvalue:
                         depth = 0
-                        expr = ''
+                        expr = ""
                         expr += token.tvalue
 
                         for t in tokens[(index + 1):]:
-                            if t.tsubtype == 'start':
+                            if t.tsubtype == "start":
                                 depth += 1
 
-                            elif t.tsubtype == 'stop':
+                            elif t.tsubtype == "stop":
                                 depth -= 1
 
                             expr += t.tvalue
@@ -191,8 +195,7 @@ class FormulaParser:
                                 new_tokens.pop()
                                 break
 
-                        new_tokens.append(
-                            tokenizer.f_token(expr, 'operand', 'pointer'))
+                        new_tokens.append(tokenizer.f_token(expr, "operand", "pointer"))
 
         tokens = new_tokens if new_tokens else tokens
 
@@ -215,7 +218,6 @@ class FormulaParser:
                 were_values.append(False)
 
             elif token.ttype == "argument":
-
                 while stack and (stack[-1].tsubtype != "start"):
                     output.append(self.create_node(stack.pop()))
 
@@ -226,32 +228,26 @@ class FormulaParser:
                 if not len(stack):
                     raise ValueError("Mismatched or misplaced parentheses")
 
-            elif token.ttype.startswith('operator'):
-
-                if token.ttype.endswith('-prefix') and token.tvalue == "-":
-                    o1 = OPERATORS['u-']
+            elif token.ttype.startswith("operator"):
+                if token.ttype.endswith("-prefix") and token.tvalue == "-":
+                    o1 = OPERATORS["u-"]
 
                 else:
                     o1 = OPERATORS[token.tvalue]
 
-                while stack and stack[-1].ttype.startswith('operator'):
-                    if (
-                            stack[-1].ttype.endswith('-prefix')
-                            and stack[-1].tvalue == "-"
-                    ):
-                        o2 = OPERATORS['u-']
+                while stack and stack[-1].ttype.startswith("operator"):
+                    if stack[-1].ttype.endswith("-prefix") and stack[-1].tvalue == "-":
+                        o2 = OPERATORS["u-"]
 
                     else:
                         o2 = OPERATORS[stack[-1].tvalue]
 
                     if (
-                            (o1.associativity == "left"
-                             and o1.precedence <= o2.precedence)
-                            or (o1.associativity == "right"
-                                and o1.precedence < o2.precedence)
+                        o1.associativity == "left" and o1.precedence <= o2.precedence
+                    ) or (
+                        o1.associativity == "right" and o1.precedence < o2.precedence
                     ):
-                        output.append(
-                            self.create_node(stack.pop()))
+                        output.append(self.create_node(stack.pop()))
 
                     else:
                         break
@@ -280,7 +276,7 @@ class FormulaParser:
                     output.append(f)
 
         while stack:
-            if (stack[-1].tsubtype == "start" or stack[-1].tsubtype == "stop"):
+            if stack[-1].tsubtype == "start" or stack[-1].tsubtype == "stop":
                 raise SyntaxError("Mismatched or misplaced parentheses")
 
             output.append(self.create_node(stack.pop()))
@@ -288,7 +284,7 @@ class FormulaParser:
         # convert to list
         return [x for x in output]
 
-    def create_node(self, token):
+    def create_node(self, token: tokenizer.f_token) -> ast_nodes.ASTNode:
         if token.ttype == "operand":
             if token.tsubtype in ["range", "pointer"]:
                 return ast_nodes.RangeNode(token)
@@ -302,15 +298,15 @@ class FormulaParser:
             return ast_nodes.OperatorNode(token)
 
         else:
-            raise ValueError('Unknown token type: ' + token.ttype)
+            raise ValueError("Unknown token type: " + token.ttype)
 
-    def build_ast(self, nodes):
+    def build_ast(self, nodes: list[ast_nodes.ASTNode]) -> ast_nodes.ASTNode:
         """Update AST nodes to build a proper parse tree.
 
         XXX: There is really no need for this. The shunting yeard algorithm
         should jsut take care of it.
         """
-        stack = []
+        stack: list[ast_nodes.ASTNode] = []
 
         for node in nodes:
             if isinstance(node, ast_nodes.OperatorNode):

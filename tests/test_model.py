@@ -9,7 +9,7 @@ from xlcalculator.xltypes import XLCell, XLFormula, XLRange
 from xlcalculator.tokenizer import f_token
 from xlcalculator import Evaluator
 
-from . import testing
+from tests import testing
 
 
 class ModelTest(testing.XlCalculatorTestCase):
