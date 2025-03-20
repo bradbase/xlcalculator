@@ -29,6 +29,7 @@ class Model():
         if isinstance(address, str):
             if address in self.cells:
                 self.cells[address].value = copy.copy(value)
+                self.cells[address].formula = None
             else:
                 self.cells[address] = xltypes.XLCell(address, copy.copy(value))
 
