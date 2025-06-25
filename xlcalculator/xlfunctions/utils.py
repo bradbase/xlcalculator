@@ -14,4 +14,4 @@ def datetime_to_number(value):
     delta = value - EXCEL_EPOCH
     # Excel treats 1900 as a leap year.
     offset = 2 if delta.days > 58 else 1
-    return (delta.days + offset) + (delta.seconds / 24 * 60 * 60)
+    return (delta.days + offset) + delta.seconds / (24 * 60 * 60)

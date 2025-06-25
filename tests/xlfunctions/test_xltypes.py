@@ -45,7 +45,7 @@ class AbstractExcelTypeTest:
     text2 = func_xltypes.Text('2')
     bool2 = func_xltypes.Boolean(True)
     dt2 = func_xltypes.DateTime(datetime.datetime(2020, 1, 1, 12, 0, 0))
-    dt2_float = 6523831.0
+    dt2_float = 43831.5
 
     math_result_type = int
 
